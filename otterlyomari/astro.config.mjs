@@ -6,6 +6,6 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://otterlyomari.github.io',
-        base: '/otterlyomari.github.io',
+        base: '/otterlyomari',
 	integrations: [mdx(), sitemap()],
 });
