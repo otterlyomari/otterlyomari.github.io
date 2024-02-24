@@ -14,8 +14,15 @@
     "@astrojs/mdx": "^2.1.1",
     "@astrojs/rss": "^4.0.5",
     "@astrojs/sitemap": "^3.1.1",
+    "@iconify-json/bi": "^1.1.23",
+    "@iconify-json/carbon": "^1.1.30",
     "astro": "^4.4.4",
+    "astro-icon": "^1.1.0",
+    "astro-meta-tags": "^0.2.1",
     "gsap": "^3.12.5",
     "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@iconify-json/mdi": "^1.1.64"
   }
 }
