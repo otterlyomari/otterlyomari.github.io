@@ -155,16 +155,7 @@ hr {
 	white-space: nowrap;
 }
 
-html.dark {
-	background-color: #0d0950;
-	color: #fff;
-}
-
-.dark .nav-links a {
-	color: #fff;
-}
-
-.navbar .navbar-nav .nav-link {
+.navbar .navbar-nav {
 	color: #ffffff;
 }
 .sm-icons {
@@ -181,9 +172,18 @@ html.dark {
 	list-style: none;
 	padding-bottom: 0.3em;
 	font-size: 30px;
+	animation-duration: 10s;
 }
 
 .social-link:hover, a {
 	color: red;
 	text-decoration: underline;
+	transition: 0.3s linear;
 }
+
+.nav-link:hover, a {
+	color: red;
+	transition: 0.3s linear;
+}
+
+
