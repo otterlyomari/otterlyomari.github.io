@@ -19,6 +19,7 @@
     "@builder.io/react": "^3.2.5",
     "@iconify-json/bi": "^1.1.23",
     "@iconify-json/carbon": "^1.1.30",
+    "@jop-software/astro-cookieconsent": "^3.0.0",
     "@qwikdev/astro": "^0.5.7",
     "@types/react": "^18.2.58",
     "@types/react-dom": "^18.2.19",
@@ -30,11 +31,14 @@
     "astro-og-canvas": "^0.4.2",
     "bootstrap-icons": "^1.11.3",
     "gsap": "^3.12.5",
+    "hamburgers": "^1.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vanilla-cookieconsent": "^3.0.0"
   },
   "devDependencies": {
-    "@iconify-json/mdi": "^1.1.64"
+    "@iconify-json/mdi": "^1.1.64",
+    "sass": "^1.71.1"
   }
 }
