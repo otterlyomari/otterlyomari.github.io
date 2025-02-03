@@ -15,7 +15,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 		<script src="/src/scripts/hackermantm.js"></script>
 		<Header />
-		<main>
+		<main id="content">
 			<div id="home-section">
 				<a href="/">
 					<img src="/logo.png" class="image">
@@ -31,17 +31,15 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		</main>
 		</script>
 		<style>
-			body
-			{
-				background-image: url("/bg.png");
-				background-size: cover;
-				position: relative;
-			}
 
 			#home-section {
 				backdrop-filter: blur(0.4rem);
-				z-index: 1;
+				z-index: 100;
 				background-color: transparent;
+			}
+
+			#content > :before {
+				z-index: -1;
 			}
 
 			span {
