@@ -15,43 +15,22 @@
 	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
 	--box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
 		0 16px 32px rgba(var(--gray), 33%);
-	--background-height: 100vh;
-	--viewport-height: 100vh;
 }
-::before {
-	content: '';
-	display: block;
-	background-attachment: scroll;
-	height: var(--background-height);
-	left: 0;
-	pointer-events: none;
-	position: fixed;
-	top: 0;
-	transform: scale(1);
-	width: 100vw;
-	z-index: 0;
-	background-image: url("/bg.png");
-	background-size: cover, cover;
-	background-position: center, center;
-	background-repeat: no-repeat, repeat;
-	background-color: #000000;
-}
+
 @font-face {
-	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-regular.woff') format('woff');
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
+    font-family: 'Pulang';
+    src: url('/public/fonts/Pulang.woff2') format('woff2'),
+        url('/public/fonts/Pulang.woff') format('woff'),
+        url('/public/fonts/Pulang.ttf') format('truetype'),
+        url('/public/fonts/Pulang.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
-@font-face {
-	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-bold.woff') format('woff');
-	font-weight: 700;
-	font-style: normal;
-	font-display: swap;
-}
+
+
 body {
-	font-family: 'Atkinson', sans-serif;
+	font-family: 'Pulang', sans-serif;
 	margin: 0;
 	padding: 0;
 	text-align: left;
@@ -62,10 +41,17 @@ body {
 	color: rgb(var(--gray-dark));
 	font-size: 20px;
 	line-height: 1.0;
-	min-height: var(--viewport-height);
-	min-width: 320px;
-	overflow-x: hidden;
 	word-wrap: break-word;
+	position: relative;
+	background-image: url("/bg.png");
+	background-size: cover, cover;
+	background-position: center;
+	background-color: #000000;
+	background-attachment: fixed;
+	height: 100vh; /* Ensures full viewport height */
+	width: 100vw; /* Ensures full viewport width */
+	margin: 0;
+	padding: 0;
 	}
 main {
 	width: 720px;
@@ -155,9 +141,11 @@ hr {
 @media (max-width: 720px) {
 	body {
 		font-size: 18px;
+		position: relative;
 		background-image: url("/bg.png");
-				background-size: cover;
-				position: relative;
+		background-size: cover;
+		background-position: center, center;
+		background-color: #000000;
 	}
 	
 	main {
@@ -192,13 +180,20 @@ hr {
 	/* Safari 4.0 - 8.0 */
 	animation: revert-scale 0.3s;
 	animation-fill-mode: forwards;
-    vertical-align: top;
     width: inherit;
 	display: block;
 	line-height: 0;
 	max-width: 100%;
 	position: relative;
   }
+
+.frame {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  vertical-align: top;
+  width: 100%;
+}
 
   @keyframes scale-up {
 	from {
@@ -227,4 +222,12 @@ hr {
 	animation-fill-mode: forwards;
     vertical-align: top;
     width: inherit;
+  }
+
+  .t-outline {
+	filter:
+	drop-shadow(-1px -1px 0px #000000) 
+	drop-shadow(2px -1px 0px #000000) 
+	drop-shadow(2px 2px 0px #000000)
+	drop-shadow(-1px 2px 0px #000000)
   }
