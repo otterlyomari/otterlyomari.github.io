@@ -138,6 +138,7 @@ hr {
 	border: none;
 	border-top: 1px solid rgb(var(--gray-light));
 }
+
 @media (max-width: 720px) {
 	body {
 		font-size: 18px;
@@ -146,6 +147,10 @@ hr {
 		background-size: cover;
 		background-position: center, center;
 		background-color: #000000;
+	}
+
+	#container {
+		padding-bottom: 0px;
 	}
 	
 	#icons01 {
@@ -233,6 +238,14 @@ hr {
 	drop-shadow(2px -1px 0px #000000) 
 	drop-shadow(2px 2px 0px #000000)
 	drop-shadow(-1px 2px 0px #000000)
+  }
+
+  .t-outline-w {
+	filter:
+	drop-shadow(-1px -1px 0px #ffffff) 
+	drop-shadow(2px -1px 0px #ffffff) 
+	drop-shadow(2px 2px 0px #ffffff)
+	drop-shadow(-1px 2px 0px #ffffff)
   }
 
   .no-deco
