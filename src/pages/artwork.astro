@@ -20,10 +20,31 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				</a>
 				<br>
 				<h5 class="t-outline" style="text-align: center;">the cute motherfluffer your mom warned you about</h5>
-				<ul id="showcase">
-					<h1 class="t-outline" style="text-align: center;">Coming Soon</h1>
-				</ul>
+				<div id="showcase">
+					<img src="/fursona-art/gyatt.png" title="Base by Skunkify (C) 2021 - coloured and filled by Kelouring" onclick="this.requestFullscreen()">
+					<img src="/fursona-art/aussiekittenOma.png" title="Art by Aussie Kitten" onclick="this.requestFullscreen()">
+					<img src="/fursona-art/omariBorger.jpg" title="The Real Cheese Burger YCH by Zulples"  onclick="this.requestFullscreen()">
+					<img src="/fursona-art/omariHotter.png" title="Christmas Gift YCH [SUGGESTIVE] by Divine TOFU" onclick="this.requestFullscreen()">
+				</div>
+				<div id="showcase">
+					<img src="/fursona-art/flirtotterbox.jpg" onclick="this.requestFullscreen()">
+					<img src="/fursona-art/inlove 11.gif" title="In Love YCH by rawbootymeat on FA" onclick="this.requestFullscreen()">
+					<img src="/fursona-art/gayJuice.png" onclick="this.requestFullscreen()">
+					<img src="/fursona-art/fingerheartSkylar.png" onclick="this.requestFullscreen()">
+				</div>
+				<div id="showcase">
+					<img src="/fursona-art/omariBaka.png" onclick="this.requestFullscreen()">
+					<img src="/fursona-art/hoodieblep.png" onclick="this.requestFullscreen()">
+				</div>
+				<div id="showcase">
+					<img src="/fursona-art/boxHug.bmp" title="Art by Nutmeg Doggy aka eggvortex" onclick="this.requestFullscreen()">
+					<img src="/fursona-art/awtterOma.png" onclick="this.requestFullscreen()">
+					<img src="/fursona-art/cute.bmp" onclick="this.requestFullscreen()">
+					<img src="/fursona-art/omariBlep.bmp" onclick="this.requestFullscreen()">
+					<img src="/fursona-art/swerveCuddle.bmp" title="Art by TsukiTheBunny ft. Swerve Husky" onclick="this.requestFullscreen()">
+				</div>
 				<br>
+				<button><a href="https://t.me/addstickers/OtterlyOmari" class="no-deco"><h4 class="t-outline">Get My Stickers (Telegram)</h4></a></button>
 				<button><a href="/" class="no-deco"><h4 class="t-outline">Go Back</h4></a></button>
 			</div>
 		</main>
@@ -36,6 +57,39 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 			ul {
 				list-style: none;
+			}
+
+			.fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            display: none;
+        }
+        .fullscreen img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 5px;
+        }
+
+			#showcase {
+			display: flex;
+			margin: 5px;
+			float: left;
+			width: 100%;
+			gap: 10px;
+			backdrop-filter: blur(0.8rem);
+			}
+
+			#showcase img {
+			width: 100%;
+			height: 100%;
 			}
 
 		</style>
