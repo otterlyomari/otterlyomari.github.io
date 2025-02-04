@@ -148,6 +148,9 @@ hr {
 		background-color: #000000;
 	}
 	
+	#icons01 {
+		transform: translateX(-25%);
+	}
 	main {
 		padding: 1em;
 	}
@@ -231,3 +234,35 @@ hr {
 	drop-shadow(2px 2px 0px #000000)
 	drop-shadow(-1px 2px 0px #000000)
   }
+
+  .no-deco
+  {
+	  text-decoration: none;
+  }
+
+	button 
+	{
+		width: 100%;
+		height: auto;
+		border-radius: 5%;
+		-webkit-animation: scale-up 0.6s;
+		/* Safari 4.0 - 8.0 */
+		-webkit-animation-fill-mode: forwards;
+		/* Safari 4.0 - 8.0 */
+		animation: revert-scale 0.3s;
+		animation-fill-mode: forwards;
+		filter:
+		drop-shadow(-1px -1px 0px #000000) 
+		drop-shadow(2px -1px 0px #000000) 
+		drop-shadow(2px 2px 0px #000000)
+		drop-shadow(-1px 2px 0px #000000)
+	}
+
+	button:hover
+	{
+		-webkit-animation-fill-mode: forwards;
+	animation: scale-up 0.5s;
+	animation-fill-mode: forwards;
+	background-color: red;
+	border-color: rgb(175, 0, 0);
+	}
