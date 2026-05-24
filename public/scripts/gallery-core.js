@@ -6,19 +6,13 @@ export function initGallery() {
   const buttons = document.querySelectorAll(".filter-btn");
 
   if (!gallery || !buttons.length) return;
-
-  // prevent double init per page instance
   if (galleryMounted) return;
   galleryMounted = true;
 
   let pool = [];
   let mode = "all";
-
   const elements = new Map();
 
-  /* =========================
-     DATA SOURCES
-  ========================= */
   const galleryData = [
     {
       category: "art",
@@ -98,40 +92,47 @@ export function initGallery() {
     return galleryData.find(s => s.category === filter)?.images || [];
   }
 
-  function createObserver() {
-    return new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
+  /* =========================
+     OBSERVER (STABLE + FAST)
+  ========================= */
+  observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
 
-        const img = entry.target;
-        observer.unobserve(img);
+      const img = entry.target;
+      observer.unobserve(img);
 
-        const src = img.dataset.src;
-        if (!src || img.dataset.loaded) return;
+      const src = img.dataset.src;
+      if (!src || img.dataset.loaded) return;
 
-        img.dataset.loaded = "true";
+      img.dataset.loaded = "1";
 
-        const real = new Image();
-        real.src = src;
+      const real = new Image();
+      real.src = src;
+      real.decoding = "async";
+      real.fetchPriority = "low";
 
-        real.onload = () => {
-          img.src = src;
-          img.style.opacity = "1";
-        };
-      }
-    }, { rootMargin: "200px" });
-  }
+      real.onload = async () => {
+        try {
+          await real.decode(); // 🧠 prevents decode jank
+        } catch {}
 
-  observer = createObserver();
+        img.src = src;
+        img.style.opacity = "1";
+      };
+    }
+  }, { rootMargin: "800px" });
 
   function createItem(src) {
     const wrapper = document.createElement("div");
     wrapper.className = "gallery-item-wrapper";
 
     const img = document.createElement("img");
+
     img.dataset.src = src;
     img.loading = "lazy";
     img.decoding = "async";
+    img.fetchPriority = "low"; // 🚀 huge for VRChat batch loads
 
     img.style.width = "100%";
     img.style.height = "auto";
@@ -143,47 +144,23 @@ export function initGallery() {
     return { wrapper, img };
   }
 
-function renderAll() {
-  gallery.innerHTML = "";
-  elements.clear();
+  function renderAll() {
+    gallery.innerHTML = "";
+    elements.clear();
 
-  const ITEM_HEIGHT_ESTIMATE = 300;
-  const BUFFER = 6;
+    const fragment = document.createDocumentFragment();
 
-  const start = 0;
-  const end = Math.min(pool.length, BUFFER);
-
-  function renderRange(from, to) {
-    for (let i = from; i < to; i++) {
-      const src = pool[i];
-
+    for (const src of pool) {
       const { wrapper, img } = createItem(src);
 
-      gallery.appendChild(wrapper);
+      fragment.appendChild(wrapper);
       elements.set(src, img);
 
       observer.observe(img);
     }
+
+    gallery.appendChild(fragment);
   }
-
-  // initial batch only
-  renderRange(start, end);
-
-  // progressively load rest in idle time
-  let cursor = end;
-
-  function step() {
-    if (cursor >= pool.length) return;
-
-    const next = Math.min(cursor + BUFFER, pool.length);
-    renderRange(cursor, next);
-    cursor = next;
-
-    requestIdleCallback(step);
-  }
-
-  requestIdleCallback(step);
-}
 
   function setFilter(filter) {
     mode = filter;
@@ -191,21 +168,12 @@ function renderAll() {
     renderAll();
   }
 
-  // IMPORTANT: remove old listeners by cloning buttons
   buttons.forEach(btn => {
-    const clone = btn.cloneNode(true);
-    btn.replaceWith(clone);
-  });
-
-  const freshButtons = document.querySelectorAll(".filter-btn");
-
-  freshButtons.forEach(btn => {
     btn.addEventListener("click", () => {
-      freshButtons.forEach(b => b.classList.remove("active"));
+      buttons.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
 
       setFilter(btn.dataset.filter);
-
       window.scrollTo(0, 0);
     });
   });
@@ -214,23 +182,19 @@ function renderAll() {
   renderAll();
 }
 
-
+/* boot */
 function bootGallery() {
   const gallery = document.getElementById("gallery");
   const buttons = document.querySelectorAll(".filter-btn");
 
   if (!gallery || !buttons.length) return;
 
-  // CRITICAL: reset mount flag on Astro navigation
-  if (window.__galleryRoot !== gallery) {
-    window.__galleryRoot = gallery;
-    galleryMounted = false;
-  }
+  if (window.__galleryMounted === gallery) return;
+  window.__galleryMounted = gallery;
 
   initGallery();
 }
 
-/* Astro + normal lifecycle coverage */
 document.addEventListener("DOMContentLoaded", bootGallery);
 document.addEventListener("astro:page-load", bootGallery);
 document.addEventListener("astro:after-swap", bootGallery);
