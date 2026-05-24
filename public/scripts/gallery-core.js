@@ -100,6 +100,22 @@ const elements = new Map();
 const sizeCache = new Map();
 
 /* =========================
+   GLOBAL OBSERVER (FIXED)
+========================= */
+const observer = new IntersectionObserver((entries) => {
+  for (const entry of entries) {
+    if (!entry.isIntersecting) continue;
+
+    const img = entry.target;
+    observer.unobserve(img);
+
+    loadImage(img, img.dataset.src);
+  }
+}, {
+  rootMargin: "800px"
+});
+
+/* =========================
    CREATE ITEM
 ========================= */
 function createItem(src) {
@@ -107,6 +123,7 @@ function createItem(src) {
   wrapper.className = "gallery-item-wrapper";
 
   const img = document.createElement("img");
+
   img.dataset.src = src;
   img.loading = "lazy";
   img.decoding = "async";
@@ -123,44 +140,50 @@ function createItem(src) {
 }
 
 /* =========================
-   ASPECT RATIO FIX
+   ASPECT RATIO
 ========================= */
 function applyAspectRatio(img, src) {
   const size = sizeCache.get(src);
+
   if (size) {
     img.style.aspectRatio = `${size.w} / ${size.h}`;
   } else {
-    img.style.aspectRatio = "4 / 3"; // temporary fallback
+    img.style.aspectRatio = "4 / 3";
   }
 }
 
 /* =========================
-   LOAD IMAGE (NO SHIFT)
+   LOAD IMAGE (CLEAN + SAFE)
 ========================= */
 function loadImage(img, src) {
   const token = renderToken;
 
-  // placeholder locks layout immediately
-  img.src =
+  if (img.dataset.loaded) return;
+  img.dataset.loaded = "true";
+
+  const placeholder =
     "data:image/svg+xml;charset=utf-8," +
-    encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="15">
-      <rect width="100%" height="100%" fill="rgba(255,255,255,0.06)"/>
-    </svg>`);
+    encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15">
+        <rect width="100%" height="100%" fill="rgba(255,255,255,0.05)"/>
+      </svg>
+    `);
 
-  const loader = new Image();
-  loader.src = src;
+  img.src = placeholder;
 
-  loader.onload = () => {
+  const realImg = new Image();
+  realImg.src = src;
+
+  realImg.onload = () => {
     if (token !== renderToken) return;
 
-    // cache real dimensions
     sizeCache.set(src, {
-      w: loader.naturalWidth,
-      h: loader.naturalHeight
+      w: realImg.naturalWidth,
+      h: realImg.naturalHeight
     });
 
-    img.src = src;
     applyAspectRatio(img, src);
+    img.src = src;
 
     requestAnimationFrame(() => {
       if (token === renderToken) {
@@ -187,7 +210,7 @@ function renderAll() {
     gallery.appendChild(wrapper);
     elements.set(src, img);
 
-    loadImage(img, src);
+    observer.observe(img);
   }
 }
 
@@ -219,7 +242,7 @@ function renderWindow() {
       gallery.appendChild(wrapper);
       elements.set(src, newImg);
 
-      loadImage(newImg, src);
+      observer.observe(newImg);
       img = newImg;
     }
 
@@ -256,6 +279,7 @@ function resetGallery() {
   for (const el of elements.values()) {
     el.parentElement?.remove();
   }
+
   elements.clear();
 }
 
@@ -268,7 +292,7 @@ function render() {
 }
 
 /* =========================
-   SCROLL THROTTLE
+   SCROLL
 ========================= */
 let ticking = false;
 
@@ -284,7 +308,7 @@ window.addEventListener("scroll", () => {
 });
 
 /* =========================
-   FILTERS (FIXED RELIABLE)
+   FILTERS
 ========================= */
 buttons.forEach(btn => {
   btn.addEventListener("click", () => {
@@ -298,9 +322,7 @@ buttons.forEach(btn => {
 
     window.scrollTo(0, 0);
 
-    requestAnimationFrame(() => {
-      render();
-    });
+    requestAnimationFrame(() => render());
   });
 });
 
