@@ -119,7 +119,7 @@ export function initGallery() {
           img.style.opacity = "1";
         };
       }
-    }, { rootMargin: "600px" });
+    }, { rootMargin: "200px" });
   }
 
   observer = createObserver();
@@ -143,11 +143,17 @@ export function initGallery() {
     return { wrapper, img };
   }
 
-  function renderAll() {
-    gallery.innerHTML = "";
-    elements.clear();
+function renderAll() {
+  gallery.innerHTML = "";
+  elements.clear();
 
-    for (const src of pool) {
+  const BATCH_SIZE = 8;
+  let index = 0;
+
+  function loadBatch() {
+    const slice = pool.slice(index, index + BATCH_SIZE);
+
+    for (const src of slice) {
       const { wrapper, img } = createItem(src);
 
       gallery.appendChild(wrapper);
@@ -155,7 +161,16 @@ export function initGallery() {
 
       observer.observe(img);
     }
+
+    index += BATCH_SIZE;
+
+    if (index < pool.length) {
+      requestIdleCallback(loadBatch);
+    }
   }
+
+  loadBatch();
+}
 
   function setFilter(filter) {
     mode = filter;
