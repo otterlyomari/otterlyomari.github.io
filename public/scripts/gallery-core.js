@@ -1,8 +1,14 @@
+let galleryMounted = false;
+
 function initGallery() {
   const gallery = document.getElementById("gallery");
   const buttons = document.querySelectorAll(".filter-btn");
 
   if (!gallery || buttons.length === 0) return;
+
+  // 🚨 PREVENT DOUBLE INIT (THIS IS KEY)
+  if (galleryMounted) return;
+  galleryMounted = true;
 
   let pool = [];
   let mode = "all";
@@ -95,7 +101,7 @@ function initGallery() {
   }
 
   /* =========================
-     OBSERVER (FAST LAZY LOAD)
+     OBSERVER
   ========================= */
   const observer = new IntersectionObserver((entries) => {
     for (const entry of entries) {
@@ -117,9 +123,7 @@ function initGallery() {
         img.style.opacity = "1";
       };
     }
-  }, {
-    rootMargin: "600px"
-  });
+  }, { rootMargin: "600px" });
 
   /* =========================
      CREATE ITEM
@@ -129,7 +133,6 @@ function initGallery() {
     wrapper.className = "gallery-item-wrapper";
 
     const img = document.createElement("img");
-
     img.dataset.src = src;
     img.loading = "lazy";
     img.decoding = "async";
@@ -146,7 +149,7 @@ function initGallery() {
   }
 
   /* =========================
-     RENDER
+     RENDER ALL
   ========================= */
   function renderAll() {
     gallery.innerHTML = "";
@@ -186,7 +189,19 @@ function initGallery() {
 }
 
 /* =========================
-   ASTRO SAFE BOOTSTRAP
+   BOOTSTRAP (FIXED)
 ========================= */
-document.addEventListener("DOMContentLoaded", initGallery);
-document.addEventListener("astro:page-load", initGallery);
+function bootGallery() {
+  const gallery = document.getElementById("gallery");
+  const buttons = document.querySelectorAll(".filter-btn");
+
+  if (!gallery || !buttons.length) {
+    requestAnimationFrame(bootGallery);
+    return;
+  }
+
+  initGallery();
+}
+
+document.addEventListener("DOMContentLoaded", bootGallery);
+document.addEventListener("astro:page-load", bootGallery);
