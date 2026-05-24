@@ -1,0 +1,141 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import { SITE_DESCRIPTION } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+	<BaseHead title={"OtterlyOmari | Gallery"} description={SITE_DESCRIPTION} />
+</head>
+
+<body>
+
+<script src="/src/scripts/hackermantm.js"></script>
+<script src="/src/scripts/gallery-core.js" defer></script>
+<script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+		
+
+<main id="content">
+
+<div id="home-section">
+
+	<a href="/">
+		<img src="/logo.png" class="image" />
+	</a>
+
+	<h5 class="t-outline" style="text-align:center;">
+		the cute motherfluffer your mom warned you about
+	</h5>
+
+	<div class="gallery-controls">
+		<button class="filter-btn active" data-filter="all">All</button>
+		<button class="filter-btn" data-filter="art">🎨 Artwork</button>
+		<button class="filter-btn" data-filter="vrchat">📸 VRChat</button>
+	</div>
+
+	<!-- MASONRY ROOT -->
+	<div id="gallery"></div>
+
+	<br />
+
+	<button>
+		<a href="/" class="no-deco">
+			<h4 class="t-outline">Go Back</h4>
+		</a>
+	</button>
+
+</div>
+
+</main>
+
+<style>
+main {
+	backdrop-filter: blur(0.4rem);
+	background: transparent;
+}
+
+#home-section {
+	max-width: 1200px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.gallery-controls {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	flex-wrap: wrap;
+	margin: 1.5rem 0;
+}
+
+.filter-btn {
+	padding: 6px 12px;
+	border: 1px solid #fff;
+	background: rgba(0,0,0,0.35);
+	color: white;
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+.filter-btn.active {
+	background: white;
+	color: black;
+}
+
+#gallery {
+	column-count: 4;
+	column-gap: 16px;
+	column-fill: balance;
+
+	width: 100vw;
+	max-width: 100vw;
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
+	padding: 12px;
+	box-sizing: border-box;
+}
+
+@media (max-width: 1000px) { #gallery { column-count: 3; } }
+@media (max-width: 700px) { #gallery { column-count: 2; } }
+@media (max-width: 480px) { #gallery { column-count: 1; } }
+
+.gallery-item-wrapper {
+	width: 100%;
+	margin-bottom: 16px;
+	break-inside: avoid;
+
+	contain: layout paint;
+}
+
+.gallery-item-wrapper img {
+	width: 100%;
+	display: block;
+	border-radius: 10px;
+	cursor: pointer;
+	filter: blur(8px);
+
+	height: auto;
+
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+	contain: layout paint;
+
+	background: rgba(255,255,255,0.06);
+
+	opacity: 0;
+	transform: translate3d(0,20px,0) scale(0.98);
+
+	transition: opacity 400ms ease, transform 400ms ease, filter 400ms ease;
+
+	will-change: transform, opacity, filter;
+}
+
+.gallery-item-wrapper img[src^="http"] {
+	filter: blur(0px);
+}
+</style>
+
+</body>
+</html>
