@@ -147,16 +147,13 @@ function renderAll() {
   gallery.innerHTML = "";
   elements.clear();
 
-  const ITEM_HEIGHT_ESTIMATE = 300;
-  const BUFFER = 6;
+  const BATCH_SIZE = 8;
+  let index = 0;
 
-  const start = 0;
-  const end = Math.min(pool.length, BUFFER);
+  function loadBatch() {
+    const slice = pool.slice(index, index + BATCH_SIZE);
 
-  function renderRange(from, to) {
-    for (let i = from; i < to; i++) {
-      const src = pool[i];
-
+    for (const src of slice) {
       const { wrapper, img } = createItem(src);
 
       gallery.appendChild(wrapper);
@@ -164,25 +161,15 @@ function renderAll() {
 
       observer.observe(img);
     }
+
+    index += BATCH_SIZE;
+
+    if (index < pool.length) {
+      requestIdleCallback(loadBatch);
+    }
   }
 
-  // initial batch only
-  renderRange(start, end);
-
-  // progressively load rest in idle time
-  let cursor = end;
-
-  function step() {
-    if (cursor >= pool.length) return;
-
-    const next = Math.min(cursor + BUFFER, pool.length);
-    renderRange(cursor, next);
-    cursor = next;
-
-    requestIdleCallback(step);
-  }
-
-  requestIdleCallback(step);
+  loadBatch();
 }
 
   function setFilter(filter) {
