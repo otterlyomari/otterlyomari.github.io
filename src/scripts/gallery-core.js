@@ -305,5 +305,7 @@ buttons.forEach(btn => {
 /* =========================
    INIT
 ========================= */
-pool = buildPool("all");
-render();
+window.addEventListener("DOMContentLoaded", () => {
+	pool = buildPool("all");
+	render();
+});
