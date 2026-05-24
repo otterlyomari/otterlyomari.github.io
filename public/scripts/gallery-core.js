@@ -1,6 +1,6 @@
 let galleryMounted = false;
 
-function initGallery() {
+export function initGallery() {
   const gallery = document.getElementById("gallery");
   const buttons = document.querySelectorAll(".filter-btn");
 
