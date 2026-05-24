@@ -1,15 +1,23 @@
 let galleryMounted = false;
+let observer = null;
 
 export function initGallery() {
   const gallery = document.getElementById("gallery");
   const buttons = document.querySelectorAll(".filter-btn");
 
   if (!gallery || !buttons.length) return;
+
+  // prevent double init per page instance
   if (galleryMounted) return;
   galleryMounted = true;
 
+  let pool = [];
+  let mode = "all";
+
+  const elements = new Map();
+
   /* =========================
-     DATA
+     DATA SOURCES
   ========================= */
   const galleryData = [
     {
@@ -85,136 +93,145 @@ export function initGallery() {
     }
   ];
 
-  /* =========================
-     STATE
-  ========================= */
-  let pool = [];
-  let mode = "all";
-
-  const elements = new Map();
-
-  const ITEM_HEIGHT = 260;
-  const BUFFER = 8;
-
-  /* =========================
-     POOL
-  ========================= */
   function buildPool(filter) {
     if (filter === "all") return galleryData.flatMap(s => s.images);
     return galleryData.find(s => s.category === filter)?.images || [];
   }
 
-  /* =========================
-     PLACEHOLDER (FAST LOAD)
-  ========================= */
-  function createPlaceholder() {
-    const div = document.createElement("div");
-    div.className = "gallery-item-wrapper";
+  function createObserver() {
+    return new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
 
-    div.innerHTML = `
-      <div class="skeleton"></div>
-    `;
+        const img = entry.target;
+        observer.unobserve(img);
 
-    return div;
+        const src = img.dataset.src;
+        if (!src || img.dataset.loaded) return;
+
+        img.dataset.loaded = "true";
+
+        const real = new Image();
+        real.src = src;
+
+        real.onload = () => {
+          img.src = src;
+          img.style.opacity = "1";
+        };
+      }
+    }, { rootMargin: "200px" });
   }
 
-  /* =========================
-     IMAGE LOAD (PROGRESSIVE)
-  ========================= */
-  function loadImage(img, src) {
-    if (img.dataset.loaded) return;
-    img.dataset.loaded = "true";
+  observer = createObserver();
 
-    const real = new Image();
-    real.src = src;
+  function createItem(src) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "gallery-item-wrapper";
 
-    real.onload = () => {
-      img.src = src;
-      img.classList.add("loaded");
-    };
+    const img = document.createElement("img");
+    img.dataset.src = src;
+    img.loading = "lazy";
+    img.decoding = "async";
+
+    img.style.width = "100%";
+    img.style.height = "auto";
+    img.style.display = "block";
+    img.style.opacity = "0";
+    img.style.transition = "opacity 300ms ease";
+
+    wrapper.appendChild(img);
+    return { wrapper, img };
   }
 
-  /* =========================
-     RENDER VISIBLE ONLY
-  ========================= */
-  function render() {
-    const scrollTop = window.scrollY;
-    const viewportHeight = window.innerHeight;
+function renderAll() {
+  gallery.innerHTML = "";
+  elements.clear();
 
-    const start = Math.max(0, Math.floor(scrollTop / ITEM_HEIGHT) - BUFFER);
-    const end = Math.min(pool.length, Math.ceil((scrollTop + viewportHeight) / ITEM_HEIGHT) + BUFFER);
+  const ITEM_HEIGHT_ESTIMATE = 300;
+  const BUFFER = 6;
 
-    const active = new Set();
+  const start = 0;
+  const end = Math.min(pool.length, BUFFER);
 
-    for (let i = start; i < end; i++) {
+  function renderRange(from, to) {
+    for (let i = from; i < to; i++) {
       const src = pool[i];
-      active.add(src);
 
-      let el = elements.get(src);
+      const { wrapper, img } = createItem(src);
 
-      if (!el) {
-        el = createPlaceholder();
+      gallery.appendChild(wrapper);
+      elements.set(src, img);
 
-        const img = document.createElement("img");
-        img.dataset.src = src;
-        img.loading = "lazy";
-        img.decoding = "async";
-
-        el.appendChild(img);
-        gallery.appendChild(el);
-
-        elements.set(src, img);
-
-        loadImage(img, src);
-      }
-    }
-
-    // remove out-of-view items
-    for (const [src, img] of elements) {
-      if (!active.has(src)) {
-        img.parentElement?.remove();
-        elements.delete(src);
-      }
+      observer.observe(img);
     }
   }
 
-  /* =========================
-     SCROLL
-  ========================= */
-  let ticking = false;
+  // initial batch only
+  renderRange(start, end);
 
-  window.addEventListener("scroll", () => {
-    if (ticking) return;
+  // progressively load rest in idle time
+  let cursor = end;
 
-    ticking = true;
-    requestAnimationFrame(() => {
-      render();
-      ticking = false;
-    });
+  function step() {
+    if (cursor >= pool.length) return;
+
+    const next = Math.min(cursor + BUFFER, pool.length);
+    renderRange(cursor, next);
+    cursor = next;
+
+    requestIdleCallback(step);
+  }
+
+  requestIdleCallback(step);
+}
+
+  function setFilter(filter) {
+    mode = filter;
+    pool = buildPool(mode);
+    renderAll();
+  }
+
+  // IMPORTANT: remove old listeners by cloning buttons
+  buttons.forEach(btn => {
+    const clone = btn.cloneNode(true);
+    btn.replaceWith(clone);
   });
 
-  /* =========================
-     FILTERS (INSTANT SWITCH)
-  ========================= */
-  buttons.forEach(btn => {
+  const freshButtons = document.querySelectorAll(".filter-btn");
+
+  freshButtons.forEach(btn => {
     btn.addEventListener("click", () => {
-      buttons.forEach(b => b.classList.remove("active"));
+      freshButtons.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
 
-      mode = btn.dataset.filter;
-      pool = buildPool(mode);
-
-      elements.forEach(el => el.parentElement?.remove());
-      elements.clear();
+      setFilter(btn.dataset.filter);
 
       window.scrollTo(0, 0);
-      render();
     });
   });
 
-  /* =========================
-     INIT
-  ========================= */
   pool = buildPool("all");
-  render();
+  renderAll();
 }
+
+
+function bootGallery() {
+  const gallery = document.getElementById("gallery");
+  const buttons = document.querySelectorAll(".filter-btn");
+
+  if (!gallery || !buttons.length) return;
+
+  // CRITICAL: reset mount flag on Astro navigation
+  if (window.__galleryRoot !== gallery) {
+    window.__galleryRoot = gallery;
+    galleryMounted = false;
+  }
+
+  initGallery();
+}
+
+/* Astro + normal lifecycle coverage */
+document.addEventListener("DOMContentLoaded", bootGallery);
+document.addEventListener("astro:page-load", bootGallery);
+document.addEventListener("astro:after-swap", bootGallery);
+window.addEventListener("load", bootGallery);
