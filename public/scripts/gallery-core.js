@@ -139,6 +139,24 @@ export function initGallery() {
     img.style.opacity = "0";
     img.style.transition = "opacity 300ms ease";
 
+    img.addEventListener("click", async () => {
+      const el = img;
+
+      // If already fullscreen, exit
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+        return;
+      }
+
+      // Request fullscreen on the image
+      if (el.requestFullscreen) {
+        el.requestFullscreen();
+      } else if (el.webkitRequestFullscreen) {
+        // Safari fallback
+        el.webkitRequestFullscreen();
+      }
+    });
+
     wrapper.appendChild(img);
     return { wrapper, img };
   }
