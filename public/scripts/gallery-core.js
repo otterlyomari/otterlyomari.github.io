@@ -212,5 +212,7 @@ document.addEventListener("DOMContentLoaded", safeBoot);
 /* Astro navigation */
 document.addEventListener("astro:page-load", safeBoot);
 
+document.addEventListener("astro:after-swap", safeBoot);
+
 /* extra safety for partial hydration cases */
 window.addEventListener("load", safeBoot);
