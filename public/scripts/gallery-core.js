@@ -188,20 +188,29 @@ function initGallery() {
   renderAll();
 }
 
-/* =========================
-   BOOTSTRAP (FIXED)
-========================= */
 function bootGallery() {
   const gallery = document.getElementById("gallery");
   const buttons = document.querySelectorAll(".filter-btn");
 
-  if (!gallery || !buttons.length) {
-    requestAnimationFrame(bootGallery);
-    return;
-  }
+  if (!gallery || !buttons.length) return false;
+
+  if (window.__galleryMounted) return;
+  window.__galleryMounted = true;
 
   initGallery();
 }
 
-document.addEventListener("DOMContentLoaded", bootGallery);
-document.addEventListener("astro:page-load", bootGallery);
+function safeBoot() {
+  requestAnimationFrame(() => {
+    bootGallery();
+  });
+}
+
+/* First load */
+document.addEventListener("DOMContentLoaded", safeBoot);
+
+/* Astro navigation */
+document.addEventListener("astro:page-load", safeBoot);
+
+/* extra safety for partial hydration cases */
+window.addEventListener("load", safeBoot);
