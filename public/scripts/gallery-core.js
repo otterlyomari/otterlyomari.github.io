@@ -1,5 +1,4 @@
 let galleryMounted = false;
-let observer = null;
 
 export function initGallery() {
   const gallery = document.getElementById("gallery");
@@ -7,7 +6,6 @@ export function initGallery() {
 
   if (!gallery || !buttons.length) return;
 
-  // prevent double init per page instance
   if (galleryMounted) return;
   galleryMounted = true;
 
@@ -17,7 +15,7 @@ export function initGallery() {
   const elements = new Map();
 
   /* =========================
-     DATA SOURCES
+     DATA
   ========================= */
   const galleryData = [
     {
@@ -98,51 +96,35 @@ export function initGallery() {
     return galleryData.find(s => s.category === filter)?.images || [];
   }
 
-  function createObserver() {
-    return new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-
-        const img = entry.target;
-        observer.unobserve(img);
-
-        const src = img.dataset.src;
-        if (!src || img.dataset.loaded) return;
-
-        img.dataset.loaded = "true";
-
-        const real = new Image();
-        real.src = src;
-
-        real.onload = () => {
-          img.src = src;
-          img.style.opacity = "1";
-        };
-      }
-    }, { rootMargin: "600px" });
-  }
-
-  observer = createObserver();
-
+  /* =========================
+     CREATE ITEM
+  ========================= */
   function createItem(src) {
     const wrapper = document.createElement("div");
     wrapper.className = "gallery-item-wrapper";
 
     const img = document.createElement("img");
-    img.dataset.src = src;
-    img.loading = "lazy";
+
+    img.src = src;                // 🔥 INSTANT LOAD
+    img.loading = "eager";        // optional hint
     img.decoding = "async";
 
     img.style.width = "100%";
-    img.style.height = "auto";
     img.style.display = "block";
     img.style.opacity = "0";
     img.style.transition = "opacity 300ms ease";
+
+    img.onload = () => {
+      img.style.opacity = "1";
+    };
 
     wrapper.appendChild(img);
     return { wrapper, img };
   }
 
+  /* =========================
+     RENDER ALL (NO LAZY)
+  ========================= */
   function renderAll() {
     gallery.innerHTML = "";
     elements.clear();
@@ -152,28 +134,21 @@ export function initGallery() {
 
       gallery.appendChild(wrapper);
       elements.set(src, img);
-
-      observer.observe(img);
     }
   }
 
+  /* =========================
+     FILTERS
+  ========================= */
   function setFilter(filter) {
     mode = filter;
     pool = buildPool(mode);
     renderAll();
   }
 
-  // IMPORTANT: remove old listeners by cloning buttons
   buttons.forEach(btn => {
-    const clone = btn.cloneNode(true);
-    btn.replaceWith(clone);
-  });
-
-  const freshButtons = document.querySelectorAll(".filter-btn");
-
-  freshButtons.forEach(btn => {
     btn.addEventListener("click", () => {
-      freshButtons.forEach(b => b.classList.remove("active"));
+      buttons.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
 
       setFilter(btn.dataset.filter);
@@ -182,27 +157,28 @@ export function initGallery() {
     });
   });
 
+  /* =========================
+     INIT
+  ========================= */
   pool = buildPool("all");
   renderAll();
 }
 
-
+/* =========================
+   BOOT (ASTRO SAFE)
+========================= */
 function bootGallery() {
   const gallery = document.getElementById("gallery");
   const buttons = document.querySelectorAll(".filter-btn");
 
   if (!gallery || !buttons.length) return;
 
-  // CRITICAL: reset mount flag on Astro navigation
-  if (window.__galleryRoot !== gallery) {
-    window.__galleryRoot = gallery;
-    galleryMounted = false;
-  }
+  if (window.__galleryMounted) return;
+  window.__galleryMounted = true;
 
   initGallery();
 }
 
-/* Astro + normal lifecycle coverage */
 document.addEventListener("DOMContentLoaded", bootGallery);
 document.addEventListener("astro:page-load", bootGallery);
 document.addEventListener("astro:after-swap", bootGallery);
