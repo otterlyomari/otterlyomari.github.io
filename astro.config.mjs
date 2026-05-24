@@ -10,6 +10,8 @@ import jopSoftwarecookieconsent from "@jop-software/astro-cookieconsent";
 // https://astro.build/config
 export default defineConfig({
   site: 'https://otterlyomari.github.io',
+  base: '/',
+  
   integrations: [mdx(), sitemap(), icon({
     include: {
       // Include all brand icons
