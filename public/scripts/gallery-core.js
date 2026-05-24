@@ -108,6 +108,8 @@ function createItem(src) {
 
   const img = document.createElement("img");
   img.dataset.src = src;
+  img.loading = "lazy";
+  img.decoding = "async";
 
   img.style.width = "100%";
   img.style.height = "auto";
