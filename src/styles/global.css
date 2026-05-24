@@ -28,6 +28,33 @@
     font-display: swap;
 }
 
+html,
+body {
+	width: 100%;
+	max-width: 100%;
+	overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+img,
+svg,
+video,
+canvas {
+	max-width: 100%;
+	height: auto;
+	display: block;
+}
+
+main,
+section,
+div {
+	max-width: 100%;
+}
 
 body {
 	font-family: 'Pulang', sans-serif;
