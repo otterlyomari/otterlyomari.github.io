@@ -1,12 +1,13 @@
 let galleryMounted = false;
+let observer = null;
 
 export function initGallery() {
   const gallery = document.getElementById("gallery");
   const buttons = document.querySelectorAll(".filter-btn");
 
-  if (!gallery || buttons.length === 0) return;
+  if (!gallery || !buttons.length) return;
 
-  // 🚨 PREVENT DOUBLE INIT (THIS IS KEY)
+  // prevent double init per page instance
   if (galleryMounted) return;
   galleryMounted = true;
 
@@ -16,7 +17,7 @@ export function initGallery() {
   const elements = new Map();
 
   /* =========================
-     DATA (UNCHANGED)
+     DATA SOURCES
   ========================= */
   const galleryData = [
     {
@@ -92,42 +93,37 @@ export function initGallery() {
     }
   ];
 
-  /* =========================
-     POOL
-  ========================= */
   function buildPool(filter) {
     if (filter === "all") return galleryData.flatMap(s => s.images);
     return galleryData.find(s => s.category === filter)?.images || [];
   }
 
-  /* =========================
-     OBSERVER
-  ========================= */
-  const observer = new IntersectionObserver((entries) => {
-    for (const entry of entries) {
-      if (!entry.isIntersecting) continue;
+  function createObserver() {
+    return new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
 
-      const img = entry.target;
-      observer.unobserve(img);
+        const img = entry.target;
+        observer.unobserve(img);
 
-      const src = img.dataset.src;
-      if (!src || img.dataset.loaded) return;
+        const src = img.dataset.src;
+        if (!src || img.dataset.loaded) return;
 
-      img.dataset.loaded = "true";
+        img.dataset.loaded = "true";
 
-      const real = new Image();
-      real.src = src;
+        const real = new Image();
+        real.src = src;
 
-      real.onload = () => {
-        img.src = src;
-        img.style.opacity = "1";
-      };
-    }
-  }, { rootMargin: "600px" });
+        real.onload = () => {
+          img.src = src;
+          img.style.opacity = "1";
+        };
+      }
+    }, { rootMargin: "600px" });
+  }
 
-  /* =========================
-     CREATE ITEM
-  ========================= */
+  observer = createObserver();
+
   function createItem(src) {
     const wrapper = document.createElement("div");
     wrapper.className = "gallery-item-wrapper";
@@ -144,13 +140,9 @@ export function initGallery() {
     img.style.transition = "opacity 300ms ease";
 
     wrapper.appendChild(img);
-
     return { wrapper, img };
   }
 
-  /* =========================
-     RENDER ALL
-  ========================= */
   function renderAll() {
     gallery.innerHTML = "";
     elements.clear();
@@ -165,54 +157,53 @@ export function initGallery() {
     }
   }
 
-  /* =========================
-     FILTERS
-  ========================= */
+  function setFilter(filter) {
+    mode = filter;
+    pool = buildPool(mode);
+    renderAll();
+  }
+
+  // IMPORTANT: remove old listeners by cloning buttons
   buttons.forEach(btn => {
+    const clone = btn.cloneNode(true);
+    btn.replaceWith(clone);
+  });
+
+  const freshButtons = document.querySelectorAll(".filter-btn");
+
+  freshButtons.forEach(btn => {
     btn.addEventListener("click", () => {
-      buttons.forEach(b => b.classList.remove("active"));
+      freshButtons.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
 
-      mode = btn.dataset.filter;
-      pool = buildPool(mode);
+      setFilter(btn.dataset.filter);
 
       window.scrollTo(0, 0);
-      renderAll();
     });
   });
 
-  /* =========================
-     INIT
-  ========================= */
   pool = buildPool("all");
   renderAll();
 }
+
 
 function bootGallery() {
   const gallery = document.getElementById("gallery");
   const buttons = document.querySelectorAll(".filter-btn");
 
-  if (!gallery || !buttons.length) return false;
+  if (!gallery || !buttons.length) return;
 
-  if (window.__galleryMounted) return;
-  window.__galleryMounted = true;
+  // CRITICAL: reset mount flag on Astro navigation
+  if (window.__galleryRoot !== gallery) {
+    window.__galleryRoot = gallery;
+    galleryMounted = false;
+  }
 
   initGallery();
 }
 
-function safeBoot() {
-  requestAnimationFrame(() => {
-    bootGallery();
-  });
-}
-
-/* First load */
-document.addEventListener("DOMContentLoaded", safeBoot);
-
-/* Astro navigation */
-document.addEventListener("astro:page-load", safeBoot);
-
-document.addEventListener("astro:after-swap", safeBoot);
-
-/* extra safety for partial hydration cases */
-window.addEventListener("load", safeBoot);
+/* Astro + normal lifecycle coverage */
+document.addEventListener("DOMContentLoaded", bootGallery);
+document.addEventListener("astro:page-load", bootGallery);
+document.addEventListener("astro:after-swap", bootGallery);
+window.addEventListener("load", bootGallery);
