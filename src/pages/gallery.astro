@@ -52,6 +52,8 @@ import { SITE_DESCRIPTION } from '../consts';
 
 </main>
 
+<button id="scroll-toggle" aria-label="Scroll" class="scroll-toggle"><span class="t-outline">↓</span></button>
+
 <style>
 main {
 	backdrop-filter: blur(0.4rem);
@@ -73,10 +75,10 @@ main {
 }
 
 .filters-title {
-  margin: 1rem 0 0.5rem;
-  text-align: center;
-  opacity: 0.85;
-  letter-spacing: 1px;
+	margin: 1rem 0 0.5rem;
+	text-align: center;
+	opacity: 0.85;
+	letter-spacing: 1px;
 }
 
 .filter-btn {
@@ -107,26 +109,17 @@ main {
 	box-sizing: border-box;
 }
 
-@media (max-width: 1000px) { #gallery { column-count: 3; } }
-@media (max-width: 700px) { #gallery { column-count: 2; } }
-@media (max-width: 480px) {
-  .filter-btn {
-    width: 100%;
-    max-width: 220px;
-  }
+@media (max-width: 1000px) {
+	#gallery { column-count: 3; }
+}
 
-  .gallery-controls {
-    flex-direction: column;
-    align-items: center;
-  }
+@media (max-width: 700px) {
+	#gallery { column-count: 2; }
 }
 
 .gallery-item-wrapper {
-	width: 100%;
-	margin-bottom: 16px;
-	break-inside: avoid;
-
-	contain: layout paint;
+	position: relative;
+	z-index: 1;
 }
 
 .gallery-item-wrapper img {
@@ -134,28 +127,147 @@ main {
 	display: block;
 	border-radius: 10px;
 	cursor: pointer;
-	filter: blur(8px);
-
-	height: auto;
 
 	aspect-ratio: 4 / 3;
 	object-fit: cover;
-	contain: layout paint;
 
-	background: rgba(255,255,255,0.06);
-
+	filter: blur(14px);
+	transform: scale(1.02);
 	opacity: 0;
-	transform: translate3d(0,20px,0) scale(0.98);
 
-	transition: opacity 400ms ease, transform 400ms ease, filter 400ms ease;
-
+	transition: all 300ms ease;
 	will-change: transform, opacity, filter;
 }
 
-.gallery-item-wrapper img[src^="http"] {
-	filter: blur(0px);
+@media (max-width: 480px) {
+	.filter-btn {
+		width: 100%;
+		max-width: 220px;
+	}
+
+	.gallery-controls {
+		flex-direction: column;
+		align-items: center;
+	}
+}
+
+.scroll-toggle {
+	position: fixed;
+	right: 16px;
+	bottom: 16px;
+	width: 48px;
+	height: 48px;
+
+	border-radius: 999px;
+	border: 1px solid rgba(255,255,255,0.4);
+	background: rgba(0,0,0,0.6);
+	backdrop-filter: blur(16px);
+	color: white;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	padding: 0;
+	cursor: pointer;
+	z-index: 9999;
+
+	opacity: 0.85;
+	transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.scroll-toggle span {
+	font-size: 40px;
+	line-height: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transform: translateY(-6px);
+}
+
+.scroll-toggle:hover {
+	transform: scale(1.08);
+	opacity: 1;
+}
+
+.scroll-toggle:active {
+	transform: scale(0.95);
 }
 </style>
+
+<script>
+const btn = document.getElementById("scroll-toggle");
+const icon = btn?.querySelector("span");
+
+function getScrollPosition() {
+	return window.scrollY || document.documentElement.scrollTop;
+}
+
+function getMaxScroll() {
+	return document.documentElement.scrollHeight - window.innerHeight;
+}
+
+function isAtTop() {
+	return getScrollPosition() <= 5;
+}
+
+function isAtBottom() {
+	return getScrollPosition() >= getMaxScroll() - 5;
+}
+
+function updateButton() {
+	if (!btn || !icon) return;
+
+	// TOP → always show DOWN
+	if (isAtTop()) {
+		icon.textContent = "↓";
+		btn.dataset.mode = "down";
+		return;
+	}
+
+	// BOTTOM → show UP
+	if (isAtBottom()) {
+		icon.textContent = "↑";
+		btn.dataset.mode = "up";
+		return;
+	}
+
+	// MID SCROLL → decide based on which direction is closer
+	const halfway = getMaxScroll() / 2;
+
+	if (getScrollPosition() < halfway) {
+		icon.textContent = "↓";
+		btn.dataset.mode = "down";
+	} else {
+		icon.textContent = "↑";
+		btn.dataset.mode = "up";
+	}
+}
+
+function scrollToTop() {
+	window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function scrollToBottom() {
+	window.scrollTo({ top: getMaxScroll(), behavior: "smooth" });
+}
+
+btn?.addEventListener("click", () => {
+	if (btn.dataset.mode === "up") {
+		scrollToTop();
+	} else {
+		scrollToBottom();
+	}
+});
+
+// keep in sync
+window.addEventListener("scroll", updateButton);
+window.addEventListener("resize", updateButton);
+document.addEventListener("DOMContentLoaded", updateButton);
+
+// initial sync
+updateButton();
+</script>
 
 </body>
 </html>

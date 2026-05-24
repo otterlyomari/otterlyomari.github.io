@@ -13,6 +13,21 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 		
 		<script is:inline src="/scripts/hackermantm.js"></script>
+		<script src="/scripts/splash.js" defer></script>
+		
+		<div id="bg-layer-base"></div>
+		<div id="bg-layer-splash"></div>
+
+		<div id="water-scene">
+			<div class="wave-layer wave1"></div>
+			<div class="wave-layer wave2"></div>
+
+			<div class="water-overlay"></div>
+
+			<div id="splash-logo">
+				<img src="/logo.png" />
+			</div>
+		</div>
 
 		<main id="content">
 			<div id="home-section">
@@ -64,13 +79,152 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				background-color: transparent;
 			}
 
+			#bg-layer-base,
+			#bg-layer-splash {
+			position: fixed;
+			inset: 0;
+			background-size: cover;
+			background-position: center;
+			transition: opacity 1.2s ease;
+			z-index: -2;
+			}
+
+			#bg-layer-base {
+			background-image: url("/bg.png");
+			opacity: 1;
+			}
+
+			#bg-layer-splash {
+			background-image: url("/splash_bg.png");
+			opacity: 1;
+			}
+
 			span {
 				opacity: 0;
 			}
 
+			#water-scene {
+				position: fixed;
+				inset: 0;
+				overflow: hidden;
+				z-index: 9999;
+				pointer-events: none;
+			}
+
+			/* soft underwater base */
+			.water-overlay {
+				position: absolute;
+				inset: 0;
+				background: radial-gradient(
+					circle at 50% 40%,
+					rgba(0, 180, 255, 0.15),
+					rgba(0, 40, 80, 0.6)
+				);
+				backdrop-filter: blur(6px);
+				animation: waterSettle 2.5s ease forwards;
+			}
+
+			.wave-layer {
+				position: absolute;
+				width: 200%;
+				height: 200%;
+				left: -50%;
+				top: -60%;
+
+				background: radial-gradient(
+					circle at 50% 50%,
+					rgba(255,255,255,0.25) 0%,
+					rgba(255,255,255,0.08) 25%,
+					transparent 60%
+				);
+
+				outline: 1px solid rgba(255,255,255,0.05);
+
+				opacity: 0.35;
+				mix-blend-mode: overlay;
+
+				animation: waveMove 12s linear infinite;
+			}
+
+			.wave1 {
+				animation-duration: 10s;
+				opacity: 0.25;
+			}
+
+			.wave2 {
+				animation-duration: 14s;
+				opacity: 0.15;
+				top: -65%;
+			}
+
+			@keyframes waveMove {
+				0% {
+					transform: translateX(-10%) translateY(0) rotate(0deg);
+				}
+				50% {
+					transform: translateX(10%) translateY(5%) rotate(180deg);
+				}
+				100% {
+					transform: translateX(-10%) translateY(0) rotate(360deg);
+				}
+			}
+
+			#splash-logo {
+				position: absolute;
+				inset: 0;
+				display: grid;
+				place-items: center;
+			}
+
+			#splash-logo img {
+				width: min(42vw, 320px);
+				opacity: 0;
+				transform: scale(1) translateY(-10px);
+				filter: blur(8px);
+				animation: logoRise 2.2s ease forwards;
+			}
+
+			@keyframes logoRise {
+				0% {
+					opacity: 0;
+					transform: scale(1.1) translateY(-20px);
+					filter: blur(12px);
+				}
+
+				40% {
+					opacity: 1;
+				}
+
+				100% {
+					opacity: 1;
+					transform: scale(2) translateY(0);
+					filter: blur(0px);
+				}
+			}
+
+			@keyframes waterSettle {
+				0% {
+					filter: blur(10px) saturate(1.4);
+				}
+				100% {
+					filter: blur(3px) saturate(1);
+				}
+			}
+
+			#home-section {
+				opacity: 0;
+				transform: translateY(10px);
+				transition: 900ms ease;
+			}
+
+			body.loaded #home-section {
+				opacity: 1;
+				transform: translateY(0);
+			}
+
 			.icons {
 				display: flex;
-				justify-content: var(--flex-alignment);
+				justify-content: center;
 				letter-spacing: 0;
 				padding: 0;
 			}
@@ -78,12 +232,19 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			#icons01,
 			#icons02
 			{
+				display: flex;
 				justify-content: center;
-				font-size: 2em;
-				gap: 0.375rem;
+				align-items: center;
+				gap: 0.75rem;
+				padding: 0;
+				margin: 0.75rem 0;
 			}
 
-
+			@media (max-width: 700px) {
+				#icons01 {
+					transform: translateX(-73px);
+				}
+			}
 
 			#icons01 .n01 svg {
 				fill: #FF0000;

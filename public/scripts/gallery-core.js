@@ -39,9 +39,9 @@ export function initGallery() {
         "/fursona-art/cute.png",
         "/fursona-art/omariBlep.png",
         "/fursona-art/swerveCuddle.png",
-        "/fursona-art/omariAnime.bmp",
+        "/fursona-art/omariAnime.png",
         "/fursona-art/otterfox.png",
-        "/fursona-art/omariCute.bmp",
+        "/fursona-art/omariCute.png",
         "/fursona-art/149_-_Omari_Symm_Headshot_gift.png",
         "/fursona-art/IMG_3250.png",
         "/fursona-art/IMG_3251.png",
@@ -111,15 +111,18 @@ export function initGallery() {
 
         img.dataset.loaded = "true";
 
-        const real = new Image();
-        real.src = src;
-
-        real.onload = () => {
-          img.src = src;
-          img.style.opacity = "1";
-        };
+        img.src = src;
+        img.decode?.()
+          .catch(() => {})
+          .then(() => {
+            requestAnimationFrame(() => {
+              img.style.opacity = "1";
+              img.style.filter = "blur(0px)";
+              img.style.transform = "scale(1)";
+            });
+        });
       }
-    }, { rootMargin: "200px" });
+    }, { rootMargin: "300px" });
   }
 
   observer = createObserver();
@@ -132,12 +135,17 @@ export function initGallery() {
     img.dataset.src = src;
     img.loading = "lazy";
     img.decoding = "async";
+    img.fetchPriority = "high";
 
     img.style.width = "100%";
     img.style.height = "auto";
     img.style.display = "block";
     img.style.opacity = "0";
     img.style.transition = "opacity 300ms ease";
+    img.style.background = "rgba(255,255,255,0.06)";
+
+    img.style.contentVisibility = "auto";
+    img.style.containIntrinsicSize = "300px 225px";
 
     img.addEventListener("click", async () => {
       const el = img;
@@ -165,7 +173,7 @@ function renderAll() {
   gallery.innerHTML = "";
   elements.clear();
 
-  const BATCH_SIZE = 8;
+  const BATCH_SIZE = 14;
   let index = 0;
 
   function loadBatch() {
