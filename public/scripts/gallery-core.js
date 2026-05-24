@@ -1,23 +1,15 @@
 let galleryMounted = false;
-let observer = null;
 
 export function initGallery() {
   const gallery = document.getElementById("gallery");
   const buttons = document.querySelectorAll(".filter-btn");
 
   if (!gallery || !buttons.length) return;
-
-  // prevent double init per page instance
   if (galleryMounted) return;
   galleryMounted = true;
 
-  let pool = [];
-  let mode = "all";
-
-  const elements = new Map();
-
   /* =========================
-     DATA SOURCES
+     DATA
   ========================= */
   const galleryData = [
     {
@@ -93,145 +85,136 @@ export function initGallery() {
     }
   ];
 
+  /* =========================
+     STATE
+  ========================= */
+  let pool = [];
+  let mode = "all";
+
+  const elements = new Map();
+
+  const ITEM_HEIGHT = 260;
+  const BUFFER = 8;
+
+  /* =========================
+     POOL
+  ========================= */
   function buildPool(filter) {
     if (filter === "all") return galleryData.flatMap(s => s.images);
     return galleryData.find(s => s.category === filter)?.images || [];
   }
 
-  function createObserver() {
-    return new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
+  /* =========================
+     PLACEHOLDER (FAST LOAD)
+  ========================= */
+  function createPlaceholder() {
+    const div = document.createElement("div");
+    div.className = "gallery-item-wrapper";
 
-        const img = entry.target;
-        observer.unobserve(img);
+    div.innerHTML = `
+      <div class="skeleton"></div>
+    `;
 
-        const src = img.dataset.src;
-        if (!src || img.dataset.loaded) return;
-
-        img.dataset.loaded = "true";
-
-        const real = new Image();
-        real.src = src;
-
-        real.onload = () => {
-          img.src = src;
-          img.style.opacity = "1";
-        };
-      }
-    }, { rootMargin: "200px" });
+    return div;
   }
 
-  observer = createObserver();
+  /* =========================
+     IMAGE LOAD (PROGRESSIVE)
+  ========================= */
+  function loadImage(img, src) {
+    if (img.dataset.loaded) return;
+    img.dataset.loaded = "true";
 
-  function createItem(src) {
-    const wrapper = document.createElement("div");
-    wrapper.className = "gallery-item-wrapper";
+    const real = new Image();
+    real.src = src;
 
-    const img = document.createElement("img");
-    img.dataset.src = src;
-    img.loading = "lazy";
-    img.decoding = "async";
-
-    img.style.width = "100%";
-    img.style.height = "auto";
-    img.style.display = "block";
-    img.style.opacity = "0";
-    img.style.transition = "opacity 300ms ease";
-
-    wrapper.appendChild(img);
-    return { wrapper, img };
+    real.onload = () => {
+      img.src = src;
+      img.classList.add("loaded");
+    };
   }
 
-function renderAll() {
-  gallery.innerHTML = "";
-  elements.clear();
+  /* =========================
+     RENDER VISIBLE ONLY
+  ========================= */
+  function render() {
+    const scrollTop = window.scrollY;
+    const viewportHeight = window.innerHeight;
 
-  const ITEM_HEIGHT_ESTIMATE = 300;
-  const BUFFER = 6;
+    const start = Math.max(0, Math.floor(scrollTop / ITEM_HEIGHT) - BUFFER);
+    const end = Math.min(pool.length, Math.ceil((scrollTop + viewportHeight) / ITEM_HEIGHT) + BUFFER);
 
-  const start = 0;
-  const end = Math.min(pool.length, BUFFER);
+    const active = new Set();
 
-  function renderRange(from, to) {
-    for (let i = from; i < to; i++) {
+    for (let i = start; i < end; i++) {
       const src = pool[i];
+      active.add(src);
 
-      const { wrapper, img } = createItem(src);
+      let el = elements.get(src);
 
-      gallery.appendChild(wrapper);
-      elements.set(src, img);
+      if (!el) {
+        el = createPlaceholder();
 
-      observer.observe(img);
+        const img = document.createElement("img");
+        img.dataset.src = src;
+        img.loading = "lazy";
+        img.decoding = "async";
+
+        el.appendChild(img);
+        gallery.appendChild(el);
+
+        elements.set(src, img);
+
+        loadImage(img, src);
+      }
+    }
+
+    // remove out-of-view items
+    for (const [src, img] of elements) {
+      if (!active.has(src)) {
+        img.parentElement?.remove();
+        elements.delete(src);
+      }
     }
   }
 
-  // initial batch only
-  renderRange(start, end);
+  /* =========================
+     SCROLL
+  ========================= */
+  let ticking = false;
 
-  // progressively load rest in idle time
-  let cursor = end;
+  window.addEventListener("scroll", () => {
+    if (ticking) return;
 
-  function step() {
-    if (cursor >= pool.length) return;
-
-    const next = Math.min(cursor + BUFFER, pool.length);
-    renderRange(cursor, next);
-    cursor = next;
-
-    requestIdleCallback(step);
-  }
-
-  requestIdleCallback(step);
-}
-
-  function setFilter(filter) {
-    mode = filter;
-    pool = buildPool(mode);
-    renderAll();
-  }
-
-  // IMPORTANT: remove old listeners by cloning buttons
-  buttons.forEach(btn => {
-    const clone = btn.cloneNode(true);
-    btn.replaceWith(clone);
-  });
-
-  const freshButtons = document.querySelectorAll(".filter-btn");
-
-  freshButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      freshButtons.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      setFilter(btn.dataset.filter);
-
-      window.scrollTo(0, 0);
+    ticking = true;
+    requestAnimationFrame(() => {
+      render();
+      ticking = false;
     });
   });
 
+  /* =========================
+     FILTERS (INSTANT SWITCH)
+  ========================= */
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      buttons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      mode = btn.dataset.filter;
+      pool = buildPool(mode);
+
+      elements.forEach(el => el.parentElement?.remove());
+      elements.clear();
+
+      window.scrollTo(0, 0);
+      render();
+    });
+  });
+
+  /* =========================
+     INIT
+  ========================= */
   pool = buildPool("all");
-  renderAll();
+  render();
 }
-
-
-function bootGallery() {
-  const gallery = document.getElementById("gallery");
-  const buttons = document.querySelectorAll(".filter-btn");
-
-  if (!gallery || !buttons.length) return;
-
-  // CRITICAL: reset mount flag on Astro navigation
-  if (window.__galleryRoot !== gallery) {
-    window.__galleryRoot = gallery;
-    galleryMounted = false;
-  }
-
-  initGallery();
-}
-
-/* Astro + normal lifecycle coverage */
-document.addEventListener("DOMContentLoaded", bootGallery);
-document.addEventListener("astro:page-load", bootGallery);
-document.addEventListener("astro:after-swap", bootGallery);
-window.addEventListener("load", bootGallery);
