@@ -218,8 +218,6 @@ function renderAll() {
       btn.classList.add("active");
 
       setFilter(btn.dataset.filter);
-
-      window.scrollTo(0, 0);
     });
   });
 

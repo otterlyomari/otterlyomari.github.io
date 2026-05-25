@@ -1,5 +1,6 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import ScrollToggle from '../components/ScrollToggle.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 ---
 
@@ -23,8 +24,8 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				<h5 class="t-outline" style="text-align: center;">the cute motherfluffer your mom warned you about</h5>
 				<div id="container">
 					<section id="section">
-						<h4 class="t-outline" style="text-align: center;" transition:animate="fade">About me</h4>
-						<p class="t-outline" style="text-align: center; color: white;" >Hi there! It's me, your friendly neighborhood otter, Omari! 
+						<h4 class="t-outline no-hover" style="text-align: center;" transition:animate="fade">About me</h4>
+						<p class="t-outline " style="text-align: center; color: white;" >Hi there! It's me, your friendly neighborhood otter, Omari! 
 						</br> I'd like to thank you for taking the time to look at my website! </br> Now that you're here, I'd like to tell you a bit about myself</p>
 						<p class="t-outline" style="text-align: center; color: white;">I'm Omari Allyn Tidemere </br> A fluffy sea otter on the internet who likes to help others and 
 						</br> spread joy, if I can make as much as one person happy then 
@@ -49,8 +50,9 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 							~ Omari Allyn Tidemere</p>
 					</section>
 				</div>
-				<button><a href="/" class="no-deco"><h4 class="t-outline">Go Back</h4></a></button>
+				<button><a href="/" class="no-deco"><h4 class="t-outline t-o">Go Back</h4></a></button>
 		</main>
+
 		<style>
 			main {
 				backdrop-filter: blur(0.4rem);
@@ -65,11 +67,11 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			}
 
 			#container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 2rem 1rem 4rem;
-}
+				display: flex;
+				justify-content: center;
+				align-items: flex-start;
+				padding: 2rem 1rem 4rem;
+			}
 
 		</style>
 	</body>

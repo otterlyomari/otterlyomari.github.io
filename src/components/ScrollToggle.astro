@@ -1,0 +1,149 @@
+<button id="scroll-toggle" class="scroll-toggle" aria-label="Scroll">
+	<span id="scroll-icon" class="t-outline">↓</span>
+</button>
+
+<style>
+.scroll-toggle {
+	position: fixed;
+	right: 16px;
+	bottom: 16px;
+	width: 48px;
+	height: 48px;
+
+	border-radius: 999px;
+	border: 1px solid rgba(255,255,255,0.4);
+	background: rgba(0,0,0,0.6);
+	backdrop-filter: blur(16px);
+	color: white;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	cursor: pointer;
+	z-index: 9999;
+
+	opacity: var(--opacity, 0.85);
+
+	/* ONLY transform lives here */
+	transform:
+		scaleX(var(--sx, 1))
+		scaleY(var(--sy, 1));
+
+	transform-origin: center;
+
+	will-change: transform, opacity;
+
+	transition: opacity 200ms ease;
+}
+
+/* hover override (still respects squash) */
+.scroll-toggle:hover {
+	--opacity: 1;
+}
+
+.scroll-toggle span {
+	font-size: 40px;
+	line-height: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transform: translateY(-6px);
+	pointer-events: none;
+}
+</style>
+
+<script is:inline>
+function initScrollToggle() {
+	const btn = document.getElementById("scroll-toggle");
+	const icon = document.getElementById("scroll-icon");
+	if (!btn || !icon) return;
+
+	const scrollEl = document.scrollingElement || document.documentElement;
+
+	let mode = "down";
+	let lastScroll = scrollEl.scrollTop;
+	let squashRAF = null;
+	let idleTimer = null;
+
+	const maxScroll = () =>
+		scrollEl.scrollHeight - window.innerHeight;
+
+	function updateMode() {
+		const pos = scrollEl.scrollTop;
+		const max = maxScroll();
+
+		if (pos <= 5) {
+			mode = "down";
+			icon.textContent = "↓";
+		} else if (pos >= max - 5) {
+			mode = "up";
+			icon.textContent = "↑";
+		} else {
+			mode = pos < max / 2 ? "down" : "up";
+			icon.textContent = mode === "up" ? "↑" : "↓";
+		}
+	}
+
+	function squashStep() {
+		const current = scrollEl.scrollTop;
+
+		const delta = Math.abs(current - lastScroll);
+		lastScroll = current;
+
+		// stronger but capped
+		const t = Math.min(delta / 80, 1);
+
+		const sx = 1 + t * 0.45;
+		const sy = 1 - t * 0.45;
+
+		btn.style.setProperty("--sx", sx.toFixed(3));
+		btn.style.setProperty("--sy", sy.toFixed(3));
+
+		squashRAF = requestAnimationFrame(squashStep);
+	}
+
+	function startSquash() {
+		if (!squashRAF) squashRAF = requestAnimationFrame(squashStep);
+	}
+
+	function stopSquash() {
+		cancelAnimationFrame(squashRAF);
+		squashRAF = null;
+
+		// smooth reset (important for visibility)
+		btn.style.setProperty("--sx", 1);
+		btn.style.setProperty("--sy", 1);
+	}
+
+	function scrollToTarget() {
+		const max = maxScroll();
+
+		scrollEl.scrollTo({
+			top: mode === "up" ? 0 : max,
+			behavior: "smooth"
+		});
+	}
+
+	btn.addEventListener("click", () => {
+		requestAnimationFrame(() => {
+			requestAnimationFrame(scrollToTarget);
+		});
+	});
+
+	window.addEventListener("scroll", () => {
+		updateMode();
+		startSquash();
+
+		clearTimeout(idleTimer);
+		idleTimer = setTimeout(stopSquash, 140);
+	}, { passive: true });
+
+	window.addEventListener("resize", updateMode);
+	window.addEventListener("load", updateMode);
+
+	requestAnimationFrame(updateMode);
+}
+
+initScrollToggle();
+</script>

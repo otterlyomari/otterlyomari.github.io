@@ -1,5 +1,6 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import ScrollToggle from '../components/ScrollToggle.astro';
 import { SITE_DESCRIPTION } from '../consts';
 ---
 
@@ -52,7 +53,9 @@ import { SITE_DESCRIPTION } from '../consts';
 
 </main>
 
-<button id="scroll-toggle" aria-label="Scroll" class="scroll-toggle"><span class="t-outline">↓</span></button>
+<ScrollToggle />
+
+
 
 <style>
 main {
@@ -150,124 +153,8 @@ main {
 		align-items: center;
 	}
 }
-
-.scroll-toggle {
-	position: fixed;
-	right: 16px;
-	bottom: 16px;
-	width: 48px;
-	height: 48px;
-
-	border-radius: 999px;
-	border: 1px solid rgba(255,255,255,0.4);
-	background: rgba(0,0,0,0.6);
-	backdrop-filter: blur(16px);
-	color: white;
-
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	padding: 0;
-	cursor: pointer;
-	z-index: 9999;
-
-	opacity: 0.85;
-	transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.scroll-toggle span {
-	font-size: 40px;
-	line-height: 1;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	transform: translateY(-6px);
-}
-
-.scroll-toggle:hover {
-	transform: scale(1.08);
-	opacity: 1;
-}
-
-.scroll-toggle:active {
-	transform: scale(0.95);
-}
 </style>
 
-<script>
-const btn = document.getElementById("scroll-toggle");
-const icon = btn?.querySelector("span");
-
-function getScrollPosition() {
-	return window.scrollY || document.documentElement.scrollTop;
-}
-
-function getMaxScroll() {
-	return document.documentElement.scrollHeight - window.innerHeight;
-}
-
-function isAtTop() {
-	return getScrollPosition() <= 5;
-}
-
-function isAtBottom() {
-	return getScrollPosition() >= getMaxScroll() - 5;
-}
-
-function updateButton() {
-	if (!btn || !icon) return;
-
-	// TOP → always show DOWN
-	if (isAtTop()) {
-		icon.textContent = "↓";
-		btn.dataset.mode = "down";
-		return;
-	}
-
-	// BOTTOM → show UP
-	if (isAtBottom()) {
-		icon.textContent = "↑";
-		btn.dataset.mode = "up";
-		return;
-	}
-
-	// MID SCROLL → decide based on which direction is closer
-	const halfway = getMaxScroll() / 2;
-
-	if (getScrollPosition() < halfway) {
-		icon.textContent = "↓";
-		btn.dataset.mode = "down";
-	} else {
-		icon.textContent = "↑";
-		btn.dataset.mode = "up";
-	}
-}
-
-function scrollToTop() {
-	window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-function scrollToBottom() {
-	window.scrollTo({ top: getMaxScroll(), behavior: "smooth" });
-}
-
-btn?.addEventListener("click", () => {
-	if (btn.dataset.mode === "up") {
-		scrollToTop();
-	} else {
-		scrollToBottom();
-	}
-});
-
-// keep in sync
-window.addEventListener("scroll", updateButton);
-window.addEventListener("resize", updateButton);
-document.addEventListener("DOMContentLoaded", updateButton);
-
-// initial sync
-updateButton();
-</script>
 
 </body>
 </html>
