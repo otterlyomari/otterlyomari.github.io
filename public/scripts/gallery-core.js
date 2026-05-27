@@ -7,7 +7,6 @@ let layoutMap = [];
 let gallery, buttons;
 let observer = null;
 
-/* IMPORTANT: now stores { src, ratio } */
 let pool = [];
 
 /* ========================= INIT ========================= */
@@ -16,11 +15,11 @@ export function initGallery() {
   gallery = document.getElementById("gallery");
   buttons = document.querySelectorAll(".filter-btn");
 
-  initLightbox();
-
   if (!gallery || !buttons.length) return;
   if (galleryMounted) return;
   galleryMounted = true;
+
+  initLightbox();
 
   /* ========================= DATA ========================= */
 
@@ -98,51 +97,44 @@ export function initGallery() {
     }
   ];
 
-  /* ========================= IMAGE LOADER (CRITICAL FIX) ========================= */
-
-  function loadRatio(src) {
-    return new Promise(resolve => {
-      const img = new Image();
-      img.src = src;
-
-      img.onload = () => {
-        resolve({
-          src,
-          ratio: img.height / img.width
-        });
-      };
-
-      img.onerror = () => {
-        resolve({
-          src,
-          ratio: 1
-        });
-      };
-    });
-  }
+  /* ========================= POOL BUILDER ========================= */
 
   function buildPool(filter) {
     const raw =
       filter === "all"
-        ? galleryData.flatMap(s => s.images)
-        : galleryData.find(s => s.category === filter)?.images || [];
+        ? galleryData.flatMap(s => s.images.map(src => ({ src, category: s.category })))
+        : galleryData.find(s => s.category === filter)?.images.map(src => ({
+            src,
+            category: filter
+          })) || [];
 
     return raw;
   }
 
-  async function setPool(newPoolRaw) {
-    const enriched = await Promise.all(
-      newPoolRaw.map(loadRatio)
-    );
+  /* ========================= IMAGE RATIO (FAST PATH FIX) ========================= */
 
-    pool = enriched;
+  function getRatio(item) {
+    // 🔥 VRChat FIX (all 1920x1080)
+    if (item.src.includes("/vrchat-pics/")) {
+      return 1080 / 1920; // 0.5625
+    }
+
+    // fallback square until worker refines it if needed
+    return 1;
+  }
+
+  async function setPool(newPoolRaw) {
+    pool = newPoolRaw.map(item => ({
+      src: item.src,
+      ratio: getRatio(item)
+    }));
 
     worker.postMessage({
       type: "INIT",
       data: { pool }
     });
 
-    setTimeout(requestLayout, 0);
+    requestLayout();
   }
 
   /* ========================= WORKER ========================= */
@@ -165,11 +157,13 @@ export function initGallery() {
   function requestLayout() {
     worker.postMessage({
       type: "LAYOUT",
-      data: { width: gallery.clientWidth }
+      data: {
+        width: gallery.clientWidth
+      }
     });
   }
 
-  /* ========================= LAZY LOAD ========================= */
+  /* ========================= OBSERVER ========================= */
 
   observer = new IntersectionObserver((entries, obs) => {
     for (const entry of entries) {
