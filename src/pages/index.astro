@@ -8,7 +8,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 	<head>
 		<BaseHead title={"OtterlyOmari"} description={SITE_DESCRIPTION} />
 	</head>
-	<body>
+	<body id="home-screen">
 		<script is:inline src="/scripts/hackermantm.js"></script>
 		<script src="/scripts/splash.js" defer></script>
 		
@@ -134,13 +134,17 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			}
 
 			
-			.tmp-has-hover {
-				transition: color 0.3s ease;
+			.t-has-hover {
+				transition: color 0.1s ease;
 				text-align: center;
 			}
 
-			h4:hover:not(.tmp-has-hover) {
+			.t-has-hover:hover {
 				color: black;
+			}
+
+			#home-screen h4:not(.t-has-hover) {
+				pointer-events: none;
 			}
 
 
@@ -277,30 +281,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				}
 			}
 
-			@media (max-width: 768px) {
-
-				.water-overlay {
-					backdrop-filter: blur(2px);
-				}
-
-				.wave-layer {
-					opacity: 0.15;
-					animation-duration: 18s;
-				}
-
-				#splash-logo img {
-					width: min(60vw, 260px);
-				}
-
-				
-				#icons01 li,
-				#icons02 li,
-				#icons03 li,
-				#icons04 li {
-					flex: 0 0 auto;
-				}
-			}
-
 			#home-section {
 				opacity: 0;
 				transform: translateY(10px);
@@ -321,25 +301,33 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 			.icons {
 				display: flex;
-				grid-template-columns: repeat(3, 1fr);
-				gap: 0.75rem;
-				justify-items: center;
+				flex-wrap: grid;
+				justify-content: center;
 				align-items: center;
-				padding: 0;
+				gap: 1rem;
+				max-width: 420px;
 				margin: 0.75rem auto;
-				list-style: none;
-				max-width: 360px;
+			}
+
+			.icons svg,
+			.icons img {
+				display: block;
+				max-width: 100%;
+				max-height: 100%;
 			}
 
 			.icons a {
-				width: 120px;
-				height: 120px;
+			width: clamp(110px, 18vw, 96px);
+			height: clamp(110px, 18vw, 96px);
 
-				display: flex;
-				align-items: center;
-				justify-content: center;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 
-				border-radius: 12px; /* optional, gives uniform “tile” feel */
+			box-sizing: border-box;
+
+			transition: transform 180ms ease;
+			transform-origin: center;
 			}
 
 			.icons li {
@@ -354,12 +342,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			#icons03 img,
 			#icons04 svg {
 				object-fit: contain;
-
-				-webkit-animation: scale-up 0.6s;
-				-webkit-animation-fill-mode: forwards;
-
-				animation: revert-scale 0.3s;
-				animation-fill-mode: forwards;
 
 				filter:
 					drop-shadow(-1px -1px 0px #000000)
@@ -380,58 +362,68 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				flex: 0 1 auto;
 			}
 
-			@media (max-width: 768px) {
-				#icons01, #icons02 {
-					transform: translateX(-20px);
-					gap: 0.03rem;
+			@media (hover: hover) and (pointer: fine) {
+				.icons a:hover {
+					transform: scale(1.12);
 				}
-				#icons03 {
-					transform: translateX(-35px);
-					gap: 0.0125rem;
-				}
-
 			}
+
+			@media (hover: none) {
+			.icons a:active {
+				transform: scale(0.95);
+			}
+}
 
 			@media (min-width: 1200px) {
 				#icons01, #icons02 {
-					transform: translateX(20px);
-					scale: 1.25;
-					gap: 0.03rem;
+					transform: translateX(0px) scale(1.15);
 				}
 
 				#icons03 {
-					transform: translateX(6px);
-					scale: 1.25;
-					gap: 0.0125rem;
+					transform: translateX(-15px) scale(1.15);
 				}
 
 				#icons04 {
 					scale: 1.1;
-					gap: 0.0125rem;
+					gap: 0.0125*2rem;
 				}
 
 			}
 
-			@media (max-width: 920px) {
-				#icons01, #icons02 {
-					transform: translateX(20px);
-					gap: 0.03rem;
+			@media (max-width: 768px) {
+				.icons a {
+					display: flex;
+					align-items: center;
+					justify-content: center;
 				}
+
+				#icons01, #icons02 {
+					gap: 0.03rem;
+					transform: translateX(3px);
+				}
+
 				#icons03 {
-					transform: translateX(6px);
+					transform: translateX(-10px);
 					gap: 0.0125rem;
+				}
+				
+				.water-overlay {
+					backdrop-filter: blur(2px);
+				}
+
+				.wave-layer {
+					opacity: 0.15;
+					animation-duration: 18s;
+				}
+
+				#splash-logo img {
+					width: min(60vw, 260px);
 				}
 
 			}
 
 			#icons01 .n01 svg {
 				fill: #FF0000;
-				-webkit-animation: scale-up 0.6s;
-				/* Safari 4.0 - 8.0 */
-				-webkit-animation-fill-mode: forwards;
-				/* Safari 4.0 - 8.0 */
-				animation: revert-scale 0.3s;
-				animation-fill-mode: forwards;
 				filter: 
 				drop-shadow(-1px -1px 0px #000000) 
 				drop-shadow(2px -1px 0px #000000) 
@@ -441,12 +433,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 			#icons01 .n02 svg {
 				fill: #008cff;
-				-webkit-animation: scale-up 0.6s;
-				/* Safari 4.0 - 8.0 */
-				-webkit-animation-fill-mode: forwards;
-				/* Safari 4.0 - 8.0 */
-				animation: revert-scale 0.3s;
-				animation-fill-mode: forwards;
 				filter: 
 				drop-shadow(-1px -1px 0px #000000) 
 				drop-shadow(2px -1px 0px #000000) 
@@ -457,12 +443,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			
 			#icons01 .n03 svg {
 				fill: #7746ff;
-				-webkit-animation: scale-up 0.6s;
-				/* Safari 4.0 - 8.0 */
-				-webkit-animation-fill-mode: forwards;
-				/* Safari 4.0 - 8.0 */
-				animation: revert-scale 0.3s;
-				animation-fill-mode: forwards;
 				filter: 
 				drop-shadow(-1px -1px 0px #000000) 
 				drop-shadow(2px -1px 0px #000000) 
@@ -472,12 +452,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 			#icons02 .n04 svg {
 				fill: #46a6ff;
-				-webkit-animation: scale-up 0.6s;
-				/* Safari 4.0 - 8.0 */
-				-webkit-animation-fill-mode: forwards;
-				/* Safari 4.0 - 8.0 */
-				animation: revert-scale 0.3s;
-				animation-fill-mode: forwards;
 				filter: 
 				drop-shadow(-1px -1px 0px #000000) 
 				drop-shadow(2px -1px 0px #000000) 
@@ -487,12 +461,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 			#icons02 .n05 svg {
 				fill: #00ff55;
-				-webkit-animation: scale-up 0.6s;
-				/* Safari 4.0 - 8.0 */
-				-webkit-animation-fill-mode: forwards;
-				/* Safari 4.0 - 8.0 */
-				animation: revert-scale 0.3s;
-				animation-fill-mode: forwards;
 				filter: 
 				drop-shadow(-1px -1px 0px #000000) 
 				drop-shadow(2px -1px 0px #000000) 
@@ -502,12 +470,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 
 			#icons02 .n06 svg {
-				-webkit-animation: scale-up 0.6s;
-				/* Safari 4.0 - 8.0 */
-				-webkit-animation-fill-mode: forwards;
-				/* Safari 4.0 - 8.0 */
-				animation: revert-scale 0.3s;
-				animation-fill-mode: forwards;
 				filter: 
 				drop-shadow(-1px -1px 0px #000000) 
 				drop-shadow(2px -1px 0px #000000) 
@@ -519,12 +481,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			#icons03 .n07 img {
 				width: 95px;
 				height: 95px;
-				-webkit-animation: scale-up 0.6s;
-				/* Safari 4.0 - 8.0 */
-				-webkit-animation-fill-mode: forwards;
-				/* Safari 4.0 - 8.0 */
-				animation: revert-scale 0.3s;
-				animation-fill-mode: forwards;
 				filter: 
 				drop-shadow(-1px -1px 0px #000000) 
 				drop-shadow(2px -1px 0px #000000) 
@@ -534,12 +490,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 						
 			#icons03 .n08 svg {
-				-webkit-animation: scale-up 0.6s;
-				/* Safari 4.0 - 8.0 */
-				-webkit-animation-fill-mode: forwards;
-				/* Safari 4.0 - 8.0 */
-				animation: revert-scale 0.3s;
-				animation-fill-mode: forwards;
 				filter: 
 				drop-shadow(-1px -1px 0px #000000) 
 				drop-shadow(2px -1px 0px #000000) 
@@ -548,12 +498,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			}
 
 			#icons03 .n09 svg {
-				-webkit-animation: scale-up 0.6s;
-				/* Safari 4.0 - 8.0 */
-				-webkit-animation-fill-mode: forwards;
-				/* Safari 4.0 - 8.0 */
-				animation: revert-scale 0.3s;
-				animation-fill-mode: forwards;
 				filter: 
 				drop-shadow(-1px -1px 0px #000000) 
 				drop-shadow(2px -1px 0px #000000) 
@@ -562,12 +506,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			}
 
 			#icons04 .n10 svg {
-				-webkit-animation: scale-up 0.6s;
-				/* Safari 4.0 - 8.0 */
-				-webkit-animation-fill-mode: forwards;
-				/* Safari 4.0 - 8.0 */
-				animation: revert-scale 0.3s;
-				animation-fill-mode: forwards;
 				filter: 
 				drop-shadow(-1px -1px 0px #000000) 
 				drop-shadow(2px -1px 0px #000000) 
@@ -580,80 +518,12 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				height: 100%;
 				max-width: 95px;
 				max-height: 95px;
-				-webkit-animation: scale-up 0.6s;
-				/* Safari 4.0 - 8.0 */
-				-webkit-animation-fill-mode: forwards;
-				/* Safari 4.0 - 8.0 */
-				animation: revert-scale 0.3s;
-				animation-fill-mode: forwards;
 				filter: 
 				drop-shadow(-1px -1px 0px #ffffff) 
 				drop-shadow(2px -1px 0px #ffffff) 
 				drop-shadow(2px 2px 0px #ffffff)
 				drop-shadow(-1px 2px 0px #ffffff)
 			}
-
-
-
-			#icons01 .n01 svg:hover,
-			#icons01 .n02 svg:hover,
-			#icons01 .n03 svg:hover
-			 {
-				-webkit-animation-fill-mode: forwards;
-				animation: scale-up 0.5s;
-				animation-fill-mode: forwards;
-			}
-
-			#icons02 .n04 svg:hover,
-			#icons02 .n05 svg:hover,
-			#icons02 .n06 svg:hover
-			 {
-				-webkit-animation-fill-mode: forwards;
-				animation: scale-up 0.5s;
-				animation-fill-mode: forwards;
-			}
-
-			
-
-			#icons03 .n07 img:hover,
-			#icons03 .n08 svg:hover,
-			#icons03 .n09 svg:hover
-			 {
-				-webkit-animation-fill-mode: forwards;
-				animation: scale-up 0.5s;
-				animation-fill-mode: forwards;
-			}
-
-			#icons04 .n10 svg:hover,
-			#icons04 .n11 svg:hover
-			 {
-				-webkit-animation-fill-mode: forwards;
-				animation: scale-up 0.5s;
-				animation-fill-mode: forwards;
-			}
-
-			@media (max-width: 768px) {
-				/* micro nudge fix for visual centering only */
-				#icons01 li,
-				#icons02 li,
-				#icons03 li,
-				#icons04 li {
-					display: flex;
-					justify-content: center;
-					align-items: center;
-				}
-
-				.icons a {
-					line-height: 0;
-					font-size: 0;
-				}
-
-				.icons svg,
-				.icons img {
-					vertical-align: middle;
-				}
-			}
-
 
 			ul {
 				list-style: none;

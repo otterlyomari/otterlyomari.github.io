@@ -13,6 +13,7 @@ import { SITE_DESCRIPTION } from '../consts';
 <body>
 
 <script type="module" src="/scripts/gallery-core.js?reload"></script>
+<script type="module" src="/scripts/gallery-lightbox.js?reload"></script> <!-- REQUIRED FOR ADDITIONAL LIGHTBOX FUNCTIONALITY -->
 <script type="module" src="/scripts/hackermantm.js?v=1"></script>
 
 <main id="content">
@@ -43,7 +44,7 @@ import { SITE_DESCRIPTION } from '../consts';
 
 	<button>
 		<a href="/" class="no-deco">
-			<h4 class="t-outline">Go Back</h4>
+			<h4 class="t-outline t-has-hover">Go Back</h4>
 		</a>
 	</button>
 
@@ -62,9 +63,18 @@ main {
 }
 
 #home-section {
-	max-width: 1200px;
-	margin: 0 auto;
+	max-width: none;
+	width: 100%;
+	margin: 0;
+}
+
+.t-has-hover {
+	transition: color 0.1s ease;
 	text-align: center;
+}
+
+.t-has-hover:hover {
+	color: black;
 }
 
 .gallery-controls {
@@ -99,46 +109,42 @@ main {
 }
 
 #gallery {
-	column-count: 4;
-	column-gap: 16px;
-	column-fill: balance;
-	contain: layout;
+  position: relative;
 
-	width: 100vw;
-	max-width: 100vw;
-	position: relative;
-	left: 50%;
-	transform: translateX(-50%);
-	padding: 12px;
-	box-sizing: border-box;
+  /* FULL BLEED HACK */
+  width: 100vw;
+  max-width: 100vw;
+
+  /* break out of centered container */
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+
+  overflow: visible;
+}
+.gallery-item-wrapper {
+  position: absolute;
 }
 
-@media (max-width: 1000px) {
-	#gallery { column-count: 3; }
+.gallery-item-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+
+.gallery-item-wrapper img.loaded {
+  opacity: 1;
 }
 
 @media (max-width: 700px) {
-	#gallery { column-count: 2; }
-
 	#gallery {
-		width: 100%;
-		max-width: 100%;
+		width: 100vw;
 		left: auto;
 		transform: none;
-	}
-
-	.icons {
-		width: 100%;
-		max-width: 360px;
-		grid-template-columns: repeat(2, 1fr);
 	}
 }
 
 @media (max-width: 480px) {
-
-	.icons {
-		grid-template-columns: 1fr;
-	}
 
 	.gallery-controls {
 		flex-direction: column;
@@ -152,33 +158,9 @@ main {
 
 }
 
-.gallery-item-wrapper {
-	position: relative;
-	z-index: 1;
-}
-
-.gallery-item-wrapper img {
-	width: 100%;
-	display: block;
-	border-radius: 10px;
-	cursor: pointer;
-
-	aspect-ratio: 4 / 3;
-	object-fit: cover;
-
-	filter: blur(14px);
-	transform: scale(1.02);
-	opacity: 0;
-
-	content-visibility: auto;
-	contain-intrinsic-size: 300px 225px;
-	transition: opacity 200ms ease, filter 200ms ease;
-	will-change: transform, opacity, filter;
-}
 
 .gallery-item-wrapper img.loaded {
   opacity: 1;
-  filter: blur(0px);
 }
 
 @media (max-width: 480px) {
@@ -204,8 +186,51 @@ h6 {
 	line-height: 1.2;
 	font-family: 'Pulang', sans-serif;
 }
+
+#lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+#lightbox.hidden {
+  display: none;
+}
+
+#lightbox-img {
+  position: absolute;
+
+  width: 45%;
+  height: auto;
+
+  transform-origin: center center;
+  will-change: transform;
+
+  /* hide no-drop/forbidden cursor */
+ -webkit-user-drag: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  pointer-events: auto;
+}
+
+#lightbox-img:active {
+  cursor: grabbing;
+}
+
+html, body {
+  overscroll-behavior: none;
+}
 </style>
 
+<div id="lightbox" class="lightbox hidden">
+  <img id="lightbox-img" />
+</div>
 
 </body>
 </html>

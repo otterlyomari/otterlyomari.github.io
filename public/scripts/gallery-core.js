@@ -1,20 +1,29 @@
+import { initLightbox, openLightbox } from "./gallery-lightbox.js";
+
 let galleryMounted = false;
+let worker = null;
+
+let layoutMap = [];
+let gallery, buttons;
 let observer = null;
 
+/* IMPORTANT: now stores { src, ratio } */
+let pool = [];
+
+/* ========================= INIT ========================= */
+
 export function initGallery() {
-  const gallery = document.getElementById("gallery");
-  const buttons = document.querySelectorAll(".filter-btn");
+  gallery = document.getElementById("gallery");
+  buttons = document.querySelectorAll(".filter-btn");
+
+  initLightbox();
 
   if (!gallery || !buttons.length) return;
   if (galleryMounted) return;
   galleryMounted = true;
 
-  let pool = [];
-  let mode = "all";
+  /* ========================= DATA ========================= */
 
-  /* =========================
-     DATA
-  ========================= */
   const galleryData = [
     {
       category: "art",
@@ -89,138 +98,151 @@ export function initGallery() {
     }
   ];
 
-  function buildPool(filter) {
-    if (filter === "all") return galleryData.flatMap(s => s.images);
-    return galleryData.find(s => s.category === filter)?.images || [];
-  }
+  /* ========================= IMAGE LOADER (CRITICAL FIX) ========================= */
 
-  /* =========================
-     OBSERVER (FIXED + LIGHTWEIGHT)
-  ========================= */
-  if (!observer) {
-    observer = new IntersectionObserver((entries, obs) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
+  function loadRatio(src) {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.src = src;
 
-        const img = entry.target;
-        obs.unobserve(img);
+      img.onload = () => {
+        resolve({
+          src,
+          ratio: img.height / img.width
+        });
+      };
 
-        const src = img.dataset.src;
-        if (!src) continue;
-
-        img.src = src;
-
-        // IMPORTANT: removed decode() (big production slowdown source)
-        img.classList.add("loaded");
-      }
-    }, {
-      rootMargin: "300px"
+      img.onerror = () => {
+        resolve({
+          src,
+          ratio: 1
+        });
+      };
     });
   }
 
-  /* =========================
-     IMAGE CREATION
-  ========================= */
-  function createItem(src) {
+  function buildPool(filter) {
+    const raw =
+      filter === "all"
+        ? galleryData.flatMap(s => s.images)
+        : galleryData.find(s => s.category === filter)?.images || [];
+
+    return raw;
+  }
+
+  async function setPool(newPoolRaw) {
+    const enriched = await Promise.all(
+      newPoolRaw.map(loadRatio)
+    );
+
+    pool = enriched;
+
+    worker.postMessage({
+      type: "INIT",
+      data: { pool }
+    });
+
+    setTimeout(requestLayout, 0);
+  }
+
+  /* ========================= WORKER ========================= */
+
+  worker = new Worker(
+    new URL("./layout-engine.worker.js", import.meta.url),
+    { type: "module" }
+  );
+
+  worker.onmessage = (e) => {
+    if (e.data.type !== "LAYOUT_RESULT") return;
+
+    layoutMap = e.data.layout;
+
+    gallery.style.height = `${e.data.totalHeight}px`;
+
+    render();
+  };
+
+  function requestLayout() {
+    worker.postMessage({
+      type: "LAYOUT",
+      data: { width: gallery.clientWidth }
+    });
+  }
+
+  /* ========================= LAZY LOAD ========================= */
+
+  observer = new IntersectionObserver((entries, obs) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+
+      const img = entry.target;
+      obs.unobserve(img);
+
+      img.src = img.dataset.src;
+      img.onload = () => img.classList.add("loaded");
+    }
+  }, { rootMargin: "300px" });
+
+  /* ========================= ITEM ========================= */
+
+  function createItem(item) {
     const wrapper = document.createElement("div");
     wrapper.className = "gallery-item-wrapper";
 
     const img = document.createElement("img");
-    img.dataset.src = src;
+
+    img.dataset.src = item.src;
     img.loading = "lazy";
     img.decoding = "async";
 
-    // IMPORTANT: do NOT set fetchPriority globally
-    // browser handles it better
-
-    img.addEventListener("click", toggleFullscreen);
+    img.addEventListener("click", () => {
+      openLightbox(item.src);
+    });
 
     wrapper.appendChild(img);
+    observer.observe(img);
 
-    return { wrapper, img };
+    return wrapper;
   }
 
-  async function toggleFullscreen(e) {
-    const el = e.currentTarget;
+  /* ========================= RENDER ========================= */
 
-    if (document.fullscreenElement) {
-      await document.exitFullscreen();
-      return;
-    }
-
-    el.requestFullscreen?.();
-  }
-
-  /* =========================
-     RENDER (OPTIMIZED BATCHING)
-  ========================= */
-  function renderAll() {
+  function render() {
     gallery.replaceChildren();
 
-    const BATCH_SIZE = 18;
-    let i = 0;
+    const fragment = document.createDocumentFragment();
 
-    function batch() {
-      const fragment = document.createDocumentFragment();
-      const slice = pool.slice(i, i + BATCH_SIZE);
+    for (const item of layoutMap) {
+      const el = createItem(item);
 
-      for (const src of slice) {
-        const { wrapper, img } = createItem(src);
-        fragment.appendChild(wrapper);
-        observer.observe(img);
-      }
+      el.style.position = "absolute";
+      el.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
+      el.style.width = `${item.w}px`;
+      el.style.height = `${item.h}px`;
 
-      gallery.appendChild(fragment);
-
-      i += BATCH_SIZE;
-
-      if (i < pool.length) {
-        // smoother than idle callback for your case
-        requestAnimationFrame(batch);
-      }
+      fragment.appendChild(el);
     }
 
-    batch();
+    gallery.appendChild(fragment);
   }
 
-  function setFilter(filter) {
-    mode = filter;
-    pool = buildPool(mode);
-    renderAll();
-  }
+  /* ========================= FILTERS ========================= */
 
-  /* =========================
-     BUTTONS (CLEAN HANDLERS)
-  ========================= */
   buttons.forEach(btn => {
     btn.addEventListener("click", () => {
       buttons.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
 
-      setFilter(btn.dataset.filter);
+      setPool(buildPool(btn.dataset.filter));
     });
   });
 
-  pool = buildPool("all");
-  renderAll();
+  /* ========================= BOOT ========================= */
+
+  setPool(buildPool("all"));
+
+  window.addEventListener("resize", requestLayout);
 }
 
-/* =========================
-   BOOT
-========================= */
-function bootGallery() {
-  const gallery = document.getElementById("gallery");
-  const buttons = document.querySelectorAll(".filter-btn");
-
-  if (!gallery || !buttons.length) return;
-
-  if (window.__galleryRoot !== gallery) {
-    window.__galleryRoot = gallery;
-    galleryMounted = false;
-  }
-
-  initGallery();
-}
-
-document.addEventListener("DOMContentLoaded", bootGallery);
-document.addEventListener("astro:page-load", bootGallery);
+document.addEventListener("DOMContentLoaded", initGallery);
+document.addEventListener("astro:page-load", initGallery);
