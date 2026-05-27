@@ -15,7 +15,6 @@
     "@astrojs/react": "^5.0.5",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
-    "@builder.io/qwik": "^1.4.5",
     "@iconify-json/bi": "^1.1.23",
     "@iconify-json/carbon": "^1.1.30",
     "@jop-software/astro-cookieconsent": "^3.0.0",
