@@ -13,7 +13,7 @@ export function initGallery() {
   let mode = "all";
 
   /* =========================
-     DATA SOURCES
+     DATA
   ========================= */
   const galleryData = [
     {
@@ -89,41 +89,38 @@ export function initGallery() {
     }
   ];
 
-   function buildPool(filter) {
+  function buildPool(filter) {
     if (filter === "all") return galleryData.flatMap(s => s.images);
     return galleryData.find(s => s.category === filter)?.images || [];
   }
 
-  /* -----------------------------
-     SHARED OBSERVER (important fix)
-  ----------------------------- */
+  /* =========================
+     OBSERVER (FIXED + LIGHTWEIGHT)
+  ========================= */
   if (!observer) {
-    observer = new IntersectionObserver((entries) => {
+    observer = new IntersectionObserver((entries, obs) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
 
         const img = entry.target;
-        observer.unobserve(img);
+        obs.unobserve(img);
 
         const src = img.dataset.src;
-        if (!src) return;
+        if (!src) continue;
 
         img.src = src;
 
-        img.decode?.()
-          .catch(() => {})
-          .then(() => {
-            img.classList.add("loaded");
-          });
+        // IMPORTANT: removed decode() (big production slowdown source)
+        img.classList.add("loaded");
       }
     }, {
-      rootMargin: "250px"
+      rootMargin: "300px"
     });
   }
 
-  /* -----------------------------
-     FAST DOM CREATION
-  ----------------------------- */
+  /* =========================
+     IMAGE CREATION
+  ========================= */
   function createItem(src) {
     const wrapper = document.createElement("div");
     wrapper.className = "gallery-item-wrapper";
@@ -133,10 +130,12 @@ export function initGallery() {
     img.loading = "lazy";
     img.decoding = "async";
 
-    wrapper.appendChild(img);
+    // IMPORTANT: do NOT set fetchPriority globally
+    // browser handles it better
 
-    // single handler shared via function reference reuse
-    img.addEventListener("click", toggleFullscreen, { passive: true });
+    img.addEventListener("click", toggleFullscreen);
+
+    wrapper.appendChild(img);
 
     return { wrapper, img };
   }
@@ -145,25 +144,25 @@ export function initGallery() {
     const el = e.currentTarget;
 
     if (document.fullscreenElement) {
-      document.exitFullscreen();
+      await document.exitFullscreen();
       return;
     }
 
     el.requestFullscreen?.();
   }
 
-  /* -----------------------------
-     MORE EFFICIENT RENDERING
-  ----------------------------- */
+  /* =========================
+     RENDER (OPTIMIZED BATCHING)
+  ========================= */
   function renderAll() {
-    gallery.replaceChildren(); // faster than innerHTML = ""
+    gallery.replaceChildren();
 
-    const BATCH = 20;
+    const BATCH_SIZE = 18;
     let i = 0;
 
     function batch() {
       const fragment = document.createDocumentFragment();
-      const slice = pool.slice(i, i + BATCH);
+      const slice = pool.slice(i, i + BATCH_SIZE);
 
       for (const src of slice) {
         const { wrapper, img } = createItem(src);
@@ -173,10 +172,11 @@ export function initGallery() {
 
       gallery.appendChild(fragment);
 
-      i += BATCH;
+      i += BATCH_SIZE;
 
       if (i < pool.length) {
-        setTimeout(batch, 0); // better yielding than idle callback here
+        // smoother than idle callback for your case
+        requestAnimationFrame(batch);
       }
     }
 
@@ -189,22 +189,25 @@ export function initGallery() {
     renderAll();
   }
 
-  /* -----------------------------
-     BUTTONS (no cloning needed)
-  ----------------------------- */
+  /* =========================
+     BUTTONS (CLEAN HANDLERS)
+  ========================= */
   buttons.forEach(btn => {
-    btn.onclick = () => {
+    btn.addEventListener("click", () => {
       buttons.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
+
       setFilter(btn.dataset.filter);
-    };
+    });
   });
 
   pool = buildPool("all");
   renderAll();
 }
 
-/* boot */
+/* =========================
+   BOOT
+========================= */
 function bootGallery() {
   const gallery = document.getElementById("gallery");
   const buttons = document.querySelectorAll(".filter-btn");
