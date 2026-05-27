@@ -6,15 +6,11 @@ export function initGallery() {
   const buttons = document.querySelectorAll(".filter-btn");
 
   if (!gallery || !buttons.length) return;
-
-  // prevent double init per page instance
   if (galleryMounted) return;
   galleryMounted = true;
 
   let pool = [];
   let mode = "all";
-
-  const elements = new Map();
 
   /* =========================
      DATA SOURCES
@@ -93,13 +89,16 @@ export function initGallery() {
     }
   ];
 
-  function buildPool(filter) {
+   function buildPool(filter) {
     if (filter === "all") return galleryData.flatMap(s => s.images);
     return galleryData.find(s => s.category === filter)?.images || [];
   }
 
-  function createObserver() {
-    return new IntersectionObserver((entries) => {
+  /* -----------------------------
+     SHARED OBSERVER (important fix)
+  ----------------------------- */
+  if (!observer) {
+    observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
 
@@ -107,26 +106,24 @@ export function initGallery() {
         observer.unobserve(img);
 
         const src = img.dataset.src;
-        if (!src || img.dataset.loaded) return;
-
-        img.dataset.loaded = "true";
+        if (!src) return;
 
         img.src = src;
+
         img.decode?.()
           .catch(() => {})
           .then(() => {
-            requestAnimationFrame(() => {
-              img.style.opacity = "1";
-              img.style.filter = "blur(0px)";
-              img.style.transform = "scale(1)";
-            });
-        });
+            img.classList.add("loaded");
+          });
       }
-    }, { rootMargin: "300px" });
+    }, {
+      rootMargin: "250px"
+    });
   }
 
-  observer = createObserver();
-
+  /* -----------------------------
+     FAST DOM CREATION
+  ----------------------------- */
   function createItem(src) {
     const wrapper = document.createElement("div");
     wrapper.className = "gallery-item-wrapper";
@@ -135,68 +132,56 @@ export function initGallery() {
     img.dataset.src = src;
     img.loading = "lazy";
     img.decoding = "async";
-    img.fetchPriority = "high";
-
-    img.style.width = "100%";
-    img.style.height = "auto";
-    img.style.display = "block";
-    img.style.opacity = "0";
-    img.style.transition = "opacity 300ms ease";
-    img.style.background = "rgba(255,255,255,0.06)";
-
-    img.style.contentVisibility = "auto";
-    img.style.containIntrinsicSize = "300px 225px";
-
-    img.addEventListener("click", async () => {
-      const el = img;
-
-      // If already fullscreen, exit
-      if (document.fullscreenElement) {
-        await document.exitFullscreen();
-        return;
-      }
-
-      // Request fullscreen on the image
-      if (el.requestFullscreen) {
-        el.requestFullscreen();
-      } else if (el.webkitRequestFullscreen) {
-        // Safari fallback
-        el.webkitRequestFullscreen();
-      }
-    });
 
     wrapper.appendChild(img);
+
+    // single handler shared via function reference reuse
+    img.addEventListener("click", toggleFullscreen, { passive: true });
+
     return { wrapper, img };
   }
 
-function renderAll() {
-  gallery.innerHTML = "";
-  elements.clear();
+  async function toggleFullscreen(e) {
+    const el = e.currentTarget;
 
-  const BATCH_SIZE = 14;
-  let index = 0;
-
-  function loadBatch() {
-    const slice = pool.slice(index, index + BATCH_SIZE);
-
-    for (const src of slice) {
-      const { wrapper, img } = createItem(src);
-
-      gallery.appendChild(wrapper);
-      elements.set(src, img);
-
-      observer.observe(img);
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+      return;
     }
 
-    index += BATCH_SIZE;
-
-    if (index < pool.length) {
-      requestIdleCallback(loadBatch);
-    }
+    el.requestFullscreen?.();
   }
 
-  loadBatch();
-}
+  /* -----------------------------
+     MORE EFFICIENT RENDERING
+  ----------------------------- */
+  function renderAll() {
+    gallery.replaceChildren(); // faster than innerHTML = ""
+
+    const BATCH = 20;
+    let i = 0;
+
+    function batch() {
+      const fragment = document.createDocumentFragment();
+      const slice = pool.slice(i, i + BATCH);
+
+      for (const src of slice) {
+        const { wrapper, img } = createItem(src);
+        fragment.appendChild(wrapper);
+        observer.observe(img);
+      }
+
+      gallery.appendChild(fragment);
+
+      i += BATCH;
+
+      if (i < pool.length) {
+        setTimeout(batch, 0); // better yielding than idle callback here
+      }
+    }
+
+    batch();
+  }
 
   function setFilter(filter) {
     mode = filter;
@@ -204,35 +189,28 @@ function renderAll() {
     renderAll();
   }
 
-  // IMPORTANT: remove old listeners by cloning buttons
+  /* -----------------------------
+     BUTTONS (no cloning needed)
+  ----------------------------- */
   buttons.forEach(btn => {
-    const clone = btn.cloneNode(true);
-    btn.replaceWith(clone);
-  });
-
-  const freshButtons = document.querySelectorAll(".filter-btn");
-
-  freshButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      freshButtons.forEach(b => b.classList.remove("active"));
+    btn.onclick = () => {
+      buttons.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
-
       setFilter(btn.dataset.filter);
-    });
+    };
   });
 
   pool = buildPool("all");
   renderAll();
 }
 
-
+/* boot */
 function bootGallery() {
   const gallery = document.getElementById("gallery");
   const buttons = document.querySelectorAll(".filter-btn");
 
   if (!gallery || !buttons.length) return;
 
-  // CRITICAL: reset mount flag on Astro navigation
   if (window.__galleryRoot !== gallery) {
     window.__galleryRoot = gallery;
     galleryMounted = false;
@@ -241,8 +219,5 @@ function bootGallery() {
   initGallery();
 }
 
-/* Astro + normal lifecycle coverage */
 document.addEventListener("DOMContentLoaded", bootGallery);
 document.addEventListener("astro:page-load", bootGallery);
-document.addEventListener("astro:after-swap", bootGallery);
-window.addEventListener("load", bootGallery);

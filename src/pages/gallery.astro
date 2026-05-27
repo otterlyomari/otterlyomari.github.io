@@ -170,8 +170,15 @@ main {
 	transform: scale(1.02);
 	opacity: 0;
 
-	transition: all 300ms ease;
+	content-visibility: auto;
+	contain-intrinsic-size: 300px 225px;
+	transition: opacity 200ms ease, filter 200ms ease;
 	will-change: transform, opacity, filter;
+}
+
+.gallery-item-wrapper img.loaded {
+  opacity: 1;
+  filter: blur(0px);
 }
 
 @media (max-width: 480px) {
