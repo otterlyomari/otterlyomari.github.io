@@ -134,6 +134,15 @@ export function initGallery() {
       data: { pool }
     });
 
+    function warmupImages(list) {
+    const batch = list.slice(0, 6);
+
+    for (const item of batch) {
+      const img = new Image();
+      img.src = item.src;
+    }
+}
+
     requestLayout();
   }
 
@@ -175,29 +184,38 @@ export function initGallery() {
       img.src = img.dataset.src;
       img.onload = () => img.classList.add("loaded");
     }
-  }, { rootMargin: "300px" });
+  }, { rootMargin: "800px 0px" });
 
   /* ========================= ITEM ========================= */
 
-  function createItem(item) {
-    const wrapper = document.createElement("div");
-    wrapper.className = "gallery-item-wrapper";
+function createItem(item) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "gallery-item-wrapper";
 
-    const img = document.createElement("img");
+  const img = document.createElement("img");
 
-    img.dataset.src = item.src;
-    img.loading = "lazy";
-    img.decoding = "async";
+  img.dataset.src = item.src;
+  img.loading = "eager"; // important change
+  img.decoding = "async";
+  img.fetchPriority = "high";
 
-    img.addEventListener("click", () => {
-      openLightbox(item.src);
-    });
+  const preload = new Image();
+  preload.src = item.src;
 
-    wrapper.appendChild(img);
-    observer.observe(img);
+  preload.onload = () => {
+    img.src = item.src;
+  };
 
-    return wrapper;
-  }
+  img.addEventListener("click", () => {
+    openLightbox(item.src);
+  });
+
+  wrapper.appendChild(img);
+
+  observer.observe(img);
+
+  return wrapper;
+}
 
   /* ========================= RENDER ========================= */
 
@@ -234,6 +252,7 @@ export function initGallery() {
   /* ========================= BOOT ========================= */
 
   setPool(buildPool("all"));
+  warmupImages(buildPool("all"));
 
   window.addEventListener("resize", requestLayout);
 }
