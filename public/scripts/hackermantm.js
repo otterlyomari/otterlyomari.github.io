@@ -928,7 +928,9 @@
 									document.title = title;
 		
 								// Unload elements.
-									unloadElements(currentSection);
+									if (currentSection && currentSection.dataset.preserve !== "1") {
+										unloadElements(currentSection);
+									}
 		
 								// Reset section change elements.
 									resetSectionChangeElements(currentSection);

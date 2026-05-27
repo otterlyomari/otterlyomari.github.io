@@ -1,0 +1,43 @@
+---
+const { types = [] } = Astro.props;
+---
+
+<div class="tag-filter" id="tagFilter">
+  <button class="tag-btn" data-type="all">All</button>
+
+  {types.map((type: unknown) => (
+    <button class="tag-btn t-outline" data-type={type}>
+      {type}
+    </button>
+  ))}
+</div>
+
+<style>
+.tag-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.tag-btn {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(20,20,20,0.6);
+  color: white;
+  cursor: pointer;
+  width: auto;
+  display: inline-flex;
+  font-size: 0.85rem;
+  font-family: "Source Serif 4", sans-serif;
+  transition: 0.2s ease;
+}
+
+.tag-btn:hover {
+  background: rgba(40,40,40,0.8);
+}
+
+.tag-btn.active {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.35);
+}
+</style>

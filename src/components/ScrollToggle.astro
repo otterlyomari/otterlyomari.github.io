@@ -62,16 +62,15 @@ function initScrollToggle() {
 	const scrollEl = document.scrollingElement || document.documentElement;
 
 	let mode = "down";
-	let lastScroll = scrollEl.scrollTop;
-	let squashRAF = null;
 	let idleTimer = null;
 
-	const maxScroll = () =>
+	// store latest layout size (no forcing scroll)
+	let latestMaxScroll = () =>
 		scrollEl.scrollHeight - window.innerHeight;
 
 	function updateMode() {
 		const pos = scrollEl.scrollTop;
-		const max = maxScroll();
+		const max = latestMaxScroll();
 
 		if (pos <= 5) {
 			mode = "down";
@@ -85,58 +84,40 @@ function initScrollToggle() {
 		}
 	}
 
-	function squashStep() {
-		const current = scrollEl.scrollTop;
-
-		const delta = Math.abs(current - lastScroll);
-		lastScroll = current;
-
-		// stronger but capped
-		const t = Math.min(delta / 80, 1);
-
-		const sx = 1 + t * 0.45;
-		const sy = 1 - t * 0.45;
-
-		btn.style.setProperty("--sx", sx.toFixed(3));
-		btn.style.setProperty("--sy", sy.toFixed(3));
-
-		squashRAF = requestAnimationFrame(squashStep);
-	}
-
-	function startSquash() {
-		if (!squashRAF) squashRAF = requestAnimationFrame(squashStep);
-	}
-
-	function stopSquash() {
-		cancelAnimationFrame(squashRAF);
-		squashRAF = null;
-
-		// smooth reset (important for visibility)
-		btn.style.setProperty("--sx", 1);
-		btn.style.setProperty("--sy", 1);
-	}
-
+	// ---------- SAFE SCROLL ----------
 	function scrollToTarget() {
-		const max = maxScroll();
+		// always compute at click time (critical fix)
+		const max = latestMaxScroll();
+		const pos = scrollEl.scrollTop;
+
+		const target = pos <= 5 ? max : 0;
 
 		scrollEl.scrollTo({
-			top: mode === "up" ? 0 : max,
+			top: target,
 			behavior: "smooth"
 		});
 	}
 
+	// ---------- RESIZE OBSERVER (NO SCROLLING HERE) ----------
+	const ro = new ResizeObserver(() => {
+		// only update internal state, NEVER scroll
+		// (this removes flicker completely)
+		updateMode();
+	});
+
+	ro.observe(document.body);
+
+	// ---------- EVENTS ----------
 	btn.addEventListener("click", () => {
-		requestAnimationFrame(() => {
-			requestAnimationFrame(scrollToTarget);
-		});
+		updateMode();
+		scrollToTarget();
 	});
 
 	window.addEventListener("scroll", () => {
 		updateMode();
-		startSquash();
 
 		clearTimeout(idleTimer);
-		idleTimer = setTimeout(stopSquash, 140);
+		idleTimer = setTimeout(updateMode, 120);
 	}, { passive: true });
 
 	window.addEventListener("resize", updateMode);

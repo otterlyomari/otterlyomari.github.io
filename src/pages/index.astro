@@ -9,9 +9,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		<BaseHead title={"OtterlyOmari"} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
-		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-		
 		<script is:inline src="/scripts/hackermantm.js"></script>
 		<script src="/scripts/splash.js" defer></script>
 		
@@ -40,7 +37,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				<br>
 				<br>
 				<br>
-				<h5 class="t-outline" style="text-align: center;">Check out my socials 👀</h5>
+				<h4 class="t-outline" style="text-align: center;">Check out my socials 👀</h4>
 				<br>
 
 				<ul id="icons01" class="icons">
@@ -82,7 +79,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 					<!-- FurAffinity icon -->
 					<li>
-						<a class="n07" href="https://www.furaffinity.net/user/furradical"><img src="\Fur_Affinity_logo.svg"/></a>
+						<a class="n07" href="https://www.furaffinity.net/user/furradical"><img src="/Fur_Affinity_logo.svg"/></a>
 					</li>
 
 					<!-- Steam icon because am gaymer ott, ja? -->
@@ -101,7 +98,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				<br>
 				<br>
 				<div class="support-section">
-					<h5 class="t-outline" style="text-align: center;">Fuel for more projects 🫶 (Support me 💛)</h5>
+					<h4 class="t-outline" style="text-align: center;">Fuel for more projects 🫶 (Support me 💛)</h4>
 					<br>
 					<ul id="icons04" class="icons">
 						<!-- Ko-fi icon -->
@@ -120,13 +117,10 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 				<!-- SUPPORT SECTION END -->
 
-				<button><a href="/about" class="no-deco"><h4 class="t-outline">About Me</h4></a></button>
-				<button><a href="/gallery" class="no-deco"><h4 class="t-outline">Gallery</h4></a></button>
-				<button><a href="/library" class="no-deco"><h4 class="t-outline">The Library</h4></a></button>
-				<button><a href="https://www.youtube.com/@symphonyoftidemereyt" class="no-deco"><h4 class="t-outline">My Music</h4></a></button>
-				<button><a href="https://patreon.com/otterlyomari" class="no-deco"><h4 class="t-outline">Patreon</h4></a></button>
-				<button><a href="https://ko-fi.com/otterlyomari" class="no-deco"><h4 class="t-outline">Donate</h4></a></button>
-			</div>
+				<button><a href="/about" class="no-deco"><h4 class="t-outline t-has-hover">About Me</h4></a></button>
+				<button><a href="/gallery" class="no-deco"><h4 class="t-outline t-has-hover">Gallery</h4></a></button>
+				<button><a href="/library" class="no-deco"><h4 class="t-outline t-has-hover">The Library</h4></a></button>
+				<button><a href="https://www.youtube.com/@symphonyoftidemereyt" class="no-deco"><h4 class="t-outline t-has-hover">Discography</h4></a></button>
 		</main>
 		<footer>
 			<p style="text-align: center;" class="t-outline-w">Copyright © otterlyomari 2024–2025. All rights reserved. </p>
@@ -138,6 +132,17 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				z-index: 9999;
 				background-color: transparent;
 			}
+
+			
+			.tmp-has-hover {
+				transition: color 0.3s ease;
+				text-align: center;
+			}
+
+			h4:hover:not(.tmp-has-hover) {
+				color: black;
+			}
+
 
 			#bg-layer-base,
 			#bg-layer-splash {
@@ -248,7 +253,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			@keyframes logoRise {
 				0% {
 					opacity: 0;
-					transform: scale(1.1) translateY(-20px);
+					transform: scale(0.9) translateY(-20px);
 					filter: blur(12px);
 				}
 
@@ -258,7 +263,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 				100% {
 					opacity: 1;
-					transform: scale(2) translateY(0);
+					transform: scale(1.5) translateY(0);
 					filter: blur(0px);
 				}
 			}
@@ -269,6 +274,30 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				}
 				100% {
 					filter: blur(3px) saturate(1);
+				}
+			}
+
+			@media (max-width: 768px) {
+
+				.water-overlay {
+					backdrop-filter: blur(2px);
+				}
+
+				.wave-layer {
+					opacity: 0.15;
+					animation-duration: 18s;
+				}
+
+				#splash-logo img {
+					width: min(60vw, 260px);
+				}
+
+				
+				#icons01 li,
+				#icons02 li,
+				#icons03 li,
+				#icons04 li {
+					flex: 0 0 auto;
 				}
 			}
 
@@ -302,8 +331,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				max-width: 360px;
 			}
 
-
-
 			.icons a {
 				width: 120px;
 				height: 120px;
@@ -319,19 +346,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				display: flex;
 				justify-content: center;
 				align-items: center;
-			}
-
-			/* responsive */
-			@media (max-width: 600px) {
-				.icons {
-					grid-template-columns: repeat(2, 1fr);
-				}
-			}
-
-			@media (max-width: 400px) {
-				.icons {
-					grid-template-columns: repeat(1, 1fr);
-				}
 			}
 
 			#icons01 svg,
@@ -366,10 +380,48 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				flex: 0 1 auto;
 			}
 
-			@media (max-width: 700px) {
-				#icons01 {
-					transform: translateX(12px);
+			@media (max-width: 768px) {
+				#icons01, #icons02 {
+					transform: translateX(-20px);
+					gap: 0.03rem;
 				}
+				#icons03 {
+					transform: translateX(-35px);
+					gap: 0.0125rem;
+				}
+
+			}
+
+			@media (min-width: 1200px) {
+				#icons01, #icons02 {
+					transform: translateX(20px);
+					scale: 1.25;
+					gap: 0.03rem;
+				}
+
+				#icons03 {
+					transform: translateX(6px);
+					scale: 1.25;
+					gap: 0.0125rem;
+				}
+
+				#icons04 {
+					scale: 1.1;
+					gap: 0.0125rem;
+				}
+
+			}
+
+			@media (max-width: 920px) {
+				#icons01, #icons02 {
+					transform: translateX(20px);
+					gap: 0.03rem;
+				}
+				#icons03 {
+					transform: translateX(6px);
+					gap: 0.0125rem;
+				}
+
 			}
 
 			#icons01 .n01 svg {
@@ -580,9 +632,43 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				animation-fill-mode: forwards;
 			}
 
+			@media (max-width: 768px) {
+				/* micro nudge fix for visual centering only */
+				#icons01 li,
+				#icons02 li,
+				#icons03 li,
+				#icons04 li {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+				}
+
+				.icons a {
+					line-height: 0;
+					font-size: 0;
+				}
+
+				.icons svg,
+				.icons img {
+					vertical-align: middle;
+				}
+			}
+
 
 			ul {
 				list-style: none;
+			}
+
+			h1,
+			h2,
+			h3,
+			h4,
+			h5,
+			h6 {
+				margin: 0 0 0.5rem 0;
+				color: white;
+				line-height: 1.2;
+				font-family: 'Pulang', sans-serif;
 			}
 
 		</style>

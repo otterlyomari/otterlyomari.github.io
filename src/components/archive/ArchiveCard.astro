@@ -1,0 +1,35 @@
+---
+const { entry } = Astro.props;
+---
+
+<a
+  href={`/library/${entry.id}`}
+  class="archive-card"
+  data-tags={entry.data.tags.join(",")}
+  data-id={entry.id}
+  data-type={entry.data.type}
+> 
+
+  {
+    entry.data.cover && (
+      <img
+        src={entry.data.cover}
+        alt={entry.data.title}
+        class="archive-cover"
+      />
+    )
+  }
+
+  <h3>{entry.data.title}</h3>
+
+  <p>{entry.data.description}</p>
+
+  <div class="tag-row">
+    {
+      entry.data.tags.map((tag: unknown) => (
+        <span class="tag">{tag}</span>
+      ))
+    }
+  </div>
+
+</a>

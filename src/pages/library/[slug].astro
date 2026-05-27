@@ -1,0 +1,224 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import { SITE_DESCRIPTION } from '../../consts';
+import ScrollToggle from '../../components/ScrollToggle.astro';
+
+export async function getStaticPaths() {
+  const library = await getCollection('library');
+
+  return library.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const isNovelSample = entry.data.type === "Novel Sample";
+const hideMeta = isNovelSample;
+---
+
+<html lang="en">
+  <head>
+		<BaseHead title={"OtterlyOmari"} description={SITE_DESCRIPTION} />
+	</head>
+  <body class="entry-page">
+
+    <main class="entry-container">
+
+    <header class="entry-header">
+
+      {!isNovelSample && (
+        <>
+          <h1 class="entry-title t-outline">
+            {entry.data.title}
+          </h1>
+
+          <p class="entry-description t-outline">
+            <i>{entry.data.description}</i>
+          </p>
+
+          <div class="entry-meta">
+            <span class="entry-type t-outline">{entry.data.type}</span>
+            <span class="entry-date t-outline">
+              {entry.data.pubDate.toDateString()}
+            </span>
+          </div>
+        </>
+      )}
+
+      {entry.data.cover && (
+        <img
+          class="entry-cover"
+          src={entry.data.cover}
+          alt={entry.data.title}
+        />
+      )}
+
+    </header>
+
+      <!-- CONTENT -->
+      <article class="entry-content t-outline">
+        <Content />
+      </article>
+
+      <br>
+      <br>
+
+      <!-- BACK BUTTON -->
+      <button><a href="/library" class="no-deco"><h4 class="t-outline t-has-hover">Go Back</h4></a></button>
+
+    </main>
+
+    <ScrollToggle />
+
+    <style>
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        margin: 0 0 0.5rem 0;
+        color: white;
+        line-height: 1.2;
+        font-family: 'Source Serif 4', sans-serif;
+      }
+
+
+      .entry-page {
+      color: #f2f2f2;
+      font-family: "Georgia", serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0; 
+
+      background-image: url('/library-bg.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      min-height: 100vh;
+    }
+
+    .entry-container {
+      background-color: rgba(20, 20, 20, 0.75);
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+
+      /* smoother mobile scaling */
+      width: min(800px, 100%);
+      box-sizing: border-box;
+    }
+
+    .entry-header {
+      margin-bottom: 2rem;
+    }
+
+    .entry-title {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-family: "Whisper", serif;
+      margin: 0 0 0.5rem;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .entry-description {
+      opacity: 0.75;
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .entry-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.75rem;
+      opacity: 0.6;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    button > a > h4 {
+      font-family: "Source Serif 4", serif;
+      font-size: 1.5rem;
+      transition: 0.2s ease;
+    }
+
+    .entry-cover {
+      width: 100%;
+      border-radius: 12px;
+      margin-top: 1rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      object-fit: cover;
+    }
+
+    .entry-content {
+      line-height: 1.75;
+      font-size: 1rem;
+      font-family: "Source Serif 4", serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: "Source Serif 4", serif;
+    }
+
+    .entry-content p {
+      margin: 1rem 0;
+    }
+
+    .entry-content img {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+
+    .entry-content a {
+      color: #cfd8ff;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .entry-container {
+        padding: 1.25rem 1rem;
+      }
+
+      .entry-meta {
+        font-size: 0.65rem;
+        gap: 0.5rem;
+      }
+
+      .entry-content {
+        font-size: 0.95rem;
+      }
+    }
+
+    @media (min-width: 601px) and (max-width: 1024px) {
+      .entry-container {
+        padding: 2rem 1.5rem;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .entry-container {
+        max-width: 850px;
+      }
+
+      .entry-content {
+        font-size: 1.05rem;
+      }
+    }
+    </style>
+
+  </body>
+</html>
