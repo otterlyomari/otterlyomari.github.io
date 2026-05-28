@@ -3,14 +3,14 @@
 > the cute motherfluffer your mom warned you about
 >> Everyone you meet is fighting a battle you know nothing about. Be kind. Always. - Robin Williams
 
-![Build Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fotterlyomari-website.sa-sweat04.workers.dev%2Fbadge.json)
+![Github Repo](https://img.shields.io/badge/github-repo-blue?logo=github) ![Build Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fotterlyomari-website.sa-sweat04.workers.dev%2Fbadge.json)
 
 ## Introduction
 Hello, and welcome to my little experiment in web design! This started out as a small project in 2024, aimed at simply being an alternative to carrd specifically tailed to my socials and such, but since then, it has evolved substantially, its basically a media center pertaining to my fursona, and my own creative written works, it's very much my way of teaching myself broader concepts of web design and exploring UX in a fun and intuitive way.
 
 This is just a fun way for me to display my favorite things ultimately, but I'll be updating this fairly actively, here's what you can expect from this project:
 
-### Existing Features
+## Existing Features
 * Mobile-first design, optimized for all screens, yes, desktop too!
     * Responsive layout and consistent scaling across all pages
     * Scroll to Top / Scroll to Bottom button for easy navigation of lengthy pages
@@ -43,6 +43,10 @@ This is just a fun way for me to display my favorite things ultimately, but I'll
 #### Note
 The list of potential future additions is subject to change and can be altered at any point in time
 
+## Licensing & Usage Notes:
+This project, while open source, cannot be modified, transformed or otherwise redistributed, whether it is for commerical or personal use- this project is permitted for educational use as a resource to understand concepts of web development, as well as javascript, and the Astro framework itself.
+
+Please review LICENSE.md for further details. thank you for your understanding!
 
 ## Credits
 This website was built using the [Astro v6.3](https://astro.build/blog/astro-630/) a web framework designed for content-driven websites, as such, it was the perfect fit from the very beginning, it has highly detailed documentation thoroughly explaining its usage, functionality, etc. I highly recommend this over other frameworks (e.g Next.js, Vue, Angular)
