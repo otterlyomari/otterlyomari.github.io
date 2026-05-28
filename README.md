@@ -3,7 +3,7 @@
 > the cute motherfluffer your mom warned you about
 >> Everyone you meet is fighting a battle you know nothing about. Be kind. Always. - Robin Williams
 
-![Build Status](https://img.shields.io/endpoint?url=https://otterlyomari-website.sa-sweat04.pages.dev/badge.json)
+![Build Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fotterlyomari-website.sa-sweat04.workers.dev%2Fbadge.json)
 
 ## Introduction
 Hello, and welcome to my little experiment in web design! This started out as a small project in 2024, aimed at simply being an alternative to carrd specifically tailed to my socials and such, but since then, it has evolved substantially, its basically a media center pertaining to my fursona, and my own creative written works, it's very much my way of teaching myself broader concepts of web design and exploring UX in a fun and intuitive way.
