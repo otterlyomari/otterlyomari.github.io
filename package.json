@@ -1,7 +1,7 @@
 {
   "name": "otterlyomari",
   "type": "module",
-  "version": "3.2.3-beta.1",
+  "version": "3.2.3-beta.2",
   "standard-version": {
     "prerelease": "beta",
     "scripts": {
