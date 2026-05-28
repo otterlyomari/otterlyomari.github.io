@@ -1,13 +1,22 @@
 {
   "name": "otterlyomari",
   "type": "module",
-  "version": "3.2.0",
+  "version": "3.2.1",
+  "standard-version": {
+    "scripts": {
+      "postbump": "echo version bumped"
+    }
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "release": "standard-version",
+    "release:patch": "standard-version --release-as patch",
+    "release:minor": "standard-version --release-as minor",
+    "release:major": "standard-version --release-as major"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
@@ -32,11 +41,13 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^5.3.3",
-    "vanilla-cookieconsent": "^3.0.0"
+    "vanilla-cookieconsent": "^3.0.0",
+    "wrangler": "^4.95.0"
   },
   "devDependencies": {
     "@iconify-json/mdi": "^1.1.64",
     "sass": "^1.71.1",
+    "standard-version": "^9.5.0",
     "vite": "^7.3.3"
   }
 }
