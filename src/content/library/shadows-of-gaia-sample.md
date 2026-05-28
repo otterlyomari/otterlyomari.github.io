@@ -1,5 +1,5 @@
 ---
-id: "shreds"
+id: "shadows-of-gaia-sample"
 title: "Shadows of Gaia: The Rise of Zenith"
 description: "Shadows of Gaia: The Rise of Zenith follows Aluxes, a young man who uncovers a plot to bring about the end of the world, as a malevolent dark wizard aims to rise to power"
 type: "Novel Sample"
@@ -7,7 +7,7 @@ tags: ["novel", "fantasy", "dark", "hopeful"]
 pubDate: 2026-05-26 
 hideMeta: true
 ---
-![A cute cat](/public/covers/archive/SOG_logo.png)
+![Logo for Shadows of Gaia: The Rise of Zenith](/covers/archive/SOG_LOGO.png)
 
 ## Cast of Characters
 Aluxes

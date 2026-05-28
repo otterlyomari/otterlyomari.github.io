@@ -1,5 +1,7 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import MenuButton from '../components/MenuButton.astro';
 import ScrollToggle from '../components/ScrollToggle.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 ---
@@ -77,8 +79,9 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 							~ Omari Allyn Tidemere</p>
 					</section>
 				</div>
-				<button><a href="/" class="no-deco"><h4 class="t-outline">Go Back</h4></a></button>
+				<MenuButton href="/" label="Go Back" />
 		</main>
+		<Footer/>
 
 		<ScrollToggle />
 

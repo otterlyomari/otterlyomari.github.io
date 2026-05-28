@@ -1,7 +1,9 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
 import ScrollToggle from '../components/ScrollToggle.astro';
+import MenuButton from '../components/MenuButton.astro';
 import { SITE_DESCRIPTION } from '../consts';
+import Footer from '../components/Footer.astro';
 ---
 
 <!doctype html>
@@ -13,15 +15,14 @@ import { SITE_DESCRIPTION } from '../consts';
 <body>
 
 <script type="module" src="/scripts/gallery-core.js?reload"></script>
-<script type="module" src="/scripts/gallery-lightbox.js?reload"></script> <!-- REQUIRED FOR ADDITIONAL LIGHTBOX FUNCTIONALITY -->
 <script type="module" src="/scripts/hackermantm.js?v=1"></script>
 
 <main id="content">
 
 <div id="home-section">
 
-	<a href="/">
-		<img src="/logo.png" class="image" />
+	<a href="/" arial-label="Home">
+		<img src="/logo.png" class="image" alt="Omari Tidemere" />
 	</a>
 
 	<h5 class="t-outline" style="text-align:center;">
@@ -42,15 +43,12 @@ import { SITE_DESCRIPTION } from '../consts';
 
 	<br />
 
-	<button>
-		<a href="/" class="no-deco">
-			<h4 class="t-outline t-has-hover">Go Back</h4>
-		</a>
-	</button>
+	<MenuButton href="/" label="Go Back" />
 
 </div>
 
 </main>
+<Footer/>
 
 <ScrollToggle />
 
@@ -121,15 +119,24 @@ main {
 
   overflow: visible;
 }
+
 .gallery-item-wrapper {
   position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
-.gallery-item-wrapper img {
+.gallery-item-wrapper img,
+.gallery-item-wrapper video {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
-  border-radius: 10px;
 }
 
 .gallery-item-wrapper img.loaded {
@@ -203,13 +210,12 @@ h6 {
   display: none;
 }
 
-#lightbox-img {
+#lightbox-media {
   position: absolute;
 
   width: 45%;
   height: auto;
 
-  transform-origin: center center;
   will-change: transform;
 
   /* hide no-drop/forbidden cursor */
@@ -219,17 +225,22 @@ h6 {
   pointer-events: auto;
 }
 
-#lightbox-img:active {
-  cursor: grabbing;
+#lightbox-media img,
+#lightbox-media video {
+  cursor: grab;
 }
 
+#lightbox-media img:active,
+#lightbox-media video:active {
+  cursor: grabbing;
+}
 html, body {
   overscroll-behavior: none;
 }
 </style>
 
 <div id="lightbox" class="lightbox hidden">
-  <img id="lightbox-img" />
+  <div id="lightbox-media"></div>
 </div>
 
 </body>

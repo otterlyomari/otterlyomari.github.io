@@ -1,8 +1,11 @@
 ---
 import { Icon } from 'astro-icon/components'
 const today = new Date();
+const {
+	class: className = "t-outline-w"
+} = Astro.props;
 ---
 
 <footer>
-	&copy; {today.getFullYear()} Omari A. Tidemere (@OtterlyOmari) All rights reserved.
-</style>
+	<p style="text-align: center;" class={`${className}`}>Copyright © otterlyomari {today.getFullYear()} All rights reserved.</p>
+</footer>

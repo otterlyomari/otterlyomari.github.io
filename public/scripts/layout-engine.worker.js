@@ -9,18 +9,18 @@ function getColumnCount(width) {
 function computeLayout(pool, width) {
   const columnCount = getColumnCount(width);
 
-  const GAP = 12;
+  const GAP = 14;
   const colW = (width - GAP * (columnCount - 1)) / columnCount;
 
-  const heights = Array(columnCount).fill(0);
+  const heights = new Array(columnCount).fill(0);
   const layout = [];
 
   for (let i = 0; i < pool.length; i++) {
     const item = pool[i];
 
-    // IMPORTANT: real ratio (fallback = 1)
     const ratio = item.ratio || 1;
 
+    // ❗ keep FLOAT precision here (no rounding yet)
     const h = colW * ratio;
 
     let col = 0;
@@ -41,6 +41,7 @@ function computeLayout(pool, width) {
     layout.push({
       i,
       src: item.src,
+      type: item.type,
       x,
       y,
       w: colW,

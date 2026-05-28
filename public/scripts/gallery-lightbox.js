@@ -1,49 +1,27 @@
-let lightbox, img;
+let lightbox, media;
 let isOpen = false;
 
-/* =========================
-   ACTUAL STATE (RENDERED)
-========================= */
-let x = 0, y = 0, scale = 1;
-let vx = 0, vy = 0;
+/* ========================= STATE ========================= */
 
-/* =========================
-   TARGET STATE (INPUT DRIVEN)
-========================= */
-let tx = 0, ty = 0, tScale = 1;
+let x = 0, y = 0;
+let scale = 1;
 
-/* =========================
-   INPUT STATE
-========================= */
 let dragging = false;
 let lastX = 0;
 let lastY = 0;
 
-/* pinch */
-let pinchStartDist = 0;
-let pinchStartScale = 1;
+/* ========================= CONFIG ========================= */
 
-/* =========================
-   CONFIG
-========================= */
 const MIN_SCALE = 1;
 const MAX_SCALE = 5;
 
-const POS_SPRING = 0.12;
-const SCALE_SPRING = 0.12;
-
-const DAMPING = 0.82;
-const SNAP_EPSILON = 0.3;
-
-/* =========================
-   INIT
-========================= */
+/* ========================= INIT ========================= */
 
 export function initLightbox() {
   lightbox = document.getElementById("lightbox");
-  img = document.getElementById("lightbox-img");
+  media = document.getElementById("lightbox-media");
 
-  if (!lightbox || !img) return;
+  if (!lightbox || !media) return;
 
   lightbox.addEventListener("click", (e) => {
     if (e.target === lightbox) closeLightbox();
@@ -53,185 +31,114 @@ export function initLightbox() {
     if (e.key === "Escape") closeLightbox();
   });
 
-  img.addEventListener("mousedown", startDrag);
+  media.addEventListener("mousedown", startDrag);
   window.addEventListener("mousemove", onDrag);
   window.addEventListener("mouseup", endDrag);
 
-  img.addEventListener("dragstart", (e) => e.preventDefault());
-
-  img.addEventListener("wheel", onWheel, { passive: false });
-  img.addEventListener("dblclick", onDoubleClick);
-
-  img.addEventListener("touchstart", onTouchStart, { passive: false });
-  img.addEventListener("touchmove", onTouchMove, { passive: false });
-  window.addEventListener("touchend", endDrag);
+  media.addEventListener("wheel", onWheel, { passive: false });
+  media.addEventListener("dblclick", onDoubleClick);
 
   requestAnimationFrame(loop);
 }
 
-/* =========================
-   OPEN / CLOSE
-========================= */
+/* ========================= OPEN ========================= */
 
 export function openLightbox(src) {
   isOpen = true;
 
   lightbox.classList.remove("hidden");
-  img.src = src;
-
   document.body.style.overflow = "hidden";
 
   reset();
-
-  tScale = 1.08;
+  setMedia(src);
 }
+
+/* ========================= CLOSE ========================= */
 
 export function closeLightbox() {
   isOpen = false;
 
   lightbox.classList.add("hidden");
-
   document.body.style.overflow = "";
 
   reset();
 }
 
-/* =========================
-   RESET
-========================= */
+/* ========================= MEDIA ========================= */
 
-function reset() {
-  x = y = 0;
-  vx = vy = 0;
+function setMedia(src) {
+  media.innerHTML = "";
 
-  tx = ty = 0;
-  tScale = 1;
-  scale = 1;
-}
+  const el = src.endsWith(".webm") || src.endsWith(".mp4")
+    ? document.createElement("video")
+    : document.createElement("img");
 
-/* =========================
-   APPLY
-========================= */
+  el.src = src;
 
-function apply() {
-  img.style.transform =
-    `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
-}
-
-/* =========================
-   MAIN SPRING LOOP
-========================= */
-
-function loop() {
-  if (isOpen) {
-
-    /* =========================
-       POSITION SPRING
-    ========================= */
-    const dx = tx - x;
-    const dy = ty - y;
-
-    vx += dx * POS_SPRING;
-    vy += dy * POS_SPRING;
-
-    vx *= DAMPING;
-    vy *= DAMPING;
-
-    x += vx;
-    y += vy;
-
-    /* =========================
-       SCALE SPRING
-    ========================= */
-    scale += (tScale - scale) * SCALE_SPRING;
-
-    /* =========================
-       SNAP TO CENTER
-    ========================= */
-    if (
-      Math.abs(vx) < SNAP_EPSILON &&
-      Math.abs(vy) < SNAP_EPSILON &&
-      scale <= 1.01 &&
-      !dragging
-    ) {
-      tx = 0;
-      ty = 0;
-      vx *= 0.8;
-      vy *= 0.8;
-    }
-
-    apply();
+  if (el.tagName === "VIDEO") {
+    el.autoplay = true;
+    el.loop = true;
+    el.muted = true;
+    el.controls = true;
+    el.playsInline = true;
   }
 
+  el.style.position = "absolute";
+  el.style.left = "50%";
+  el.style.top = "50%";
+  el.style.transformOrigin = "center";
+  el.style.cursor = "grab";
+  el.draggable = false;
+
+  media.appendChild(el);
+}
+
+/* ========================= RESET ========================= */
+
+function reset() {
+  x = 0;
+  y = 0;
+  scale = 1;
+  dragging = false;
+}
+
+/* ========================= APPLY ========================= */
+
+function apply() {
+  const el = media.firstElementChild;
+  if (!el) return;
+
+  el.style.transform =
+    `translate(-50%, -50%) translate(${x}px, ${y}px) scale(${scale})`;
+}
+
+/* ========================= LOOP ========================= */
+
+function loop() {
+  if (!isOpen) {
+    requestAnimationFrame(loop);
+    return;
+  }
+
+  // snap to center when idle
+  if (!dragging && scale <= 1.02) {
+    x *= 0.85;
+    y *= 0.85;
+
+    if (Math.abs(x) < 0.5) x = 0;
+    if (Math.abs(y) < 0.5) y = 0;
+  }
+
+  apply();
   requestAnimationFrame(loop);
 }
 
-/* =========================
-   ZOOM (CURSOR ANCHORED)
-========================= */
-
-function zoomAtPoint(nextScale, px, py) {
-  const rect = img.getBoundingClientRect();
-
-  const cx = px - rect.left - rect.width / 2;
-  const cy = py - rect.top - rect.height / 2;
-
-  const wx = (cx - x) / scale;
-  const wy = (cy - y) / scale;
-
-  tScale = clamp(nextScale);
-
-  tx = cx - wx * tScale;
-  ty = cy - wy * tScale;
-}
-
-/* =========================
-   WHEEL ZOOM
-========================= */
-
-function onWheel(e) {
-  if (!isOpen) return;
-
-  e.preventDefault();
-
-  zoomAtPoint(
-    tScale - e.deltaY * 0.002,
-    e.clientX,
-    e.clientY
-  );
-}
-
-/* =========================
-   DOUBLE CLICK
-========================= */
-
-function onDoubleClick(e) {
-  if (!isOpen) return;
-
-  const target = tScale > 1 ? 1 : 2.4;
-
-  zoomAtPoint(target, e.clientX, e.clientY);
-
-  if (target === 1) {
-    tx = 0;
-    ty = 0;
-  }
-}
-
-/* =========================
-   DRAG + KINETIC PAN
-========================= */
+/* ========================= DRAG ========================= */
 
 function startDrag(e) {
-  if (!isOpen) return;
-
   dragging = true;
-
   lastX = e.clientX;
   lastY = e.clientY;
-
-  vx = 0;
-  vy = 0;
 }
 
 function onDrag(e) {
@@ -240,11 +147,8 @@ function onDrag(e) {
   const dx = e.clientX - lastX;
   const dy = e.clientY - lastY;
 
-  tx += dx;
-  ty += dy;
-
-  vx = dx;
-  vy = dy;
+  x += dx;
+  y += dy;
 
   lastX = e.clientX;
   lastY = e.clientY;
@@ -254,48 +158,55 @@ function endDrag() {
   dragging = false;
 }
 
-/* =========================
-   PINCH ZOOM
-========================= */
+/* ========================= CURSOR ZOOM (CORRECT iOS STYLE) ========================= */
 
-function onTouchStart(e) {
+function onWheel(e) {
   if (!isOpen) return;
-
-  if (e.touches.length === 2) {
-    pinchStartDist = getDist(e.touches);
-    pinchStartScale = tScale;
-  }
-}
-
-function onTouchMove(e) {
-  if (!isOpen || e.touches.length !== 2) return;
-
   e.preventDefault();
 
-  const dist = getDist(e.touches);
-  const factor = dist / pinchStartDist;
+  const el = media.firstElementChild;
+  if (!el) return;
 
-  const next = pinchStartScale * factor;
+  const rect = el.getBoundingClientRect();
 
-  const px =
-    (e.touches[0].clientX + e.touches[1].clientX) / 2;
+  // cursor relative to center
+  const cx = e.clientX - (rect.left + rect.width / 2);
+  const cy = e.clientY - (rect.top + rect.height / 2);
 
-  const py =
-    (e.touches[0].clientY + e.touches[1].clientY) / 2;
+  const prev = scale;
+  const next = clamp(prev - e.deltaY * 0.002);
 
-  zoomAtPoint(next, px, py);
+  const ratio = next / prev;
+
+  // 🔥 THIS is the correct zoom-at-point formula
+  x = cx - (cx - x) * ratio;
+  y = cy - (cy - y) * ratio;
+
+  scale = next;
 }
 
-/* =========================
-   UTILS
-========================= */
+/* ========================= DOUBLE CLICK ========================= */
 
-function getDist(touches) {
-  const dx = touches[0].clientX - touches[1].clientX;
-  const dy = touches[0].clientY - touches[1].clientY;
-  return Math.hypot(dx, dy);
+function onDoubleClick(e) {
+  const el = media.firstElementChild;
+  if (!el) return;
+
+  const rect = el.getBoundingClientRect();
+
+  const cx = e.clientX - (rect.left + rect.width / 2);
+  const cy = e.clientY - (rect.top + rect.height / 2);
+
+  const next = scale > 1 ? 1 : 2.5;
+  const ratio = next / scale;
+
+  x = cx - (cx - x) * ratio;
+  y = cy - (cy - y) * ratio;
+
+  scale = next;
 }
 
-function clamp(v = tScale) {
+/* ========================= UTILS ========================= */
+
+function clamp(v) {
   return Math.min(Math.max(v, MIN_SCALE), MAX_SCALE);
 }

@@ -3,6 +3,8 @@ import { getCollection, render } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import { SITE_DESCRIPTION } from '../../consts';
 import ScrollToggle from '../../components/ScrollToggle.astro';
+import MenuButton from '../../components/MenuButton.astro';
+import Footer from '../../components/Footer.astro';
 
 export async function getStaticPaths() {
   const library = await getCollection('library');
@@ -69,9 +71,10 @@ const hideMeta = isNovelSample;
       <br>
 
       <!-- BACK BUTTON -->
-      <button><a href="/library" class="no-deco"><h4 class="t-outline t-has-hover">Go Back</h4></a></button>
+      <MenuButton href="/library" label="Return to Library" />
 
     </main>
+    <Footer class="t-outline"/>
 
     <ScrollToggle />
 
