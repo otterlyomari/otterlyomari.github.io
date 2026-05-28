@@ -1,10 +1,10 @@
+import { env } from "cloudflare:workers";
+
 export const prerender = false;
 
-export async function GET(context: any) {
+export async function GET() {
   try {
-    const env = context?.locals?.runtime?.env;
-
-    if (!env?.CF_API_TOKEN) {
+    if (!env.CF_API_TOKEN) {
       return Response.json({
         schemaVersion: 1,
         label: "build",
