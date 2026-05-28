@@ -1,10 +1,10 @@
 name: Deploy Worker (Astro + Cloudflare)
 
 on:
-  push:
-    tags:
-      - "v*"
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Create Release"]
+    types:
+      - completed
 
 permissions:
   contents: write
@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout tag
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -28,17 +28,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # 🟢 Extract version from git tag
       - name: Extract version
-        id: version
         run: echo "version=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
 
-      # 🟡 Build (before deploy engine runs wrangler)
-      - name: Build Astro Worker
-        run: npm run build
-
-      # 🟣 Run unified deploy engine (ledger + deploy + snapshot)
       - name: Deploy system
-        run: node scripts/deploy.mjs "${{ steps.version.outputs.version }}"
+        run: node scripts/deploy.mjs "${{ github.ref_name }}"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
