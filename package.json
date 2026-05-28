@@ -1,7 +1,7 @@
 {
   "name": "otterlyomari",
   "type": "module",
-  "version": "3.2.10",
+  "version": "3.2.11",
   "standard-version": {
     "scripts": {
       "postbump": "echo version bumped"
