@@ -1,0 +1,65 @@
+name: Deploy Worker (Astro + Cloudflare)
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout tag
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Astro Worker
+        run: npm run build
+
+      - name: Generate deploy ledger entry
+        run: |
+          node -e "
+          const fs = require('fs');
+          const pkg = require('./package.json');
+
+          const ledgerPath = 'public/deploy-ledger.json';
+
+          let ledger = [];
+          if (fs.existsSync(ledgerPath)) {
+            ledger = JSON.parse(fs.readFileSync(ledgerPath));
+          }
+
+          ledger.unshift({
+            version: pkg.version,
+            commit: process.env.GITHUB_SHA,
+            time: new Date().toISOString()
+          });
+
+          ledger = ledger.slice(0, 20);
+
+          fs.writeFileSync(ledgerPath, JSON.stringify(ledger, null, 2));
+          "
+
+      - name: Deploy Worker
+        run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+
+      - name: Upload rollback snapshot
+        run: npx wrangler versions upload
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
