@@ -50,7 +50,7 @@ export function initGallery() {
         "/fursona-art/IMG_3251.webp",
         "/fursona-art/IMG_3253.webp",
         "/fursona-art/image.webp",
-        "/fursona-art/Omari-maw (4).webm",
+        "/fursona-art/Omari-maw (4).webp",
         "/fursona-art/IMG_2010.webp",
         "/fursona-art/photo_2025-10-15_16-18-21.webp"
       ]
