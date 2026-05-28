@@ -61,13 +61,11 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.version }}
 
-      # 🔵 DEPLOY WITH TAG
       - name: Deploy Worker
-        run: npx wrangler deploy --tag ${{ steps.version.outputs.version }} --message ${{ github.sha }}
+        run: npx wrangler deploy --message "v${{ steps.pkg.outputs.version }} (${github.sha})"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
 
-      # 🔵 SNAPSHOT (rollback support)
       - name: Upload rollback snapshot
         run: npx wrangler versions upload
         env:
