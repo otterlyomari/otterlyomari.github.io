@@ -32,6 +32,6 @@ jobs:
         run: echo "version=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
 
       - name: Deploy system
-        run: node scripts/deploy.mjs "${{ github.ref_name }}"
+        run: node scripts/deploy.mjs "${{ steps.version.outputs.version }}"
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
