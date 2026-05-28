@@ -68,12 +68,12 @@ Role: A mysterious and enigmatic presence, Zenith’s motivations remain shroude
 actions ripple across the realms. His calculating nature and immense power make him a
 force to be reckoned with.
 
-Malgrint
+Malgrin
 Appearance: A sinister figure cloaked in shadow. His gaunt frame and ashen skin make him
 appear almost spectral, while his crimson eyes glint with malice. His attire is dark and
 tattered, with faint wisps of dark energy emanating from him.
 
-Role: A malevolent force of destruction, Malgrint’s presence casts a long shadow over the
+Role: A malevolent force of destruction, Malgrin’s presence casts a long shadow over the
 journey. His cunning and mastery of forbidden magic make him an ever-present danger.
 
 Korrin

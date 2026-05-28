@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@iconify-json/mdi": "^1.1.64",
-    "sass": "^1.71.1"
+    "sass": "^1.71.1",
+    "vite": "^7.3.3"
   }
 }
