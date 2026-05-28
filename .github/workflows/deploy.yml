@@ -2,7 +2,6 @@ name: Deploy Worker (Astro + Cloudflare)
 
 on:
   push:
-    branches: [main]
     tags:
       - "v*"
   workflow_dispatch:
@@ -14,12 +13,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    # ✅ GLOBAL ENV FOR ALL STEPS
-    env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-
     steps:
-      - name: Checkout repository
+      - name: Checkout tag
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -33,39 +28,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build Astro Worker
-        run: npm run build
-
+      # 🟢 Extract version from git tag
       - name: Extract version
         id: version
         run: echo "version=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
 
-      - name: Generate deploy ledger entry
-        run: |
-          node -e "
-          const fs = require('fs');
+      # 🟡 Build (before deploy engine runs wrangler)
+      - name: Build Astro Worker
+        run: npm run build
 
-          const ledgerPath = 'public/deploy-ledger.json';
-
-          let ledger = [];
-          if (fs.existsSync(ledgerPath)) {
-            ledger = JSON.parse(fs.readFileSync(ledgerPath));
-          }
-
-          ledger.unshift({
-            version: process.env.VERSION,
-            time: new Date().toISOString()
-          });
-
-          ledger = ledger.slice(0, 20);
-
-          fs.writeFileSync(ledgerPath, JSON.stringify(ledger, null, 2));
-          "
+      # 🟣 Run unified deploy engine (ledger + deploy + snapshot)
+      - name: Deploy system
+        run: node scripts/deploy.mjs "${{ steps.version.outputs.version }}"
         env:
-          VERSION: ${{ steps.version.outputs.version }}
-
-      - name: Deploy Worker
-        run: npx wrangler deploy --message "${{ steps.version.outputs.version }}"
-
-      - name: Upload rollback snapshot
-        run: npx wrangler versions upload
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}

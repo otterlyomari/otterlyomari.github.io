@@ -1,9 +1,8 @@
 {
   "name": "otterlyomari",
   "type": "module",
-  "version": "3.2.3-beta.3",
+  "version": "3.2.2",
   "standard-version": {
-    "prerelease": "beta",
     "scripts": {
       "postbump": "echo version bumped"
     }

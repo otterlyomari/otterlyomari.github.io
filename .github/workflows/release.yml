@@ -26,16 +26,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # REQUIRED: Git identity for tagging
+      # Configure git (required for tagging in CI)
       - name: Configure Git
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-      # Generate version + changelog + tag
+      # Generate version + CHANGELOG + tag
       - name: Create release
         run: npx standard-version
 
-      # Push commit + tags (THIS is what triggers deploy.yml)
-      - name: Push changes
+      # Push commit + tags back to repo
+      - name: Push release
         run: git push --follow-tags origin main
