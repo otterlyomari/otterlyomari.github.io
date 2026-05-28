@@ -1,26 +1,55 @@
-import fs from "fs";
-
-const ledger = JSON.parse(
-  fs.readFileSync("public/deploy-ledger.json", "utf-8")
-);
-
 export const prerender = false;
 
-export async function GET() {
-  const latest = ledger?.[0]?.version ?? "unknown";
+const ACCOUNT_ID = import.meta.env.CF_ACCOUNT_ID;
+const WORKER = import.meta.env.CF_WORKER_NAME;
 
-  return new Response(
-    JSON.stringify({
-      schemaVersion: 1,
-      label: "deploy",
-      message: latest,
-      color: "green",
-    }),
-    {
-      headers: {
-        "content-type": "application/json",
-        "cache-control": "no-store",
-      },
-    }
-  );
+export async function GET() {
+  try {
+    const res = await fetch(
+      `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/workers/deployments?name=${WORKER}`,
+      {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.CF_API_TOKEN}`,
+        },
+      }
+    );
+
+    const json = await res.json();
+
+    const deployments = json?.result ?? [];
+
+    const latest = deployments[0];
+
+    const version =
+      latest?.versions?.[0]?.tag ||
+      latest?.deployment_id?.slice(0, 7) ||
+      "unknown";
+
+    return new Response(
+      JSON.stringify({
+        schemaVersion: 1,
+        label: "deploy",
+        message: version,
+        color: "green",
+      }),
+      {
+        headers: {
+          "content-type": "application/json",
+          "cache-control": "no-store",
+        },
+      }
+    );
+  } catch {
+    return new Response(
+      JSON.stringify({
+        schemaVersion: 1,
+        label: "deploy",
+        message: "offline",
+        color: "red",
+      }),
+      {
+        headers: { "content-type": "application/json" },
+      }
+    );
+  }
 }

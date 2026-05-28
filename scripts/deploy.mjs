@@ -4,9 +4,6 @@ import { execSync } from "child_process";
 const ledgerPath = "public/deploy-ledger.json";
 const version = process.argv[2] || "unknown";
 
-// ----------------------
-// helpers
-// ----------------------
 function run(cmd, env = {}) {
   execSync(cmd, {
     stdio: "inherit",
@@ -17,9 +14,6 @@ function run(cmd, env = {}) {
   });
 }
 
-// ----------------------
-// 1. WRITE DEPLOY LEDGER
-// ----------------------
 function writeLedger() {
   let ledger = [];
 
@@ -36,56 +30,36 @@ function writeLedger() {
     time: new Date().toISOString(),
   });
 
-  ledger = ledger.slice(0, 20);
-
-  fs.writeFileSync(ledgerPath, JSON.stringify(ledger, null, 2));
-
+  fs.writeFileSync(ledgerPath, JSON.stringify(ledger.slice(0, 20), null, 2));
   console.log("📦 Ledger updated");
 }
 
-// ----------------------
-// 2. BUILD ASTRO
-// ----------------------
 function build() {
-  console.log("🔧 Building project...");
+  console.log("🔧 Building...");
   run("npm run build");
 }
 
-// ----------------------
-// 3. DEPLOY TO CLOUDFLARE
-// ----------------------
 function deploy() {
   console.log("☁️ Deploying to Cloudflare...");
 
   if (!process.env.CF_API_TOKEN) {
-    console.error("❌ Missing CF_API_TOKEN");
-    process.exit(1);
+    throw new Error("Missing CF_API_TOKEN");
   }
 
-  run(
-    `npx wrangler deploy --message "${version}"`,
-    {
-      CLOUDFLARE_API_TOKEN: process.env.CF_API_TOKEN,
-    }
-  );
+  run("npx wrangler deploy --message \"" + version + "\"", {
+    CLOUDFLARE_API_TOKEN: process.env.CF_API_TOKEN,
+  });
 }
 
-// ----------------------
-// 4. UPLOAD ROLLBACK SNAPSHOT
-// ----------------------
 function snapshot() {
-  console.log("🧷 Uploading rollback snapshot...");
-
+  console.log("🧷 Snapshot...");
   run("npx wrangler versions upload", {
     CLOUDFLARE_API_TOKEN: process.env.CF_API_TOKEN,
   });
 }
 
-// ----------------------
-// RUN PIPELINE
-// ----------------------
-function runPipeline() {
-  console.log(`🚀 Starting deploy: ${version}`);
+function main() {
+  console.log(`🚀 Deploy starting: ${version}`);
 
   writeLedger();
   build();
@@ -95,4 +69,4 @@ function runPipeline() {
   console.log(`✅ Deploy complete: ${version}`);
 }
 
-runPipeline();
+main();
