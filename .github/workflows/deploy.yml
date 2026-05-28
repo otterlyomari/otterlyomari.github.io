@@ -14,6 +14,10 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
+    # ✅ CRITICAL FIX: global env for ALL steps
+    env:
+      CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -35,5 +39,3 @@ jobs:
 
       - name: Deploy system
         run: node scripts/deploy.mjs "${{ steps.version.outputs.version }}"
-        env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}

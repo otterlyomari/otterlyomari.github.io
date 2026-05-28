@@ -43,8 +43,10 @@ function deploy() {
   console.log("☁️ Deploying to Cloudflare...");
 
   if (!process.env.CF_API_TOKEN) {
-    throw new Error("Missing CF_API_TOKEN");
-  }
+    console.error("❌ Missing CF_API_TOKEN");
+    console.error("Available env keys:", Object.keys(process.env));
+    process.exit(1);
+   }
 
   run("npx wrangler deploy --message \"" + version + "\"", {
     CLOUDFLARE_API_TOKEN: process.env.CF_API_TOKEN,
