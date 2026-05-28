@@ -1,0 +1,5 @@
+name = "otterlyomari-website"
+compatibility_date = "2026-05-28"
+
+[build]
+command = "npm run build"

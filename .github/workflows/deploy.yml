@@ -30,11 +30,16 @@ jobs:
       - name: Build Astro Worker
         run: npm run build
 
+      # 🟢 GET VERSION FROM GIT TAG (NOT PACKAGE.JSON)
+      - name: Extract version from tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+
+      # 🟡 DEPLOY LEDGER
       - name: Generate deploy ledger entry
         run: |
           node -e "
           const fs = require('fs');
-          const pkg = require('./package.json');
 
           const ledgerPath = 'public/deploy-ledger.json';
 
@@ -44,7 +49,7 @@ jobs:
           }
 
           ledger.unshift({
-            version: pkg.version,
+            version: process.env.VERSION,
             commit: process.env.GITHUB_SHA,
             time: new Date().toISOString()
           });
@@ -53,12 +58,16 @@ jobs:
 
           fs.writeFileSync(ledgerPath, JSON.stringify(ledger, null, 2));
           "
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
 
+      # 🔵 DEPLOY WITH TAG
       - name: Deploy Worker
-        run: npx wrangler deploy
+        run: npx wrangler deploy --tag ${{ steps.version.outputs.version }} --message ${{ github.sha }}
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
 
+      # 🔵 SNAPSHOT (rollback support)
       - name: Upload rollback snapshot
         run: npx wrangler versions upload
         env:
