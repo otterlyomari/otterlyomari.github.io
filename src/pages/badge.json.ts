@@ -1,3 +1,5 @@
+export const prerender = false;
+
 type Env = {
   CF_ACCOUNT_ID: string;
   CF_PROJECT_NAME: string;
@@ -15,35 +17,29 @@ export async function GET({ env }: { env: Env }) {
   );
 
   const data = await res.json();
+
   const latest = data?.result?.latest_deployment;
   const status = latest?.latest_stage?.status;
-
-  let message = "unknown";
-  let color = "lightgrey";
-
-  if (status === "success") {
-    message = "passing";
-    color = "green";
-  } else if (status === "failure" || status === "errored") {
-    message = "failing";
-    color = "red";
-  } else if (status) {
-    message = "building";
-    color = "yellow";
-  }
 
   return new Response(
     JSON.stringify({
       schemaVersion: 1,
       label: "build",
-      message,
-      color,
+      message:
+        status === "success"
+          ? "passing"
+          : status === "failure"
+          ? "failing"
+          : "building",
+      color:
+        status === "success"
+          ? "green"
+          : status === "failure"
+          ? "red"
+          : "yellow",
     }),
     {
-      headers: {
-        "content-type": "application/json",
-        "Cache-Control": "no-store",
-      },
+      headers: { "content-type": "application/json" },
     }
   );
 }
