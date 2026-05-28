@@ -3,7 +3,8 @@
 > the cute motherfluffer your mom warned you about
 >> Everyone you meet is fighting a battle you know nothing about. Be kind. Always. - Robin Williams
 
-![Github Repo](https://img.shields.io/badge/github-repo-blue?logo=github) ![Astro Framework In Use](https://img.shields.io/badge/github-repo-pink?logo=astro) ![TypeScript](https://img.shields.io/badge/github-repo-blue?logo=TypeScript) ![JavaScript](https://img.shields.io/badge/github-repo-blue?logo=JavaScript) ![Educational Use Only](https://img.shields.io/badge/License-Educational%20Only-orange?) ![Build Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fotterlyomari-website.sa-sweat04.workers.dev%2Fbadge.json)
+![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-181717?logo=github) 
+![Build Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fotterlyomari-website.sa-sweat04.workers.dev%2Fbadge.json)
 
 ## Introduction
 Hello, and welcome to my little experiment in web design! This started out as a small project in 2024, aimed at simply being an alternative to carrd specifically tailed to my socials and such, but since then, it has evolved substantially, its basically a media center pertaining to my fursona, and my own creative written works, it's very much my way of teaching myself broader concepts of web design and exploring UX in a fun and intuitive way.
@@ -44,6 +45,8 @@ This is just a fun way for me to display my favorite things ultimately, but I'll
 The list of potential future additions is subject to change and can be altered at any point in time
 
 ## Licensing & Usage Notes:
+![Educational Use Only](https://img.shields.io/badge/License-Educational_Use_Only-orange)
+
 This project, while open source, cannot be modified, transformed or otherwise redistributed, whether it is for commerical or personal use- this project is permitted for educational use as a resource to understand concepts of web development, as well as javascript, and the Astro framework itself.
 
 Please review LICENSE.md for further details. thank you for your understanding!
@@ -53,7 +56,16 @@ This website was built using the [Astro v6.3](https://astro.build/blog/astro-630
 
 ### Libraries used
 * [Fuse .js](https://www.fusejs.io/)
-* Hah, you were expecting some CSS libraries, weren't ya? well, too bad! all custom css here, baby >:3
+* No CSS frameworks were used — all styling was written from scratch.
+
+## Tech Stack
+
+![Astro](https://img.shields.io/badge/Astro-v6.3-FF5D01?logo=astro)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES2023-F7DF1E?logo=javascript&logoColor=black)
+
+- Cloudflare Workers
+- Cloudflare Pages
 
 ### Fonts used
 * [Whisper by Robert Leushcke](https://fonts.google.com/specimen/Whisper)
