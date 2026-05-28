@@ -1,62 +1,104 @@
-![Omari Tidemere logo](/public/logo.png)
+![Omari Tidemere logo](./images/logo.png)
 
 > the cute motherfluffer your mom warned you about
->> Everyone you meet is fighting a battle you know nothing about. Be kind. Always. - Robin Williams
 
-![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-181717?logo=github) 
+> “Everyone you meet is fighting a battle you know nothing about. Be kind. Always.” — Robin Williams
+
+![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-181717?logo=github)
 ![Build Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fotterlyomari-website.sa-sweat04.workers.dev%2Fbadge.json)
 
-## Introduction
-Hello, and welcome to my little experiment in web design! This started out as a small project in 2024, aimed at simply being an alternative to carrd specifically tailed to my socials and such, but since then, it has evolved substantially, its basically a media center pertaining to my fursona, and my own creative written works, it's very much my way of teaching myself broader concepts of web design and exploring UX in a fun and intuitive way.
+---
 
-This is just a fun way for me to display my favorite things ultimately, but I'll be updating this fairly actively, here's what you can expect from this project:
+## Introduction
+
+Hello, and welcome to my little experiment in web design.
+
+This project started in 2024 as a small attempt to build an alternative to Carrd, specifically tailored to my socials. Since then, it has evolved into a media center for my fursona and my creative writing.
+
+More importantly, it’s been my way of learning broader web development concepts and exploring UX design in a hands-on, experimental way.
+
+This is ultimately just a space for me to showcase things I enjoy, but I actively maintain and improve it. Here’s what you can expect:
+
+---
 
 ## Existing Features
-* Mobile-first design, optimized for all screens, yes, desktop too!
-    * Responsive layout and consistent scaling across all pages
-    * Scroll to Top / Scroll to Bottom button for easy navigation of lengthy pages
-* Splash screen, which plays the first time you load the page in a new tab
-    * Post-animation, it sets a flag "hasSeenSplash" in your session storage to true, this way, you don't have to see it again until the tab is closed and re-opened!
-* Quick links on the home page to various social media profies, ways to financially support my work, as well as different pages of the website
-* Accessible design language and choices across the board
-    * Full screen reader support for those who are vision impaired or blind
-    * General ease of use for colorblind people
-    * Relatively large buttons designed to be easy for people to activate, regardless of hand/finger size
-* Dynamic gallery system that is easily maintainable and configurable
-    * Pintrest-inspired masonry layout that allows images to display at full width and height, and fill the full available space of the viewport
-    * Images are dynamically loaded from galleryData in gallery-core.js and can be added/removed at any time without errors or other issues
-    * Custom fullscreen "lightbox" implementation with zooming with the wheel, or cursor-anchored zoom,as well as panning, these features also are supported on mobile via touch gestures!
-    * Optimized for quick load times and little to no performance bottle neck on the users end
-* Dynamic content & data driven collection of written works, ditto to the previous point regarding the gallery- is easily maintainable configurable
-    * Custom landing page for the collection with special UI, search bar, and filters for easily viewing specific types of content 
-    * Slug page that loads data from the clicked card, can be altered as needed too
-    * Dynamic ArchiveCard component, created at run time using data from the "library" collection
+
+* Mobile-first design, optimized for all screen sizes (including desktop)
+  * Responsive layout with consistent scaling across pages
+  * Scroll-to-top / scroll-to-bottom navigation for long pages
+
+* Splash screen shown on first visit per session
+  * After the animation plays, a `hasSeenSplash` flag is stored in session storage so it won’t replay until the tab is closed
+
+* Quick links on the homepage
+  * Social media profiles
+  * Ways to support my work
+  * Navigation to key sections of the site
+
+* Accessible design principles applied throughout
+  * Full screen reader support
+  * Consideration for colorblind users
+  * Large, easy-to-use interactive elements
+
+* Dynamic gallery system (fully data-driven and maintainable)
+  * Pinterest-inspired masonry layout
+  * Images loaded dynamically from `galleryData` in `gallery-core.js`
+  * Custom fullscreen lightbox with zoom (mouse wheel and cursor anchoring) and panning
+  * Touch gesture support on mobile devices
+  * Optimized for performance and fast load times
+
+* Dynamic content system for written works (data-driven architecture)
+  * Dedicated landing page with search and filtering
+  * Dynamic slug pages generated from selected entries
+  * Reusable `ArchiveCard` component generated from the library dataset
+
+---
 
 ## Potential Future Additions
-* Quality-of-Life additions to the Gallery "Lightbox" user interface
-    * Arrow buttons left and right (for going to previous image or the next)
-    * Improved media player for .webm files
-    * Minor adjustments to the CSS styles in gallery.astro
-* Quality-of-Life additions to the library landing page
-    * Improved search responsiveness
-    * Small adjustments to the layout (specifically the filter row and search bar)
 
-#### Note
-The list of potential future additions is subject to change and can be altered at any point in time
+* Quality-of-life improvements to the gallery lightbox UI
+  * Previous/next navigation arrows
+  * Improved `.webm` playback handling
+  * Minor CSS refinements in `gallery.astro`
 
-## Licensing & Usage Notes:
+* Improvements to the library landing page
+  * Faster and more responsive search
+  * Layout refinements for filters and search bar
+
+---
+
+### Note
+
+This list of potential future additions is subject to change at any time.
+
+---
+
+## Licensing & Usage Notes
+
 ![Educational Use Only](https://img.shields.io/badge/License-Educational_Use_Only-orange)
 
-This project, while open source, cannot be modified, transformed or otherwise redistributed, whether it is for commerical or personal use- this project is permitted for educational use as a resource to understand concepts of web development, as well as javascript, and the Astro framework itself.
+This project is source-available for educational and reference purposes only.
 
-Please review LICENSE.md for further details. thank you for your understanding!
+It may be used to learn about web development, JavaScript, and the Astro framework. However, modification, redistribution, or commercial use of this project or its assets is not permitted without explicit permission.
+
+Please refer to `LICENSE.md` for full details.
+
+---
 
 ## Credits
-This website was built using the [Astro v6.3](https://astro.build/blog/astro-630/) a web framework designed for content-driven websites, as such, it was the perfect fit from the very beginning, it has highly detailed documentation thoroughly explaining its usage, functionality, etc. I highly recommend this over other frameworks (e.g Next.js, Vue, Angular)
 
-### Libraries used
-* [Fuse .js](https://www.fusejs.io/)
+This website was built using [Astro v6.3](https://astro.build/blog/astro-630/), a web framework designed for content-driven sites. Its documentation and structure made it a strong fit for this project from the beginning.
+
+I recommend it for similar projects over alternatives such as Next.js, Vue, or Angular.
+
+---
+
+### Libraries Used
+
+* [Fuse.js](https://www.fusejs.io/)
 * No CSS frameworks were used — all styling was written from scratch.
+
+---
 
 ## Tech Stack
 
@@ -67,13 +109,17 @@ This website was built using the [Astro v6.3](https://astro.build/blog/astro-630
 - Cloudflare Workers
 - Cloudflare Pages
 
-### Fonts used
-* [Whisper by Robert Leushcke](https://fonts.google.com/specimen/Whisper)
-* [Source Serif 4 by Frank Grießhammer](https://fonts.google.com/specimen/Source+Serif+4)
-* [Pulang by Khurasan](https://www.dafont.com/pulang.font)
+---
+
+### Fonts Used
+
+* Whisper by Robert Leuschke  
+* Source Serif 4 by Frank Grießhammer  
+* Pulang by Khurasan  
+
+---
 
 ### Inspirations
-* [Archive of Our Own(Ao3)](https://archiveofourown.org/) was a key inspiration for the core of the library page
-* [Pintrest](https://www.pinterest.com/) inspired the layout for my gallery page
 
-
+* [Archive of Our Own (AO3)](https://archiveofourown.org/) — core inspiration for the library system  
+* [Pinterest](https://www.pinterest.com/) — inspiration for the gallery layout
