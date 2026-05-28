@@ -35,7 +35,7 @@ jobs:
         id: version
         run: echo "version=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
 
-      # Update deploy ledger (source of truth)
+      # Update deploy ledger
       - name: Generate deploy ledger entry
         run: |
           node -e "
@@ -60,7 +60,7 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.version }}
 
-      # Deploy Worker
+      # Deploy to Cloudflare
       - name: Deploy Worker
         run: npx wrangler deploy --message "${{ steps.version.outputs.version }}"
         env:
