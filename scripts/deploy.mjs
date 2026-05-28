@@ -41,15 +41,13 @@ function build() {
 
 function deploy() {
   console.log("☁️ Deploying to Cloudflare...");
-
   if (!process.env.CF_API_TOKEN) {
     console.error("❌ Missing CF_API_TOKEN");
-    console.error("Available env keys:", Object.keys(process.env));
     process.exit(1);
-   }
-
-  run("npx wrangler deploy --message \"" + version + "\"", {
+  }
+  run(`npx wrangler deploy --message "${version}"`, {
     CLOUDFLARE_API_TOKEN: process.env.CF_API_TOKEN,
+    CLOUDFLARE_ACCOUNT_ID: process.env.CF_ACCOUNT_ID,
   });
 }
 
@@ -57,6 +55,7 @@ function snapshot() {
   console.log("🧷 Snapshot...");
   run("npx wrangler versions upload", {
     CLOUDFLARE_API_TOKEN: process.env.CF_API_TOKEN,
+    CLOUDFLARE_ACCOUNT_ID: process.env.CF_ACCOUNT_ID,
   });
 }
 
