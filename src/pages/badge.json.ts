@@ -1,14 +1,8 @@
 export const prerender = false;
 
-type Env = {
-  CF_ACCOUNT_ID: string;
-  CF_PROJECT_NAME: string;
-  CF_API_TOKEN: string;
-};
-
-export async function GET({ env }: { env: Env }) {
+export async function GET({ env }) {
   const res = await fetch(
-    `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/pages/projects/${env.CF_PROJECT_NAME}`,
+    "https://api.cloudflare.com/client/v4/accounts/cce2e206b76dbfa476f08a9b3b32e343/pages/projects/otterlyomari-website",
     {
       headers: {
         Authorization: `Bearer ${env.CF_API_TOKEN}`,
@@ -39,7 +33,9 @@ export async function GET({ env }: { env: Env }) {
           : "yellow",
     }),
     {
-      headers: { "content-type": "application/json" },
+      headers: {
+        "content-type": "application/json",
+      },
     }
   );
 }
