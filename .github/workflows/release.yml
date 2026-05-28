@@ -23,11 +23,15 @@ jobs:
 
       - run: npm ci
 
-      # VERSION + CHANGELOG + TAG
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      # Create version + changelog + tag
       - name: Create release
         run: npx standard-version
 
-      - name: Push tags
+      # Push commits + tags
+      - name: Push release
         run: git push --follow-tags origin main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
