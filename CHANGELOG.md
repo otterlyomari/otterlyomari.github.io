@@ -2,32 +2,6 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [3.2.10](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.2.9...v3.2.10) (2026-05-28)
-
-### [3.2.9](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.2.8...v3.2.9) (2026-05-28)
-
-### [3.2.8](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.2.7...v3.2.8) (2026-05-28)
-
-### [3.2.7](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.2.6...v3.2.7) (2026-05-28)
-
-### [3.2.6](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.2.5...v3.2.6) (2026-05-28)
-
-### [3.2.5](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.2.4...v3.2.5) (2026-05-28)
-
-### [3.2.4](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.2.3...v3.2.4) (2026-05-28)
-
-### [3.2.3](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.2.2...v3.2.3) (2026-05-28)
-
-### [3.2.3-beta.3](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.2.2...v3.2.3-beta.3) (2026-05-28)
-
-### [3.2.3-beta.2](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.2.2...v3.2.3-beta.2) (2026-05-28)
-
-### [3.2.3-beta.1](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.2.3-beta.0...v3.2.3-beta.1) (2026-05-28)
-
-### [3.2.3-beta.0](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.2.2...v3.2.3-beta.0) (2026-05-28)
-
-### 3.2.1 (2026-05-28)
-
 ## [3.2.0] - 2026-05-28
 
 ### Added
