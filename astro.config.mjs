@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import { createHtmlPlugin } from "vite-plugin-html";
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
@@ -14,6 +15,17 @@ export default defineConfig({
 
   // no base needed unless you're deploying under a subpath
   base: '/',
+
+  vite: {
+    plugins: [
+      createHtmlPlugin({
+        minify: true
+      })
+    ],
+    build: {
+      minify: "esbuild"
+    }
+  },
 
   integrations: [
     mdx(),

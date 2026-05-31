@@ -1,4 +1,4 @@
-![Omari Tidemere logo](./images/logo.png)
+![Omari Tidemere logo](/public/logo.png)
 
 > the cute motherfluffer your mom warned you about
 

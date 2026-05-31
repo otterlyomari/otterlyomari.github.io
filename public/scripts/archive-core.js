@@ -1,5 +1,3 @@
-console.log("Archive engine loaded");
-
 // -----------------------------
 // HELPERS
 // -----------------------------
@@ -41,12 +39,26 @@ window.addEventListener("DOMContentLoaded", () => {
 
   if (!grid) return;
 
+  function debounce(fn, ms) {
+    let t;
+    return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+  }
+
+  const SORT_OPTIONS = {
+    default:  (a, b) => 0,
+    az:       (a, b) => a.item.title.localeCompare(b.item.title),
+    za:       (a, b) => b.item.title.localeCompare(a.item.title),
+  };
+
+  // Add sort to state
   const state = {
     query: "",
     type: "all",
+    sort: "default",
     focusedIndex: 0,
     items: []
   };
+
 
   const fuse = new Fuse(data, {
     keys: [
@@ -67,9 +79,11 @@ window.addEventListener("DOMContentLoaded", () => {
       ? fuse.search(state.query)
       : data.map(item => ({ item, matches: [] }));
 
-    return results.filter(r =>
+    const filtered = results.filter(r =>
       state.type === "all" || r.item.type === state.type
     );
+
+    return [...filtered].sort(SORT_OPTIONS[state.sort] ?? SORT_OPTIONS.default);
   }
 
   // -----------------------------
@@ -194,10 +208,10 @@ window.addEventListener("DOMContentLoaded", () => {
   // -----------------------------
   // SEARCH
   // -----------------------------
-  searchInput?.addEventListener("input", (e) => {
+  searchInput?.addEventListener("input", debounce((e) => {
     state.query = e.target.value.trim();
     render();
-  });
+  }, 120));
 
   // -----------------------------
   // FILTERS
@@ -214,5 +228,10 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  const sortSelect = document.querySelector("#archiveSort");
+  sortSelect?.addEventListener("change", (e) => {
+    state.sort = e.target.value;
+    render();
+  });
   render();
 });

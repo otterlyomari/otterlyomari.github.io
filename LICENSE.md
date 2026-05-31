@@ -22,7 +22,7 @@ Unless otherwise explicitly stated by the original creator:
 
 ## Website Code and Design
 
-Unless otherwise noted, the code, layout, structure, and custom design elements of this website are © 2026 [Your Name or Brand].
+Unless otherwise noted, the code, layout, structure, and custom design elements of this website are © 2026 Omari Tidemere.
 
 You may not:
 

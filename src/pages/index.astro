@@ -11,7 +11,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		<BaseHead title={"OtterlyOmari"} description={SITE_DESCRIPTION} />
 	</head>
 	<body id="home-screen">
-		<script is:inline src="/scripts/hackermantm.js"></script>
 		<script src="/scripts/splash.js" defer></script>
 
 		<!-- SVG SPRITE SHEET -->
@@ -108,7 +107,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			<div class="water-overlay" aria-hidden="true"></div>
 
 			<div id="splash-logo">
-				<img src="/logo.png" alt="Omari Tidemere logo" />
+				<img src="/logo.png" alt="Omari Tidemere logo" width="1372" height="213" />
 			</div>
 		</div>
 
@@ -117,14 +116,8 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				<a href="/" aria-label="Home">
 					<img src="/logo.png" class="image" alt="Omari Tidemere">
 				</a>
-				<br>
 				<h5 class="t-outline" style="text-align: center;">the cute motherfluffer your mom warned you about</h5>
-				<br>
-				<br>
-				<br>
-				<br>
 				<h4 class="t-outline" style="text-align: center;">Check out my socials 👀</h4>
-				<br>
 
 				<ul id="icons01" class="icons">
 					
@@ -217,16 +210,13 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				</ul>
 
 				<!-- SUPPORT SECTION BEGIN, DO NOT TRY TO MAKE THIS MATCH THE POS OF THE OTHER ICONS -->
-				<br>
-				<br>
-				<br>
 				<div class="support-section">
 					<h4 class="t-outline" style="text-align: center;">Fuel for more projects 🫶 (Support me 💛)</h4>
 					<br>
 					<ul id="icons04" class="icons">
 						<!-- Ko-fi icon -->
 						<li>
-							<a class="n09" href="https://ko-fi.com/otterlyomari" aria-label="Ko-fi page">
+							<a class="n10" href="https://ko-fi.com/otterlyomari" aria-label="Ko-fi page">
 								<svg viewBox="0 0 60 60" aria-hidden="true">
 									<use href="#icon-kofi"></use>
 								</svg>
@@ -235,7 +225,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 						<!-- Patreon icon -->
 						<li>
-							<a class="n10 t-outline-w" href="https://patreon.com/otterlyomari" aria-label="Patreon page">
+							<a class="n11" href="https://patreon.com/otterlyomari" aria-label="Patreon page">
 								<svg viewBox="0 0 60 60" aria-hidden="true">
 									<use href="#icon-patreon"></use>
 								</svg>
@@ -243,8 +233,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 						</li>
 					</ul>
 				</div>
-				<br>
-				<br>
 
 				<!-- SUPPORT SECTION END -->
 
@@ -261,8 +249,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				z-index: 9999;
 				background-color: transparent;
 			}
-
-			
+		
 			.t-has-hover {
 				transition: color 0.1s ease;
 				text-align: center;
@@ -288,12 +275,12 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			}
 
 			#bg-layer-base {
-			background-image: url("/bg.png");
+			background-image: url("/bg.webp");
 			opacity: 1;
 			}
 
 			#bg-layer-splash {
-			background-image: url("/splash_bg.png");
+			background-image: url("/splash_bg.webp");
 			opacity: 1;
 			}
 
@@ -416,6 +403,13 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				transition: 900ms ease;
 			}
 
+			#home-section .image { display: block; margin: 0 auto 1.5rem; }
+			#home-section > h5   { margin-bottom: 2.5rem; }
+			#home-section > h4   { margin-top: 2rem; margin-bottom: 1rem; }
+			.support-section { margin-top: 2.5rem; }
+			.support-section h4 { margin-bottom: 1rem; }
+			#icons01, #icons02, #icons03 { margin-bottom: 0; }
+
 			body.loaded #home-section {
 				opacity: 1;
 				transform: translateY(0);
@@ -430,7 +424,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 			.icons {
 				display: flex;
-				flex-wrap: grid;
+				flex-wrap: wrap;
 				justify-content: center;
 				align-items: center;
 				gap: 1rem;
@@ -446,8 +440,8 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			}
 
 			.icons a {
-			width: clamp(110px, 18vw, 96px);
-			height: clamp(110px, 18vw, 96px);
+			width: clamp(56px, 18vw, 96px);
+			height: clamp(56px, 18vw, 96px);
 
 			display: flex;
 			align-items: center;
@@ -657,20 +651,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			ul {
 				list-style: none;
 			}
-
-			h1,
-			h2,
-			h3,
-			h4,
-			h5,
-			h6 {
-				margin: 0 0 0.5rem 0;
-				color: white;
-				line-height: 1.2;
-				font-family: 'Pulang', sans-serif;
-			}
-
-			
 
 		</style>
 	</body>
