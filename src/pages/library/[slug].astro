@@ -1,39 +1,43 @@
 ---
-import { getCollection, render } from 'astro:content';
-import BaseHead from '../../components/BaseHead.astro';
-import { SITE_DESCRIPTION } from '../../consts';
-import ScrollToggle from '../../components/ScrollToggle.astro';
-import MenuButton from '../../components/MenuButton.astro';
-import Footer from '../../components/Footer.astro';
+import { getCollection, render } from "astro:content";
+import BaseHead from "../../components/BaseHead.astro";
+import MenuButton from "../../components/MenuButton.astro";
+import Footer from "../../components/Footer.astro";
+import ScrollToggle from "../../components/ScrollToggle.astro";
 
 export async function getStaticPaths() {
   const library = await getCollection("library");
 
   return library.map((entry) => ({
     params: { slug: entry.id },
-    props: { entry },
   }));
 }
 
+const { slug } = Astro.params;
 
-const { entry } = Astro.props;
+const library = await getCollection("library");
+const entry = library.find((e) => e.id === slug);
+
+if (!entry) {
+  return Astro.redirect("/404");
+}
+
 const { Content } = await render(entry);
 
-const isNovelSample = entry.data.type === "Novel Sample";
+const pubDate = entry.data.pubDate
+  ? new Date(entry.data.pubDate)
+  : null;
 
+const isNovelSample = entry.data.type === "Novel Sample";
 ---
 
 <html lang="en">
   <head>
-    <BaseHead
-      title={`OtterlyOmari | ${entry.data.title}`}
-      description={SITE_DESCRIPTION}
-    />
+    <BaseHead title={entry.data.title ?? "Library"} description={entry.data.description ?? ""} type="article" pubDate={pubDate ?? undefined}  tags={entry.data.tags}/>
   </head>
-
   <body class="entry-page">
     <main class="entry-container">
-      <header class="entry-header">
+
         {!isNovelSample && (
           <>
             <h1 class="entry-title t-outline">
@@ -45,9 +49,7 @@ const isNovelSample = entry.data.type === "Novel Sample";
             </p>
 
             <div class="entry-meta">
-              <span class="entry-type t-outline">
-                {entry.data.type}
-              </span>
+              <span class="entry-type t-outline">{entry.data.type}</span>
               <span class="entry-date t-outline">
                 {entry.data.pubDate.toDateString()}
               </span>
@@ -55,109 +57,133 @@ const isNovelSample = entry.data.type === "Novel Sample";
           </>
         )}
 
-        {entry.data.cover && (
-          <img
-            class="entry-cover"
-            src={entry.data.cover}
-            alt={entry.data.title}
-          />
-        )}
-      </header>
+          {entry.data.cover && (
+            <img
+              src={entry.data.cover}
+              alt={entry.data.title}
+              class="entry-cover"
+            />
+          )}
+        </header>
 
-      <!-- CONTENT -->
-      <article class="entry-content t-outline">
-        <Content />
-     </article>
+          <article class="entry-content t-outline">
+            <Content />
+          </article>
 
-      <!-- BACK BUTTON -->
-      <MenuButton href="/library" label="Go Back" />
-    </main>
+          <MenuButton class="menu-button-lib" href="/library" label="Go Back" />
 
-    <Footer class="t-outline" />
-    <ScrollToggle />
+      </main>
+           
+      <Footer class="t-outline" />
+      <ScrollToggle />
 
-    <style>
-      h1, h2, h3, h4, h5, h6 {
-        margin: 0 0 0.5rem 0;
-        color: white;
-        line-height: 1.2;
-        font-family: 'Source Serif 4', sans-serif;
-      }
+      <style>
+        
+        :global(:is(h1, h2, h3, h4, h5, h6):not(.entry-title)) {
+          margin: 0 0 0.5rem 0;
+          color: white;
+          line-height: 1.2;
+          font-family: 'Source Serif 4', sans-serif !important;
+          font-style: italic;
+          font-weight: 500;
+        }
 
-      .entry-page {
-        color: #f2f2f2;
-        font-family: "Georgia", serif;
-        line-height: 1.6;
-        margin: 0;
-        padding: 0;
-        background-image: url('/library-bg.webp');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        min-height: 100vh;
-      }
+       .menu-button-lib {
+          font-family: "Source Serif 4", serif;
+          transition: 0.2s ease;
+        }
 
-      .entry-container {
-        background-color: rgba(20, 20, 20, 0.75);
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 3rem 1.5rem;
-        width: min(800px, 100%);
-        box-sizing: border-box;
-      }
+        @media (max-width: 600px) {
+          .menu-button-lib {
+            width: 100%;
+          }
+        }
 
-      .entry-header {
-        margin-bottom: 2rem;
-      }
+        .entry-page::before {
+          content: "";
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          backdrop-filter: blur(5px);
+          z-index: -1;
+        }
 
-      .entry-title {
-        font-size: clamp(2rem, 4vw, 3.5rem);
-        font-family: "Whisper", serif;
-        text-align: center;
-      }
+        .entry-page {
+          color: #f2f2f2;
+          font-family: "Georgia", serif;
+          line-height: 1.6;
+          margin: 0;
+          padding: 0;
+          background-image: url('/library-bg.webp');
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
 
-      .entry-description {
-        opacity: 0.75;
-        text-align: center;
-      }
+          min-height: 100vh;
+        }
 
-      .entry-meta {
-        display: flex;
-        gap: 1rem;
-        font-size: 0.75rem;
-        opacity: 0.6;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
+        .entry-container {
+          background-color: rgba(20, 20, 20, 0.75);
+          max-width: 800px;
+          margin: 0 auto;
+          padding: 3rem 1.5rem;
+          width: min(800px, 100%);
+          box-sizing: border-box;
+        }
 
-      .entry-cover {
-        width: 100%;
-        border-radius: 12px;
-        margin-top: 1rem;
-        border: 1px solid rgba(255,255,255,0.08);
-        object-fit: cover;
-      }
+        .entry-header {
+          margin-bottom: 2rem;
+        }
 
-      .entry-content {
-        line-height: 1.75;
-        font-size: 1rem;
-        font-family: "Source Serif 4", serif;
-        margin-bottom: 2.5rem;
-      }
+        .entry-title {
+          font-size: clamp(2rem, 4vw, 3.5rem);
+          font-family: "Whisper", serif;
+          text-align: center;
+        }
 
-      .entry-content p {
-        margin: 1rem 0;
-      }
+        .entry-description {
+          opacity: 0.75;
+          text-align: center;
+        }
 
-      .entry-content img {
-        max-width: 100%;
-        border-radius: 10px;
-      }
+        .entry-meta {
+          display: flex;
+          gap: 1rem;
+          font-size: 0.75rem;
+          opacity: 0.6;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
 
-      .entry-content a {
-        color: #cfd8ff;
-        text-decoration: underline;
-      }
-    </style>
-  </body>
-</html>
+        .entry-cover {
+          width: 100%;
+          border-radius: 12px;
+          margin-top: 1rem;
+          border: 1px solid rgba(255,255,255,0.08);
+          object-fit: cover;
+        }
+
+        .entry-content {
+          line-height: 1.75;
+          font-size: 1rem;
+          font-family: "Source Serif 4", serif;
+          margin-bottom: 2.5rem;
+        }
+
+        .entry-content p {
+          margin: 1rem 0;
+        }
+
+        .entry-content img {
+          max-width: 100%;
+          border-radius: 10px;
+        }
+
+        .entry-content a {
+          color: #cfd8ff;
+          text-decoration: underline;
+        }
+      </style>
+

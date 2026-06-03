@@ -16,16 +16,14 @@ const allTypes = [...new Set(archive.map(entry => entry.data.type))];
   <head>
     <BaseHead title="OtterlyOmari | Library" description={SITE_DESCRIPTION} />
 
-    <!-- Gallery dependencies -->
+    <!-- Library dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2" defer></script>
     <script src="/scripts/archive-core.js" defer></script>
     
   </head>
 
   <body class="archive-mode">
-
     <main>
-
       <!-- HERO -->
       <section class="archive-hero">
         <h1 class="t-outline">The Library</h1>
@@ -73,7 +71,6 @@ const allTypes = [...new Set(archive.map(entry => entry.data.type))];
   <style>
     .menu-button-lib {
       font-family: "Source Serif 4", serif;
-      font-size: 1.5rem;
       transition: 0.2s ease;
     }
 
@@ -88,7 +85,6 @@ const allTypes = [...new Set(archive.map(entry => entry.data.type))];
       line-height: 1.2;
       font-family: 'Source Serif 4', sans-serif;
     }
-
 
     .archive-mode {
       margin: 0;

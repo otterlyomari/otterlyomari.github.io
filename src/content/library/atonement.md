@@ -1,5 +1,4 @@
 ---
-id: "atonement"
 title: "Would You Love Me If I Atoned?"
 description: "Poem drawing heavily from my own experiences of abandonment, rejection and struggles of repairing sins and mistakes of my own creation."
 type: "Poetry"

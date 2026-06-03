@@ -1,5 +1,4 @@
 ---
-id: "no-more-am-i-the-same"
 title: "No more am I the same"
 description: "A solemn poem exploring transformation, identity loss, and quiet hope in the aftermath of social death, reflecting on what remains when connection and self-perception are stripped away."
 type: "Poetry"

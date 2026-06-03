@@ -1,5 +1,4 @@
 ---
-id: "katharsis"
 title: "Katharsis"
 description: "Poem heavily inspired by 'Katharsis' by Toru Kitajima, the lead singer of Ling Tosite Sigure. The poem explores themes of rebirth and transformation in the face of an apocalyptic event."
 type: "Poetry"

@@ -1,5 +1,4 @@
 ---
-id: "horror-trailer-park"
 title: "NO OCCUPANTS REMAIN"
 description: "When a teenager sets out to debunk the local legend of a trailer linked to a vanished family, he finds that some places do not remain still just because they are left behind. What begins as curiosity turns into an encounter with something the town has spent years trying not to acknowledge."
 type: "Short Story"

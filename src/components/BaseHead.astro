@@ -1,56 +1,88 @@
 ---
-// Import the global.css file here so that it is included on
-// all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
 
 interface Props {
-	title: string;
-	description: string;
-	image?: string;
+    title: string;
+    description: string;
+    image?: string;
+    type?: 'website' | 'article';
+    pubDate?: Date | null;
+    author?: string;
+    tags?: string[];
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const {
+    title,
+    description,
+    image = '/android-chrome-512x512.png',
+    type = 'website',
+    pubDate,
+    author = 'OtterlyOmari',
+    tags = []
+} = Astro.props;
 
-const { title, description, image = '/public/android-chrome-512x512.png' } = Astro.props;
+const resolvedImage = new URL(image, Astro.url);
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="generator" content={Astro.generator} />
+<meta name="theme-color" content="#00c600" />
+
+<!-- Favicons -->
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="manifest" href="/site.webmanifest">
 
-<meta name="generator" content={Astro.generator} />
-
-<!-- Font preloads -->
+<!-- Font Preloads -->
 <link rel="preload" href="/fonts/Pulang.woff" as="font" type="font/woff" crossorigin />
-<link rel="preload" href="/fonts/Pulang.woff" as="font" type="font/woff" crossorigin />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&family=Whisper&display=swap" rel="stylesheet" />
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&family=Whisper&display=swap" rel="stylesheet">
-
-<!-- Canonical URL -->
+<!-- Canonical -->
 <link rel="canonical" href={canonicalURL} />
 
-<!-- Primary Meta Tags -->
+<!-- Primary Meta -->
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
+<meta name="author" content={author} />
+<meta name="robots" content="index, follow" />
+<meta name="language" content="en" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
+<meta name="format-detection" content="telephone=no" /> <!-- stops iOS auto-linking numbers -->
+<meta name="google-site-verification" content="your-token" />
+{tags.length > 0 && <meta name="keywords" content={tags.join(', ')} />}
 
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:site_name" content="OtterlyOmari" />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:image" content={resolvedImage} />
+<meta property="og:image:alt" content={title} />
+<meta property="og:locale" content="en_US" />
 
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
+<!-- Article-specific Open Graph (only injected for library entries) -->
+{type === 'article' && pubDate && (
+    <meta property="article:published_time" content={pubDate.toISOString()} />
+)}
+{type === 'article' && (
+    <meta property="article:author" content={author} />
+)}
+{type === 'article' && tags.map(tag => (
+    <meta property="article:tag" content={tag} />
+))}
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalURL} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={resolvedImage} />
+<meta name="twitter:image:alt" content={title} />

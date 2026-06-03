@@ -55,6 +55,11 @@
 
 <script is:inline>
 function initScrollToggle() {
+	if (window.__scrollToggleInit) {
+		return;
+	}
+	window.__scrollToggleInit = true;
+
 	const btn = document.getElementById("scroll-toggle");
 	const icon = document.getElementById("scroll-icon");
 	if (!btn || !icon) return;
@@ -105,7 +110,7 @@ function initScrollToggle() {
 		updateMode();
 	});
 
-	ro.observe(document.body);
+	ro.observe(document.documentElement);
 
 	// ---------- EVENTS ----------
 	btn.addEventListener("click", () => {

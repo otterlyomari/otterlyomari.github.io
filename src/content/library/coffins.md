@@ -1,5 +1,4 @@
 ---
-id: "coffins"
 title: "Coffins In Bloom"
 description: "A thought provoking poem about the cycle of life, death and reincarnation. not affiliated nor related to well known furry artist, Coffins"
 type: "Poetry"
