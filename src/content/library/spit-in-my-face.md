@@ -1,8 +1,8 @@
 ---
-title: "Spit In My Face"
+title: 'Spit In My Face'
 description: "I found this song on Spotify by Canadian musician 'ThxSoMuch' called 'Spit in my Face' in 2024— and I absolutely vibed to the lyrics, sure, it's thematically dark, but the meaning was so damn powerful, and resonant within me that I had to adapt it into prose, so October 2025, I did exactly that!"
-type: "Poetry"
-tags: ["poem", "melancholy", "dark", "angst"]
+type: 'Poetry'
+tags: ['poem', 'melancholy', 'dark', 'angst']
 pubDate: 2025-03-23
 ---
 

@@ -15,7 +15,6 @@ This document outlines planned improvements and future development goals for thi
   - ~~Add swipe-to-dismiss lightbox (mobile, spring-based motion)~~
   - ~~Add hover preview timeline for `.webm` playback~~
   - ~~Improve playback slider design (less generic, more stylized)~~
-  - ~~Reduce gallery image quality while lightbox is active (adaptive rendering)~~
 - ~~- Improve gallery layout display~~
   - ~~- Improve lightbox so that portrait videos scale proportionately~~
   - -~~(For .webm files with audio) make audio unmuted by default~~

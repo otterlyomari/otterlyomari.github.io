@@ -23,38 +23,39 @@ This is ultimately just a space for me to showcase things I enjoy, but I activel
 
 ## Existing Features
 
-* Mobile-first design, optimized for all screen sizes (including desktop)
-  * Responsive layout with consistent scaling across pages
-  * Scroll-to-top / scroll-to-bottom navigation for long pages
+- Mobile-first design, optimized for all screen sizes (including desktop)
+  - Responsive layout with consistent scaling across pages
+  - Scroll-to-top / scroll-to-bottom navigation for long pages
 
-* Splash screen shown on first visit per session
-  * After the animation plays, a `hasSeenSplash` flag is stored in session storage so it won’t replay until the tab is closed
+- Splash screen shown on first visit per session
+  - After the animation plays, a `hasSeenSplash` flag is stored in session storage so it won’t replay until the tab is closed
 
-* Quick links on the homepage
-  * Social media profiles
-  * Ways to support my work
-  * Navigation to key sections of the site
+- Quick links on the homepage
+  - Social media profiles
+  - Ways to support my work
+  - Navigation to key sections of the site
 
-* Accessible design principles applied throughout
-  * Full screen reader support
-  * Consideration for colorblind users
-  * Large, easy-to-use interactive elements
+- Accessible design principles applied throughout
+  - Full screen reader support
+  - Consideration for colorblind users
+  - Large, easy-to-use interactive elements
 
-* Dynamic gallery system (fully data-driven and maintainable)
-  * Pinterest-inspired masonry layout
-  * Images loaded dynamically from `galleryData` in `gallery-core.js`
-  * Custom fullscreen lightbox with zoom (mouse wheel and cursor anchoring) and panning
-  * Touch gesture support on mobile devices
-  * Optimized for performance and fast load times
+- Dynamic gallery system (fully data-driven and maintainable)
+  - Pinterest-inspired masonry layout
+  - Images loaded dynamically from `galleryData` in `gallery-core.js`
+  - Custom fullscreen lightbox with zoom (mouse wheel and cursor anchoring) and panning
+  - Touch gesture support on mobile devices
+  - Optimized for performance and fast load times
 
-* Dynamic content system for written works (data-driven architecture)
-  * Dedicated landing page with search and filtering
-  * Dynamic slug pages generated from selected entries
-  * Reusable `ArchiveCard` component generated from the library dataset
+- Dynamic content system for written works (data-driven architecture)
+  - Dedicated landing page with search and filtering
+  - Dynamic slug pages generated from selected entries
+  - Reusable `ArchiveCard` component generated from the library dataset
 
 ---
 
 ## Potential Future Additions
+
 See `ROADMAP.md` for further details
 
 ---
@@ -87,8 +88,8 @@ I recommend it for similar projects over alternatives such as Next.js, Vue, or A
 
 ### Libraries Used
 
-* [Fuse.js](https://www.fusejs.io/)
-* No CSS frameworks were used — all styling was written from scratch.
+- [Fuse.js](https://www.fusejs.io/)
+- No CSS frameworks were used — all styling was written from scratch.
 
 ---
 
@@ -105,13 +106,13 @@ I recommend it for similar projects over alternatives such as Next.js, Vue, or A
 
 ### Fonts Used
 
-* Whisper by Robert Leuschke  
-* Source Serif 4 by Frank Grießhammer  
-* Pulang by Khurasan  
+- Whisper by Robert Leuschke
+- Source Serif 4 by Frank Grießhammer
+- Pulang by Khurasan
 
 ---
 
 ### Inspirations
 
-* [Archive of Our Own (AO3)](https://archiveofourown.org/) — core inspiration for the library system  
-* [Pinterest](https://www.pinterest.com/) — inspiration for the gallery layout
+- [Archive of Our Own (AO3)](https://archiveofourown.org/) — core inspiration for the library system
+- [Pinterest](https://www.pinterest.com/) — inspiration for the gallery layout

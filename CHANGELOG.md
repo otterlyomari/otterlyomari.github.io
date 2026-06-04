@@ -2,13 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [3.3.0](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.2.10...v3.3.0) (2026-06-04)
 
+## [3.3.0] - 2026-06-04
 
-### Features
+### Added
 
-* **gallery:** improve lightbox rendering and video support ([23fba07](https://github.com/otterlyomari/otterlyomari.github.io/commit/23fba07cf17aa8a1fb4e40e4a3583f59c1355b24))
-* improve lightbox navigation ui/ux ([6c3c0ff](https://github.com/otterlyomari/otterlyomari.github.io/commit/6c3c0ff28d603340380be51a67dcd88ea56e203c))
+  - Video audio unmute in lightbox with audio track detection
+  - Size constraints for video elements on desktop (max 560x420)
+
+### Fixed
+
+  - Fixed lightbox close to properly pause and cleanup video elements
+  - Fixed SVG sprite sheet cross-browser rendering (zero-sized container)
+
+### Removed
+  - Removed `test.astro` (unused page from early version)
+  - Removed unused import from Footer.astro
+
+### Updated
+  - Updated ROADMAP.md to reflect progress and current interests
+  - Updated inconsistent formatting and indenting across the codebase
+  - Updated import ordering for cleanliness
 
 ## [3.2.0] - 2026-05-28
 

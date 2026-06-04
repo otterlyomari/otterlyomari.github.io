@@ -1,13 +1,15 @@
 ---
-title: "Shadows of Gaia: The Rise of Zenith"
-description: "Shadows of Gaia: The Rise of Zenith follows Aluxes, a young man who uncovers a plot to bring about the end of the world, as a malevolent dark wizard aims to rise to power"
-type: "Novel Sample"
-tags: ["novel", "fantasy", "dark", "hopeful"]
-pubDate: 2026-05-26 
+title: 'Shadows of Gaia: The Rise of Zenith'
+description: 'Shadows of Gaia: The Rise of Zenith follows Aluxes, a young man who uncovers a plot to bring about the end of the world, as a malevolent dark wizard aims to rise to power'
+type: 'Novel Sample'
+tags: ['novel', 'fantasy', 'dark', 'hopeful']
+pubDate: 2026-05-26
 ---
+
 ![Logo for Shadows of Gaia: The Rise of Zenith](/covers/archive/SOG_LOGO.png)
 
 ## Cast of Characters
+
 Aluxes
 Appearance: A young man in his early 20s, with a lean but athletic build. His piercing blue
 eyes shine with determination, contrasting his unkempt orange hair that falls just above his
@@ -85,6 +87,7 @@ with a means to traverse the vast lands and aids them in their quest with his ec
 genius.
 
 ## Prologue
+
 Legends speak of an era before land and life, when the cosmos lay shrouded in eternal
 silence, its vast depths untouched. After countless centuries, the stillness was broken by
 The Architect, the ruler of the infinite. From the void, The Architect forged The Pillars,
@@ -157,10 +160,10 @@ hero of the people, and Zenith a shadowy figure amassing power in secret. What n
 could comprehend was that their stories were but two halves of a greater truth—one that,
 when uncovered, would shake the very foundations of Gaia.
 
-
-
 # Act I
+
 ## Chapter 1: Forged in Fire
+
 The rhythmic crackle of the forge fire echoed faintly in the stillness of the predawn hours.
 Outside, the frost-bitten village of Eryndor slept beneath a blanket of snow, its rooftops
 glimmering under a pale crescent moon. Within the modest home adjoining the
@@ -218,7 +221,7 @@ Aluxes glanced up, surprised by the rare compliment. “You mean that?”
 “Aye, but don’t let it go to your head,” Garrick said with a smirk. “You’ve still got plenty to
 learn. Now quench it before you overheat the metal.”
 
-Aluxes nodded and plunged the blade into a barrel of oil. Steam hissed and billowed
+Aluxes nodded and plunged the blade into a barrel of oil. Steam hissed and billowed
 around him, the sharp smell filling the air. As the blade cooled, he lifted it from the oil,
 inspecting its shape. It wasn’t perfect, but it was solid work—functional and well-balanced.
 Garrick approached, taking the blade from his hands. He ran a practiced eye along its edge,
@@ -249,7 +252,7 @@ Harwin’s sheep. He’s saying it’s a demon!”
 Garrick’s jaw tightened, and he exchanged a glance with Aluxes. “Stay here,” he ordered.
 “No,” Aluxes said firmly, stepping forward. “I’m coming with you.”
 
-“This isn’t a game, boy.”
+“This isn’t a game, boy.”
 “I’m not a boy anymore,” Aluxes shot back. “I’m ready. Let me prove it.”
 Garrick studied him for a long moment, then nodded reluctantly. “Fine. Grab your sword.
 But you stay close to me, and you follow my orders. Understood?”
@@ -281,7 +284,7 @@ that important to you, then we can’t let anything happen to him.”
 Garrick glanced at him, his expression softening for a moment. “No, we can’t.”
 The young man shifted nervously. “Please, hurry. It—it might come back.”
 
-Garrick nodded, his composure returning. “We’re going. Aluxes, grab your gear.”
+Garrick nodded, his composure returning. “We’re going. Aluxes, grab your gear.”
 As Aluxes hurried to arm himself, Garrick turned back to the young villager. “What exactly
 did Harwin see?”
 “He said it was like a shadow, but solid. Huge. Eyes like burning coals. It tore through the
@@ -312,7 +315,7 @@ been attacked.
 
 “Harwin wouldn’t leave this kind of mess willingly,” Garrick said, his voice tense.
 
-As they moved further, the forest grew darker, the canopy above blotting out the moonlight.
+As they moved further, the forest grew darker, the canopy above blotting out the moonlight.
 Suddenly, the faint sound of chanting reached their ears—low and rhythmic, as though the
 forest itself was humming.
 
@@ -340,7 +343,7 @@ Garrick stepped forward, his sword drawn but lowered. “Who are you?”
 The man tilted his head, smiling faintly. “I could ask the same of you, friend, but that would
 be rude, wouldn’t it? Name’s Bjørn. And you are?”
 
-“Garrick Thorne,” Garrick replied tersely. “This is Aluxes. We’re here because of the attacks.
+“Garrick Thorne,” Garrick replied tersely. “This is Aluxes. We’re here because of the attacks.
 What do you know about them?”
 
 Bjørn sighed, his expression growing serious. “Ah, so you’re looking for the shadow beast.
@@ -368,7 +371,7 @@ Garrick hesitated, glancing at Aluxes. “And why should we trust you?”
 “Because I’m not the one attacking your sheep,” Bjørn said dryly. “But if you’d rather take
 your chances without me, be my guest.”
 
-“Enough,” Aluxes interjected. “We don’t have time to argue. If you know how to stop this
+“Enough,” Aluxes interjected. “We don’t have time to argue. If you know how to stop this
 thing, we’ll help you.”
 
 Bjørn studied him for a moment, then nodded. “Good. Follow me.”
@@ -399,7 +402,7 @@ noise.
 “Can you blame him?” Garrick said. “He’s not used to wandering through cursed woods
 with a stranger leading the way.”
 
-“Stranger?” Bjørn glanced back with mock offense. “I told you my name. That makes me a
+“Stranger?” Bjørn glanced back with mock offense. “I told you my name. That makes me a
 friend.”
 
 “That’s not how it works,” Garrick replied gruffly.
@@ -428,7 +431,7 @@ that, the magic just… clicked.”
 
 “That’s impressive,” Aluxes said, admiration creeping into his voice.
 
-“Impressive, is it?” Bjørn replied with a smirk. “What about you, lad? What’s your story?
+“Impressive, is it?” Bjørn replied with a smirk. “What about you, lad? What’s your story?
 Aside from being dragged into cursed forests by grumpy blacksmiths.”
 
 “I’m not grumpy,” Garrick grumbled.
@@ -456,7 +459,7 @@ Bjørn raised an eyebrow. “And here I thought you’d be the type to keep thin
 
 Garrick shrugged. “War isn’t lighthearted.”
 
-The weight of Garrick’s words hung in the air, and for a moment, the group fell silent.
+The weight of Garrick’s words hung in the air, and for a moment, the group fell silent.
 
 Bjørn finally spoke, his tone softer. “You’ve seen a lot, haven’t you?”
 
@@ -483,7 +486,7 @@ through the trees, freezing them all in place.
 
 “Stay sharp,” Garrick muttered, drawing his sword.
 
-Bjørn’s carefree demeanor vanished, replaced by a calm intensity. “The beast is close.
+Bjørn’s carefree demeanor vanished, replaced by a calm intensity. “The beast is close.
 Ready yourselves.”
 
 The air grew colder, the shadows deeper, as the forest held its breath in anticipation of the
@@ -514,7 +517,7 @@ that connection first. Keep it busy while I prepare the spell.”
 
 “Of course,” Garrick said with a sigh. “Just another day in paradise.”
 
-The wraith lunged suddenly, its form elongating unnaturally as it closed the distance
+The wraith lunged suddenly, its form elongating unnaturally as it closed the distance
 between them in an instant. Garrick shoved Aluxes aside, raising his sword to meet the
 beast’s claws. Steel clashed with shadow, and the impact sent Garrick skidding back, his
 boots digging into the dirt.
@@ -543,7 +546,7 @@ smirked. “It doesn’t like that!”
 
 “Good!” Bjørn shouted. “Keep it distracted!”
 
-Aluxes picked himself up, shaking off the dirt and leaves. He watched Garrick and the
+Aluxes picked himself up, shaking off the dirt and leaves. He watched Garrick and the
 wraith clash, trying to think of a way to help. Bjørn’s words echoed in his mind—outsmart it.
 
 His eyes darted to the trees above. The wraith was tall and unwieldy, its movements
@@ -570,7 +573,7 @@ outward in rippling waves.
 
 “Now!” Bjørn shouted.
 
-The vines around the clearing came alive, wrapping around the wraith’s limbs and holding it
+The vines around the clearing came alive, wrapping around the wraith’s limbs and holding it
 in place. The creature thrashed and screeched, but the vines tightened, glowing faintly with
 Bjørn’s magic.
 
@@ -599,7 +602,7 @@ placing a hand on his shoulder.
 
 “Well done, lad,” the mage said with a smile. “You’ve got potential, no doubt about it.”
 
-Garrick sheathed his sword, his expression a mix of relief and pride. “Not bad for your first
+Garrick sheathed his sword, his expression a mix of relief and pride. “Not bad for your first
 real fight.”
 
 Aluxes looked up at them, a small smile on his face. “I couldn’t have done it without you.”
@@ -630,7 +633,7 @@ is called Verdancia—the magic of the earth, nature’s lifeblood. It’s not t
 power most mages use, but it’s just as potent, in its own way. It’s tied to the land itself—
 plants, trees, and the forces that shape the world beneath our feet.”
 
-Aluxes’s eyes widened. “Verdancia? I’ve never heard of it.”
+Aluxes’s eyes widened. “Verdancia? I’ve never heard of it.”
 
 “That’s not surprising,” Bjørn said with a chuckle. “It’s not as widely practiced as the more
 traditional forms of magic. Most people are too caught up in the ways of fire and ice, of
@@ -661,7 +664,7 @@ sword glow like that?”
 wasn’t entirely physical—it was a creature born of darkness and magic, but with a core
 that’s vulnerable to light. A physical weapon, like your sword, couldn’t touch it, but the light
 
-infused into it could disrupt its essence. That’s why I enchanted the blade. It gave it a bit of
+infused into it could disrupt its essence. That’s why I enchanted the blade. It gave it a bit of
 nature’s force to strike where steel alone couldn’t.”
 
 Aluxes’s head was spinning with all the new information. “So, you’re saying that… if I learn
@@ -692,7 +695,7 @@ eagerly. “I’ll do that. I promise.”
 Garrick rolled his eyes, muttering something under his breath about “mage talk” and
 “overcomplicating things.” But Aluxes didn’t care.
 
-His path ahead was clearer now. There was more to magic than what he’d known, and Bjørn
+His path ahead was clearer now. There was more to magic than what he’d known, and Bjørn
 was the guide he never expected but desperately needed.
 
 Chapter 4: The Vision

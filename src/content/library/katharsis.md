@@ -1,13 +1,13 @@
 ---
-title: "Katharsis"
+title: 'Katharsis'
 description: "Poem heavily inspired by 'Katharsis' by Toru Kitajima, the lead singer of Ling Tosite Sigure. The poem explores themes of rebirth and transformation in the face of an apocalyptic event."
-type: "Poetry"
-tags: ["poem", "melancholy", "angst"]
+type: 'Poetry'
+tags: ['poem', 'melancholy', 'angst']
 pubDate: 2025-04-06
 ---
 
 If I could open eyes and ears,
-Would ***“just a dream”*** be what I hear?
+Would **_“just a dream”_** be what I hear?
 You drift into my restless view—
 A miracle I never knew.
 
@@ -25,7 +25,7 @@ And still, I lie.
 So draw it out and lay me bare,
 Undo this form, strip every layer.
 'Til only echoes fill the air,
-And sorrow whispers: ***“I miss you there.”***
+And sorrow whispers: **_“I miss you there.”_**
 
 So sentence me again, again—
 Strike every fracture, break what’s left.

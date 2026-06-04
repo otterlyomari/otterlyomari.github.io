@@ -263,64 +263,8 @@ function initGallery() {
     { threshold: 0.25 }
   );
 
-  /* ========================= ADAPTIVE RENDERING ========================= */
-
-  const originalSrcs = new WeakMap();
-  let degradeQueue = [];
-  let degrading = false;
-
-  function degradeImage(img) {
-    if (originalSrcs.has(img)) return;
-    if (!img.complete || !img.naturalWidth) return;
-
-    const canvas = document.createElement("canvas");
-    const w = Math.max(1, Math.floor(img.naturalWidth  * 0.4));
-    const h = Math.max(1, Math.floor(img.naturalHeight * 0.4));
-
-    // Draw small then stretch back up — quality degrades, size stays same
-    const temp = document.createElement("canvas");
-    temp.width  = w;
-    temp.height = h;
-    temp.getContext("2d").drawImage(img, 0, 0, w, h);
-
-    canvas.width  = img.naturalWidth;
-    canvas.height = img.naturalHeight;
-    canvas.getContext("2d").drawImage(temp, 0, 0, img.naturalWidth, img.naturalHeight);
-
-    originalSrcs.set(img, img.src);
-    img.src = canvas.toDataURL("image/webp", 0.4);
-  }
-
-  function restoreImage(img) {
-    if (!originalSrcs.has(img)) return;
-    img.src = originalSrcs.get(img);
-    originalSrcs.delete(img);
-  }
-
-  function processQueue() {
-    if (!degradeQueue.length) {
-      degrading = false;
-      return;
-    }
-    const img = degradeQueue.shift();
-    degradeImage(img);
-    requestIdleCallback(processQueue);
-  }
-
-  window.addEventListener("lightbox:open", () => {
-    degradeQueue = Array.from(gallery.querySelectorAll("img.loaded"));
-    if (!degradeQueue.length || degrading) return;
-    degrading = true;
-    requestIdleCallback(processQueue);
-  });
-
-  window.addEventListener("lightbox:close", () => {
-    degradeQueue = [];
-    degrading = false;
-    for (const img of gallery.querySelectorAll("img")) {
-      restoreImage(img);
-    }
-  });
+  window.addEventListener("lightbox:open", () => {});
+  window.addEventListener("lightbox:close", () => {});
 
   /* ========================= PRELOAD ========================= */
 
