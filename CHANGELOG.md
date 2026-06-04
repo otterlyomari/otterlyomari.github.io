@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [3.3.0](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.3.3...v3.3.0) (2026-06-04)
 
+## [3.3.0](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.3.3...v3.3.0) (2026-06-04)
+
 ## [3.3.0] - 2026-06-04
 
 ### Added
