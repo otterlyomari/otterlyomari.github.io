@@ -12,12 +12,12 @@ This repository follows an incremental development philosophy focused on maintai
 
 When contributing:
 
-* Prefer small, focused changes over large rewrites.
-* Reuse existing patterns and utilities whenever possible.
-* Avoid redesigning unrelated systems while implementing a feature.
-* Preserve project structure and coding conventions.
-* Prioritize maintainability and clarity over cleverness.
-* Keep accessibility and responsive behavior in mind.
+- Prefer small, focused changes over large rewrites.
+- Reuse existing patterns and utilities whenever possible.
+- Avoid redesigning unrelated systems while implementing a feature.
+- Preserve project structure and coding conventions.
+- Prioritize maintainability and clarity over cleverness.
+- Keep accessibility and responsive behavior in mind.
 
 Contributors should avoid introducing unnecessary abstractions, frameworks, or architectural rewrites without discussion.
 
@@ -25,129 +25,46 @@ Contributors should avoid introducing unnecessary abstractions, frameworks, or a
 
 # Branch Workflow
 
-This project uses a multi-branch workflow:
+This project uses a structured multi-branch workflow:
 
-* `main` → stable production-ready code
-* `dev` → integration/testing branch
-* `feature/*` → isolated feature branches
+- `main` → stable production-ready code
+- `dev` → integration and staging branch for active development
+- `feature/*` → isolated feature branches created from `dev`
 
-### Recommended workflow:
+---
+
+### Recommended workflow
 
 1. Create a feature branch from `dev`
-2. Implement and test changes
-3. Open a Pull Request into `dev`
-4. Merge `dev` into `main` once stable
+2. Implement and test changes locally
+3. Merge the feature branch into `dev`
+4. Once `dev` is stable, open a Pull Request from `dev` → `main`
 
 ---
 
 ### Example workflow
 
 ```bash
+# Start from dev
 git switch dev
 git pull origin dev
+
+# Create feature branch
 git switch -c feature/gallery-lightbox-navigation
 
-# Commit Guidelines
+# Work on changes
+git add .
+git commit -m "Improve gallery lightbox navigation"
 
-Use descriptive commit messages.
+# Merge feature into dev
+git switch dev
+git merge feature/gallery-lightbox-navigation
 
-Examples:
+# Push updated dev branch
+git push origin dev
 
-* `Improve gallery lightbox navigation`
-* `Fix .webm playback handling on mobile`
-* `Refactor gallery gesture utilities`
-
-Avoid vague commits like:
-
-* `fix stuff`
-* `changes`
-* `update`
-
----
-
-# Coding Standards
-
-## General
-
-* Keep functions focused and readable.
-* Avoid deeply nested logic when possible.
-* Prefer explicit naming over abbreviations.
-* Do not duplicate existing systems unnecessarily.
-
-## JavaScript / TypeScript
-
-* Preserve existing architecture patterns.
-* Avoid rewriting entire modules unless necessary.
-* Prefer incremental refactors.
-* Keep DOM manipulation performant and minimal.
-
-## Astro Components
-
-* Follow existing component organization.
-* Avoid excessive inline logic inside templates.
-* Reuse shared utilities where appropriate.
-
----
-
-# UI / UX Expectations
-
-When making UI changes:
-
-* Maintain keyboard accessibility
-* Preserve mobile usability
-* Ensure responsive layouts remain functional
-* Avoid layout shifts and unnecessary animations
-* Test image/video handling carefully
-
-For gallery/lightbox work specifically:
-
-* Preserve touch support
-* Ensure `.webm` playback behaves consistently
-* Avoid introducing input lag or excessive event listeners
-
----
-
-# Testing Expectations
-
-Before merging changes:
-
-* Verify the site builds successfully
-* Test desktop and mobile behavior
-* Check for console errors
-* Confirm interactive components still function properly
-
----
-
-# Roadmap-Driven Development
-
-Tasks may originate from `roadmap.md`.
-
-When implementing roadmap items:
-
-* Complete one task at a time
-* Avoid scope expansion
-* Preserve unfinished roadmap items
-* Document major implementation decisions when necessary
-
----
-
-# Performance Considerations
-
-This project values responsiveness and lightweight frontend behavior.
-
-Avoid:
-
-* unnecessary dependencies
-* oversized client-side bundles
-* excessive runtime processing
-* redundant event listeners
-
-Optimize media handling where practical.
-
----
-
-# Final Notes
-
-The goal of this repository is sustainable long-term development with clean, understandable code.
-
-Contributors should strive to improve the project without disrupting existing workflows or architecture.
+# (Later) when dev is stable:
+git switch main
+git pull origin main
+git merge dev
+git push origin main
