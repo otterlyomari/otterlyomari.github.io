@@ -10,6 +10,12 @@ export default defineConfig({
   output: 'server',
   adapter: cloudflare({
     mode: 'advanced',
+    kvNamespaces: [
+      {
+        binding: 'SESSION',
+        id: 'otterlyomari-website-session',
+      }
+    ]
   }),
 
   vite: {
