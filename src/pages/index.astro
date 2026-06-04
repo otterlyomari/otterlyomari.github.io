@@ -11,12 +11,10 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		<BaseHead title={"OtterlyOmari"} description={SITE_DESCRIPTION} />
 	</head>
 	<body id="home-screen">
-		<script is:inline src="/scripts/hackermantm.js"></script>
 		<script src="/scripts/splash.js" defer></script>
 
 		<!-- SVG SPRITE SHEET -->
-		<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
-
+		<svg xmlns="http://www.w3.org/2000/svg" style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
 			<!-- YouTube -->
 			<symbol id="icon-youtube" viewBox="0 0 60 60">
 				<path d="M37.6,27.1c0,0-0.3,2.4-1.4,3.5c-1.4,1.4-2.9,1.4-3.6,1.5c-5,0.4-12.4,0.4-12.4,0.4s-9.2-0.1-12.1-0.4 c-0.8-0.1-2.6-0.1-3.9-1.5c-1.1-1.1-1.4-3.5-1.4-3.5s-0.4-2.9-0.4-5.7v-2.7c0-2.9,0.4-5.7,0.4-5.7s0.3-2.4,1.4-3.5 C5.5,8,7,8,7.7,7.9c5-0.4,12.4-0.4,12.4-0.4h0c0,0,7.5,0,12.4,0.4C33.3,8,34.8,8,36.2,9.4c1.1,1.1,1.4,3.5,1.4,3.5s0.4,2.9,0.4,5.7 v2.7C37.9,24.2,37.6,27.1,37.6,27.1z M16.5,14.6l0,9.9l9.6-5L16.5,14.6z"/>
@@ -33,8 +31,16 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			</symbol>
 
 			<symbol id="icon-spotify" viewBox="0 0 60 60">
-				<linearGradient id="tS~Tu1dsT5kMXF2Lct~HUa_G9XXzb9XaEKX_gr1" x1="24.001" x2="24.001" y1="-4.765" y2="56.31" gradientUnits="userSpaceOnUse" data-astro-cid-j7pv25f6=""><stop offset="0" stop-color="#4caf50" data-astro-cid-j7pv25f6=""></stop><stop offset=".489" stop-color="#4aaf50" data-astro-cid-j7pv25f6=""></stop><stop offset=".665" stop-color="#43ad50" data-astro-cid-j7pv25f6=""></stop><stop offset=".79" stop-color="#38aa50" data-astro-cid-j7pv25f6=""></stop><stop offset=".892" stop-color="#27a550" data-astro-cid-j7pv25f6=""></stop><stop offset=".978" stop-color="#11a050" data-astro-cid-j7pv25f6=""></stop><stop offset="1" stop-color="#0a9e50" data-astro-cid-j7pv25f6=""></stop></linearGradient>
-				<path fill="url(#tS~Tu1dsT5kMXF2Lct~HUa_G9XXzb9XaEKX_gr1)" d="M24.001,4c-11.077,0-20,8.923-20,20s8.923,20,20,20c11.076,0,20-8.923,20-20	S35.077,4,24.001,4z" data-astro-cid-j7pv25f6=""></path>
+				<linearGradient id="spotify-gradient" x1="24.001" x2="24.001" y1="-4.765" y2="56.31" gradientUnits="userSpaceOnUse">
+					<stop offset="0" stop-color="#4caf50"></stop>
+					<stop offset=".489" stop-color="#4aaf50"></stop>
+					<stop offset=".665" stop-color="#43ad50"></stop>
+					<stop offset=".79" stop-color="#38aa50"></stop>
+					<stop offset=".892" stop-color="#27a550"></stop>
+					<stop offset=".978" stop-color="#11a050"></stop>
+					<stop offset="1" stop-color="#0a9e50"></stop>
+				</linearGradient>
+				<path fill="url(#spotify-gradient)" d="M24.001,4c-11.077,0-20,8.923-20,20s8.923,20,20,20c11.076,0,20-8.923,20-20	S35.077,4,24.001,4z" data-astro-cid-j7pv25f6=""></path>
 				<path d="M21.224,15.938c5.554,0,11.4,1.17,15.785,3.654c0.584,0.293,1.022,0.877,1.022,1.754 c-0.145,1.023-0.877,1.755-1.899,1.755c-0.438,0-0.585-0.146-1.023-0.291c-3.508-2.047-8.769-3.217-13.885-3.217 c-2.631,0-5.262,0.293-7.6,0.877c-0.293,0-0.585,0.146-1.023,0.146c-0.075,0.011-0.149,0.016-0.221,0.016 c-0.905,0-1.533-0.821-1.533-1.77c0-1.023,0.585-1.607,1.315-1.754C14.939,16.231,17.862,15.938,21.224,15.938 M20.785,22.369 c4.97,0,9.793,1.17,13.593,3.507c0.584,0.291,0.877,0.877,0.877,1.461c0,0.878-0.585,1.608-1.462,1.608 c-0.438,0-0.73-0.144-1.023-0.291c-3.068-1.9-7.308-3.071-12.13-3.071c-2.339,0-4.531,0.293-6.139,0.733 c-0.439,0.144-0.585,0.144-0.877,0.144c-0.877,0-1.462-0.73-1.462-1.461c0-0.877,0.439-1.316,1.169-1.607 C15.523,22.808,17.716,22.369,20.785,22.369 M21.223,28.654c4.093,0,7.893,1.021,11.108,2.924 c0.438,0.291,0.731,0.584,0.731,1.314c-0.146,0.586-0.731,1.023-1.315,1.023c-0.292,0-0.585-0.145-0.877-0.292 c-2.777-1.607-6.139-2.484-9.792-2.484c-2.047,0-4.093,0.291-5.993,0.73c-0.292,0-0.731,0.146-0.877,0.146 c-0.731,0-1.169-0.586-1.169-1.17c0-0.73,0.438-1.17,1.023-1.314C16.4,28.945,18.739,28.654,21.223,28.654 M21.224,14.938 c-3.789,0-6.666,0.371-9.317,1.202c-1.254,0.279-2.06,1.341-2.06,2.722c0,1.553,1.112,2.77,2.533,2.77 c0.095,0,0.192-0.005,0.291-0.017c0.319-0.007,0.574-0.065,0.764-0.107c0.068-0.015,0.13-0.035,0.193-0.038h0.123l0.116-0.03 c2.219-0.554,4.763-0.847,7.358-0.847c5.073,0,10.075,1.152,13.381,3.081l0.09,0.053l0.099,0.033 c0.109,0.036,0.195,0.073,0.273,0.105c0.251,0.105,0.563,0.236,1.065,0.236c1.483,0,2.671-1.075,2.889-2.615l0.01-0.07v-0.071 c0-1.171-0.564-2.13-1.549-2.635C33.238,16.313,27.314,14.938,21.224,14.938L21.224,14.938z M20.785,21.369 c-3.291,0-5.651,0.508-7.711,1.057l-0.058,0.015l-0.055,0.022c-1.194,0.476-1.799,1.329-1.799,2.536 c0,1.357,1.104,2.461,2.462,2.461c0.371,0,0.626-0.009,1.189-0.194c1.572-0.429,3.714-0.683,5.827-0.683 c4.441,0,8.562,1.037,11.603,2.921l0.038,0.024l0.04,0.02c0.334,0.168,0.792,0.397,1.471,0.397c1.404,0,2.462-1.121,2.462-2.608 c0-0.996-0.53-1.886-1.387-2.334C31.04,22.659,26.04,21.369,20.785,21.369L20.785,21.369z M21.223,27.654 c-2.547,0-4.969,0.297-7.404,0.907c-1.096,0.27-1.78,1.145-1.78,2.284c0,1.217,0.953,2.17,2.169,2.17 c0.172,0,0.334-0.037,0.522-0.079c0.101-0.023,0.288-0.065,0.357-0.067l0.101-0.003l0.122-0.023 c2.023-0.467,3.963-0.704,5.768-0.704c3.422,0,6.635,0.812,9.291,2.35l0.025,0.015l0.026,0.013 c0.334,0.168,0.792,0.399,1.327,0.399c1.05,0,2.032-0.766,2.285-1.781l0.03-0.119v-0.123c0-1.202-0.595-1.76-1.178-2.147 l-0.022-0.014l-0.022-0.013C29.455,28.713,25.437,27.654,21.223,27.654L21.223,27.654z" opacity=".05" data-astro-cid-j7pv25f6=""></path>	
 		        <path d="M21.224,15.938c5.554,0,11.4,1.17,15.785,3.654c0.584,0.293,1.022,0.877,1.022,1.754 c-0.145,1.023-0.877,1.755-1.899,1.755c-0.438,0-0.585-0.146-1.023-0.291c-3.508-2.047-8.769-3.217-13.885-3.217 c-2.631,0-5.262,0.293-7.6,0.877c-0.293,0-0.585,0.146-1.023,0.146c-0.075,0.011-0.149,0.016-0.221,0.016 c-0.905,0-1.533-0.821-1.533-1.77c0-1.023,0.585-1.607,1.315-1.754C14.939,16.231,17.862,15.938,21.224,15.938 M20.785,22.369 c4.97,0,9.793,1.17,13.593,3.507c0.584,0.291,0.877,0.877,0.877,1.461c0,0.878-0.585,1.608-1.462,1.608 c-0.438,0-0.73-0.144-1.023-0.291c-3.068-1.9-7.308-3.071-12.13-3.071c-2.339,0-4.531,0.293-6.139,0.733 c-0.439,0.144-0.585,0.144-0.877,0.144c-0.877,0-1.462-0.73-1.462-1.461c0-0.877,0.439-1.316,1.169-1.607 C15.523,22.808,17.716,22.369,20.785,22.369 M21.223,28.654c4.093,0,7.893,1.021,11.108,2.924 c0.438,0.291,0.731,0.584,0.731,1.314c-0.146,0.586-0.731,1.023-1.315,1.023c-0.292,0-0.585-0.145-0.877-0.292 c-2.777-1.607-6.139-2.484-9.792-2.484c-2.047,0-4.093,0.291-5.993,0.73c-0.292,0-0.731,0.146-0.877,0.146 c-0.731,0-1.169-0.586-1.169-1.17c0-0.73,0.438-1.17,1.023-1.314C16.4,28.945,18.739,28.654,21.223,28.654 M21.224,15.438 c-3.747,0-6.582,0.366-9.188,1.186c-1.042,0.222-1.689,1.078-1.689,2.238c0,1.273,0.893,2.27,2.033,2.27 c0.084,0,0.169-0.005,0.257-0.016c0.28-0.004,0.506-0.055,0.689-0.096c0.119-0.027,0.222-0.05,0.299-0.05h0.061l0.06-0.015 c2.258-0.564,4.844-0.862,7.479-0.862c5.158,0,10.254,1.177,13.633,3.149l0.045,0.026l0.05,0.016 c0.123,0.041,0.221,0.082,0.309,0.119c0.231,0.097,0.47,0.197,0.871,0.197c1.247,0,2.209-0.878,2.394-2.185l0.005-0.035v-0.035 c0-0.985-0.473-1.787-1.298-2.201C33.083,16.794,27.24,15.438,21.224,15.438L21.224,15.438z M20.785,21.869 c-3.054,0-5.24,0.416-7.583,1.04l-0.029,0.008l-0.028,0.011c-0.637,0.254-1.484,0.745-1.484,2.071c0,0.943,0.75,1.961,1.962,1.961 c0.34,0,0.541-0.008,1.033-0.169c1.637-0.447,3.827-0.708,5.983-0.708c4.533,0,8.747,1.064,11.867,2.996 c0.345,0.175,0.725,0.366,1.286,0.366c1.119,0,1.962-0.906,1.962-2.108c0-0.823-0.442-1.554-1.154-1.909 C30.885,23.141,25.965,21.869,20.785,21.869L20.785,21.869z M21.223,28.154c-2.506,0-4.888,0.292-7.283,0.892 c-0.864,0.213-1.401,0.902-1.401,1.799c0,0.821,0.624,1.67,1.669,1.67c0.116,0,0.246-0.029,0.411-0.067 c0.148-0.033,0.351-0.079,0.466-0.079h0.057l0.056-0.013c2.06-0.476,4.038-0.717,5.88-0.717c3.51,0,6.809,0.836,9.542,2.417 c0.331,0.168,0.712,0.359,1.127,0.359c0.827,0,1.601-0.603,1.8-1.402l0.015-0.06v-0.061c0-1.012-0.493-1.424-0.954-1.73 C29.277,29.189,25.348,28.154,21.223,28.154L21.223,28.154z" opacity=".07" data-astro-cid-j7pv25f6=""></path>	
 			    <path fill="#fff" d="M31.747,33.915c-0.292,0-0.585-0.145-0.877-0.292c-2.777-1.607-6.139-2.484-9.792-2.484 c-2.047,0-4.093,0.291-5.993,0.73c-0.292,0-0.731,0.146-0.877,0.146c-0.731,0-1.169-0.586-1.169-1.17 c0-0.73,0.438-1.17,1.023-1.314c2.338-0.586,4.677-0.877,7.161-0.877c4.093,0,7.893,1.021,11.108,2.924 c0.438,0.291,0.731,0.584,0.731,1.314C32.916,33.478,32.331,33.915,31.747,33.915z M33.793,28.945c-0.438,0-0.73-0.144-1.023-0.291 c-3.068-1.9-7.308-3.071-12.13-3.071c-2.339,0-4.531,0.293-6.139,0.733c-0.439,0.144-0.585,0.144-0.877,0.144 c-0.877,0-1.462-0.73-1.462-1.461c0-0.877,0.439-1.316,1.169-1.607c2.192-0.584,4.385-1.023,7.454-1.023 c4.97,0,9.793,1.17,13.593,3.507c0.584,0.291,0.877,0.877,0.877,1.461C35.255,28.215,34.67,28.945,33.793,28.945z M36.132,23.101 c-0.438,0-0.585-0.146-1.023-0.291c-3.508-2.047-8.769-3.217-13.885-3.217c-2.631,0-5.262,0.293-7.6,0.877 c-0.293,0-0.585,0.146-1.023,0.146c-1.023,0.146-1.754-0.73-1.754-1.754c0-1.023,0.585-1.607,1.315-1.754 c2.777-0.877,5.7-1.17,9.062-1.17c5.554,0,11.4,1.17,15.785,3.654c0.584,0.293,1.022,0.877,1.022,1.754 C37.886,22.369,37.154,23.101,36.132,23.101z" data-astro-cid-j7pv25f6=""></path>	
@@ -42,19 +48,13 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 			<!-- TikTok -->
 			<symbol id="icon-tiktok" viewBox="0 0 32 32">
-				<path fill="#FF004F" d="M22.459 6.846v3.659c-.197 0-.433.04-.669.04a7.295 7.295 0 01-4.682-1.732v7.79a6.987 6.987 0 01-1.416 4.25 7.02 7.02 0 01-5.626 2.832 6.993 6.993 0 01-5.941-3.305c1.259 1.18 2.95 1.928 4.8 1.928a6.893 6.893 0 005.586-2.833c.866-1.18 1.417-2.636 1.417-4.249v-7.83c1.259 1.102 2.872 1.732 4.682 1.732.236 0 .433 0 .669-.04v-2.36c.354.079.669.118 1.023.118h.157z"/>
-				
-				<path fill="#FF004F" d="M11.05 9.56v4.053a3.277 3.277 0 00-.866-.118c-1.732 0-3.148 1.456-3.148 3.226 0 .394.079.748.197 1.102-.787-.59-1.338-1.535-1.338-2.597 0-1.77 1.416-3.226 3.148-3.226.314 0 .59.04.865.118V9.521h.236c.315 0 .63 0 .905.04z"/>
-				
+				<path fill="#FF004F" d="M22.459 6.846v3.659c-.197 0-.433.04-.669.04a7.295 7.295 0 01-4.682-1.732v7.79a6.987 6.987 0 01-1.416 4.25 7.02 7.02 0 01-5.626 2.832 6.993 6.993 0 01-5.941-3.305c1.259 1.18 2.95 1.928 4.8 1.928a6.893 6.893 0 005.586-2.833c.866-1.18 1.417-2.636 1.417-4.249v-7.83c1.259 1.102 2.872 1.732 4.682 1.732.236 0 .433 0 .669-.04v-2.36c.354.079.669.118 1.023.118h.157z"/>				
+				<path fill="#FF004F" d="M11.05 9.56v4.053a3.277 3.277 0 00-.866-.118c-1.732 0-3.148 1.456-3.148 3.226 0 .394.079.748.197 1.102-.787-.59-1.338-1.535-1.338-2.597 0-1.77 1.416-3.226 3.148-3.226.314 0 .59.04.865.118V9.521h.236c.315 0 .63 0 .905.04z"/>				
 				<path fill="#FF004F" d="M17.698 3.934c-.708-.63-1.22-1.495-1.495-2.4h.945v.551a6.25 6.25 0 00.55 1.85z"/>
-				
-				<path fill="#000" d="M21.318 6.767v2.36c-.197.04-.433.04-.669.04a7.295 7.295 0 01-4.682-1.73v7.79a6.987 6.987 0 01-1.416 4.248c-1.299 1.732-3.305 2.833-5.587 2.833-1.85 0-3.541-.747-4.8-1.928a7.136 7.136 0 01-1.062-3.737c0-3.817 3.03-6.925 6.806-7.043v2.597a3.277 3.277 0 00-.865-.118c-1.732 0-3.148 1.455-3.148 3.226 0 1.062.512 2.046 1.338 2.597.433 1.22 1.613 2.124 2.95 2.124 1.732 0 3.148-1.456 3.148-3.226V1.534h2.872c.276.945.787 1.77 1.495 2.4a5.397 5.397 0 003.62 2.833z"/>
-				
+				<path fill="#000" d="M21.318 6.767v2.36c-.197.04-.433.04-.669.04a7.295 7.295 0 01-4.682-1.73v7.79a6.987 6.987 0 01-1.416 4.248c-1.299 1.732-3.305 2.833-5.587 2.833-1.85 0-3.541-.747-4.8-1.928a7.136 7.136 0 01-1.062-3.737c0-3.817 3.03-6.925 6.806-7.043v2.597a3.277 3.277 0 00-.865-.118c-1.732 0-3.148 1.455-3.148 3.226 0 1.062.512 2.046 1.338 2.597.433 1.22 1.613 2.124 2.95 2.124 1.732 0 3.148-1.456 3.148-3.226V1.534h2.872c.276.945.787 1.77 1.495 2.4a5.397 5.397 0 003.62 2.833z"/>				
 				<g>
-					<path fill="#00F7EF" d="M9.908 8.184V9.52c-3.777.118-6.806 3.226-6.806 7.043 0 1.377.393 2.636 1.062 3.738A7.122 7.122 0 012 15.148c0-3.896 3.148-7.043 7.003-7.043.315 0 .63.04.905.079z"/>
-					
+					<path fill="#00F7EF" d="M9.908 8.184V9.52c-3.777.118-6.806 3.226-6.806 7.043 0 1.377.393 2.636 1.062 3.738A7.122 7.122 0 012 15.148c0-3.896 3.148-7.043 7.003-7.043.315 0 .63.04.905.079z"/>				
 					<path fill="#00F7EF" d="M16.203 1.534h-2.872v15.187c0 1.77-1.416 3.227-3.147 3.227-1.377 0-2.518-.866-2.951-2.125.511.354 1.14.59 1.81.59 1.73 0 3.147-1.416 3.147-3.187V0h3.817v.079c0 .157 0 .314.039.472 0 .315.079.669.157.983z"/>
-					
 					<path fill="#00F7EF" d="M21.318 5.311v1.417c-1.574-.315-2.911-1.377-3.659-2.794a5.11 5.11 0 003.659 1.377z"/>
 				</g>
 			</symbol>
@@ -75,15 +75,31 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 			<!-- Steam -->
 			<symbol id="icon-steam" viewBox="-10 -18 95 95" fill="#fff">
-				<linearGradient id="A" x2="50%" x1="50%" y2="100%" y1="0%" data-astro-cid-j7pv25f6=""><stop stop-color="#111d2e" offset="0%" data-astro-cid-j7pv25f6=""></stop><stop stop-color="#051839" offset="21.2%" data-astro-cid-j7pv25f6=""></stop><stop stop-color="#0a1b48" offset="40.7%" data-astro-cid-j7pv25f6=""></stop><stop stop-color="#132e62" offset="58.1%" data-astro-cid-j7pv25f6=""></stop><stop stop-color="#144b7e" offset="73.8%" data-astro-cid-j7pv25f6=""></stop><stop stop-color="#136497" offset="87.3%" data-astro-cid-j7pv25f6=""></stop><stop stop-color="#1387b8" offset="100%" data-astro-cid-j7pv25f6=""></stop></linearGradient>
-				<path d="M1.305 41.202C5.259 54.386 17.488 64 31.959 64c17.673 0 32-14.327 32-32s-14.327-32-32-32C15.001 0 1.124 13.193.028 29.874c2.074 3.477 2.879 5.628 1.275 11.328z" fill="url(#A)" data-astro-cid-j7pv25f6=""></path>
+				<defs>
+					<linearGradient id="steam-gradient" x2="50%" x1="50%" y2="100%" y1="0%">
+						<stop stop-color="#111d2e" offset="0%"></stop>
+						<stop stop-color="#051839" offset="21.2%"></stop>
+						<stop stop-color="#0a1b48" offset="40.7%"></stop>
+						<stop stop-color="#132e62" offset="58.1%"></stop>
+						<stop stop-color="#144b7e" offset="73.8%"></stop>
+						<stop stop-color="#136497" offset="87.3%"></stop>
+						<stop stop-color="#1387b8" offset="100%"></stop>
+					</linearGradient>
+				</defs>
+				<path d="M1.305 41.202C5.259 54.386 17.488 64 31.959 64c17.673 0 32-14.327 32-32s-14.327-32-32-32C15.001 0 1.124 13.193.028 29.874c2.074 3.477 2.879 5.628 1.275 11.328z" fill="url(#steam-gradient)" data-astro-cid-j7pv25f6=""></path>
 			    <path d="M30.31 23.985l.003.158-7.83 11.375c-1.268-.058-2.54.165-3.748.662a8.14 8.14 0 0 0-1.498.8L.042 29.893s-.398 6.546 1.26 11.424l12.156 5.016c.6 2.728 2.48 5.12 5.242 6.27a8.88 8.88 0 0 0 11.603-4.782 8.89 8.89 0 0 0 .684-3.656L42.18 36.16l.275.005c6.705 0 12.155-5.466 12.155-12.18s-5.44-12.16-12.155-12.174c-6.702 0-12.155 5.46-12.155 12.174zm-1.88 23.05c-1.454 3.5-5.466 5.147-8.953 3.694a6.84 6.84 0 0 1-3.524-3.362l3.957 1.64a5.04 5.04 0 0 0 6.591-2.719 5.05 5.05 0 0 0-2.715-6.601l-4.1-1.695c1.578-.6 3.372-.62 5.05.077 1.7.703 3 2.027 3.696 3.72s.692 3.56-.01 5.246M42.466 32.1a8.12 8.12 0 0 1-8.098-8.113 8.12 8.12 0 0 1 8.098-8.111 8.12 8.12 0 0 1 8.1 8.111 8.12 8.12 0 0 1-8.1 8.113m-6.068-8.126a6.09 6.09 0 0 1 6.08-6.095c3.355 0 6.084 2.73 6.084 6.095a6.09 6.09 0 0 1-6.084 6.093 6.09 6.09 0 0 1-6.081-6.093z" data-astro-cid-j7pv25f6=""></path>
 			</symbol>
 
 			<!-- Throne -->
 			<symbol id="icon-throne" viewBox="0 0 596 502" fill="none">
-				<path d="M421.278 263.803C419.233 267.944 416.539 271.687 413.304 274.97L306.268 384.674C304.41 387.267 301.216 388.898 297.709 388.898C294.202 388.898 290.986 387.267 288.92 384.402L182.072 274.949C181.55 274.447 180.987 273.841 180.465 273.234C169.275 260.666 167.125 242.515 175.016 227.04L287.959 5.33253C290.151 1.92389 293.742 0 297.709 0C301.675 0 305.245 1.90298 307.333 5.1025L363.94 116.239L420.548 227.375C426.498 239.023 426.769 252.657 421.278 263.803ZM301.133 455.983L19.1291 168.759L18.2314 167.839C16.1438 166.166 13.7429 165.308 11.1542 165.308C7.37552 165.455 4.05611 167.107 2.01019 169.825C0.0895236 172.376 -0.474149 175.681 0.402675 179.194L82.4693 462.11C84.4317 468.865 87.605 475.138 91.9682 480.701C92.4901 481.412 93.0747 482.102 93.6383 482.771C103.388 494.085 118.085 500.295 133.325 500.295C139.233 500.295 145.225 499.375 151.029 497.41C193.283 483.399 237.521 475.536 282.615 474.093C286.435 473.8 290.235 473.57 294.014 473.382C297.145 473.215 300.047 471.709 301.926 469.262C303.784 466.878 304.494 463.867 303.93 460.96C303.575 459.225 302.636 457.552 301.153 456.004L301.133 455.983ZM590.443 167.086C586.873 164.639 582.322 164.785 577.562 167.63L576.393 168.341L333.909 415.749C329.88 419.848 329.859 426.288 333.867 430.387L376.122 473.675C381.132 478.819 387.562 482.332 394.765 483.859C413.93 487.895 432.949 493.206 451.32 499.626C455.579 501.111 460.026 501.843 464.493 501.843C470.026 501.843 475.558 500.714 480.84 498.455C489.942 494.733 497.813 488.857 503.596 481.433C507.917 475.891 511.132 469.618 513.115 462.8L595.203 179.758C595.537 178.441 595.662 177.123 595.558 175.994C595.558 172.397 593.637 169.052 590.443 167.044V167.086Z" fill="url(#paint0_linear_219_1377)" data-astro-cid-j7pv25f6=""></path>
-				<linearGradient id="paint0_linear_219_1377" x1="87.4883" y1="501.843" x2="481.439" y2="105.247" gradientUnits="userSpaceOnUse" data-astro-cid-j7pv25f6=""><stop stop-color="#4CA6FF" data-astro-cid-j7pv25f6=""></stop><stop offset="0.276959" stop-color="#4D4DFF" data-astro-cid-j7pv25f6=""></stop><stop offset="0.491704" stop-color="#990AFF" data-astro-cid-j7pv25f6=""></stop><stop offset="0.642891" stop-color="#D21EB4" data-astro-cid-j7pv25f6=""></stop><stop offset="1" stop-color="#FFC400" data-astro-cid-j7pv25f6=""></stop></linearGradient>
+				<linearGradient id="throne-gradient" x1="87.4883" y1="501.843" x2="481.439" y2="105.247" gradientUnits="userSpaceOnUse">
+					<stop stop-color="#4CA6FF"></stop>
+					<stop offset="0.276959" stop-color="#4D4DFF"></stop>
+					<stop offset="0.491704" stop-color="#990AFF"></stop>
+					<stop offset="0.642891" stop-color="#D21EB4"></stop>
+					<stop offset="1" stop-color="#FFC400"></stop>
+				</linearGradient>
+				<path d="M421.278 263.803C419.233 267.944 416.539 271.687 413.304 274.97L306.268 384.674C304.41 387.267 301.216 388.898 297.709 388.898C294.202 388.898 290.986 387.267 288.92 384.402L182.072 274.949C181.55 274.447 180.987 273.841 180.465 273.234C169.275 260.666 167.125 242.515 175.016 227.04L287.959 5.33253C290.151 1.92389 293.742 0 297.709 0C301.675 0 305.245 1.90298 307.333 5.1025L363.94 116.239L420.548 227.375C426.498 239.023 426.769 252.657 421.278 263.803ZM301.133 455.983L19.1291 168.759L18.2314 167.839C16.1438 166.166 13.7429 165.308 11.1542 165.308C7.37552 165.455 4.05611 167.107 2.01019 169.825C0.0895236 172.376 -0.474149 175.681 0.402675 179.194L82.4693 462.11C84.4317 468.865 87.605 475.138 91.9682 480.701C92.4901 481.412 93.0747 482.102 93.6383 482.771C103.388 494.085 118.085 500.295 133.325 500.295C139.233 500.295 145.225 499.375 151.029 497.41C193.283 483.399 237.521 475.536 282.615 474.093C286.435 473.8 290.235 473.57 294.014 473.382C297.145 473.215 300.047 471.709 301.926 469.262C303.784 466.878 304.494 463.867 303.93 460.96C303.575 459.225 302.636 457.552 301.153 456.004L301.133 455.983ZM590.443 167.086C586.873 164.639 582.322 164.785 577.562 167.63L576.393 168.341L333.909 415.749C329.88 419.848 329.859 426.288 333.867 430.387L376.122 473.675C381.132 478.819 387.562 482.332 394.765 483.859C413.93 487.895 432.949 493.206 451.32 499.626C455.579 501.111 460.026 501.843 464.493 501.843C470.026 501.843 475.558 500.714 480.84 498.455C489.942 494.733 497.813 488.857 503.596 481.433C507.917 475.891 511.132 469.618 513.115 462.8L595.203 179.758C595.537 178.441 595.662 177.123 595.558 175.994C595.558 172.397 593.637 169.052 590.443 167.044V167.086Z" fill="url(#throne-gradient)" data-astro-cid-j7pv25f6=""></path>
 			</symbol>
 
 			<!-- Ko-fi -->
@@ -108,7 +124,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 			<div class="water-overlay" aria-hidden="true"></div>
 
 			<div id="splash-logo">
-				<img src="/logo.png" alt="Omari Tidemere logo" />
+				<img src="/logo.png" alt="Omari Tidemere logo" width="1372" height="213" />
 			</div>
 		</div>
 
@@ -117,14 +133,8 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				<a href="/" aria-label="Home">
 					<img src="/logo.png" class="image" alt="Omari Tidemere">
 				</a>
-				<br>
 				<h5 class="t-outline" style="text-align: center;">the cute motherfluffer your mom warned you about</h5>
-				<br>
-				<br>
-				<br>
-				<br>
 				<h4 class="t-outline" style="text-align: center;">Check out my socials 👀</h4>
-				<br>
 
 				<ul id="icons01" class="icons">
 					
@@ -217,16 +227,13 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				</ul>
 
 				<!-- SUPPORT SECTION BEGIN, DO NOT TRY TO MAKE THIS MATCH THE POS OF THE OTHER ICONS -->
-				<br>
-				<br>
-				<br>
 				<div class="support-section">
 					<h4 class="t-outline" style="text-align: center;">Fuel for more projects 🫶 (Support me 💛)</h4>
 					<br>
 					<ul id="icons04" class="icons">
 						<!-- Ko-fi icon -->
 						<li>
-							<a class="n09" href="https://ko-fi.com/otterlyomari" aria-label="Ko-fi page">
+							<a class="n10" href="https://ko-fi.com/otterlyomari" aria-label="Ko-fi page">
 								<svg viewBox="0 0 60 60" aria-hidden="true">
 									<use href="#icon-kofi"></use>
 								</svg>
@@ -235,7 +242,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 						<!-- Patreon icon -->
 						<li>
-							<a class="n10 t-outline-w" href="https://patreon.com/otterlyomari" aria-label="Patreon page">
+							<a class="n11" href="https://patreon.com/otterlyomari" aria-label="Patreon page">
 								<svg viewBox="0 0 60 60" aria-hidden="true">
 									<use href="#icon-patreon"></use>
 								</svg>
@@ -243,8 +250,6 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 						</li>
 					</ul>
 				</div>
-				<br>
-				<br>
 
 				<!-- SUPPORT SECTION END -->
 
@@ -256,422 +261,276 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		<Footer/>
 		
 		<style>
-			main {
-				backdrop-filter: blur(0.4rem);
-				z-index: 9999;
-				background-color: transparent;
-			}
+		main {
+			backdrop-filter: blur(0.4rem);
+			z-index: 9999;
+			background-color: transparent;
+		}
 
-			
-			.t-has-hover {
-				transition: color 0.1s ease;
-				text-align: center;
-			}
+		.t-has-hover {
+			transition: color 0.1s ease;
+			text-align: center;
+		}
 
-			.t-has-hover:hover {
-				color: black;
-			}
+		.t-has-hover:hover {
+			color: black;
+		}
 
-			#home-screen h4:not(.t-has-hover) {
-				pointer-events: none;
-			}
+		#home-screen h4:not(.t-has-hover) {
+			pointer-events: none;
+		}
 
-
-			#bg-layer-base,
-			#bg-layer-splash {
+		#bg-layer-base,
+		#bg-layer-splash {
 			position: fixed;
 			inset: 0;
 			background-size: cover;
 			background-position: center;
 			transition: opacity 1.2s ease;
 			z-index: -2;
-			}
+		}
 
-			#bg-layer-base {
-			background-image: url("/bg.png");
+		#bg-layer-base {
+			background-image: url("/bg.webp");
 			opacity: 1;
-			}
+		}
 
-			#bg-layer-splash {
-			background-image: url("/splash_bg.png");
+		#bg-layer-splash {
+			background-image: url("/splash_bg.webp");
 			opacity: 1;
-			}
+		}
 
-			span {
-				opacity: 0;
-			}
+		span {
+			opacity: 0;
+		}
 
-			#water-scene {
-				position: fixed;
-				inset: 0;
-				width: 100%;
-				max-width: 100%;
-				z-index: 9999;
-				pointer-events: none;
-			}
+		#water-scene {
+			position: fixed;
+			inset: 0;
+			width: 100%;
+			max-width: 100%;
+			z-index: 9999;
+			pointer-events: none;
+		}
 
-			/* soft underwater base */
-			.water-overlay {
-				position: absolute;
-				inset: 0;
-				background: radial-gradient(
-					circle at 50% 40%,
-					rgba(0, 180, 255, 0.15),
-					rgba(0, 40, 80, 0.6)
-				);
-				backdrop-filter: blur(6px);
-				animation: waterSettle 2.5s ease forwards;
-			}
+		.water-overlay {
+			position: absolute;
+			inset: 0;
+			background: radial-gradient(
+			circle at 50% 40%,
+			rgba(0, 180, 255, 0.15),
+			rgba(0, 40, 80, 0.6)
+			);
+			backdrop-filter: blur(6px);
+			animation: waterSettle 2.5s ease forwards;
+		}
 
-			.wave-layer {
-				position: absolute;
-				width: 200%;
-				height: 200%;
-				left: -50%;
-				top: -60%;
+		.wave-layer {
+			position: absolute;
+			width: 200%;
+			height: 200%;
+			left: -50%;
+			top: -60%;
+			background: radial-gradient(
+			circle at 50% 50%,
+			rgba(255,255,255,0.25) 0%,
+			rgba(255,255,255,0.08) 25%,
+			transparent 60%
+			);
+			outline: 1px solid rgba(255,255,255,0.05);
+			opacity: 0.35;
+			mix-blend-mode: overlay;
+			animation: waveMove 12s linear infinite;
+		}
 
-				background: radial-gradient(
-					circle at 50% 50%,
-					rgba(255,255,255,0.25) 0%,
-					rgba(255,255,255,0.08) 25%,
-					transparent 60%
-				);
+		.wave1 {
+			animation-duration: 10s;
+			opacity: 0.25;
+		}
 
-				outline: 1px solid rgba(255,255,255,0.05);
+		.wave2 {
+			animation-duration: 14s;
+			opacity: 0.15;
+			top: -65%;
+		}
 
-				opacity: 0.35;
-				mix-blend-mode: overlay;
+		@keyframes waveMove {
+			0%   { transform: translateX(-10%) translateY(0) rotate(0deg); }
+			50%  { transform: translateX(10%) translateY(5%) rotate(180deg); }
+			100% { transform: translateX(-10%) translateY(0) rotate(360deg); }
+		}
 
-				animation: waveMove 12s linear infinite;
-			}
+		#splash-logo {
+			position: absolute;
+			inset: 0;
+			display: grid;
+			place-items: center;
+		}
 
-			.wave1 {
-				animation-duration: 10s;
-				opacity: 0.25;
-			}
+		#splash-logo img {
+			width: min(42vw, 320px);
+			opacity: 0;
+			transform: scale(1) translateY(-10px);
+			filter: blur(8px);
+			animation: logoRise 2.2s ease forwards;
+		}
 
-			.wave2 {
-				animation-duration: 14s;
-				opacity: 0.15;
-				top: -65%;
-			}
+		@keyframes logoRise {
+			0%   { opacity: 0; transform: scale(0.9) translateY(-20px); filter: blur(12px); }
+			40%  { opacity: 1; }
+			100% { opacity: 1; transform: scale(1.5) translateY(0); filter: blur(0px); }
+		}
 
-			@keyframes waveMove {
-				0% {
-					transform: translateX(-10%) translateY(0) rotate(0deg);
-				}
-				50% {
-					transform: translateX(10%) translateY(5%) rotate(180deg);
-				}
-				100% {
-					transform: translateX(-10%) translateY(0) rotate(360deg);
-				}
-			}
+		@keyframes waterSettle {
+			0%   { filter: blur(10px) saturate(1.4); }
+			100% { filter: blur(3px) saturate(1); }
+		}
 
-			#splash-logo {
-				position: absolute;
-				inset: 0;
-				display: grid;
-				place-items: center;
-			}
+		#home-section {
+			opacity: 0;
+			transform: translateY(10px);
+			transition: 900ms ease;
+		}
 
-			#splash-logo img {
-				width: min(42vw, 320px);
-				opacity: 0;
-				transform: scale(1) translateY(-10px);
-				filter: blur(8px);
-				animation: logoRise 2.2s ease forwards;
-			}
+		#home-section .image  { display: block; margin: 0 auto 1.5rem; }
+		#home-section > h5    { margin-bottom: 2.5rem; }
+		#home-section > h4    { margin-top: 2rem; margin-bottom: 1rem; }
+		.support-section      { margin-top: 2.5rem; }
+		.support-section h4   { margin-bottom: 1rem; }
+		#icons01, #icons02, #icons03 { margin-bottom: 0; }
 
-			@keyframes logoRise {
-				0% {
-					opacity: 0;
-					transform: scale(0.9) translateY(-20px);
-					filter: blur(12px);
-				}
+		body.loaded #home-section {
+			opacity: 1;
+			transform: translateY(0);
+		}
 
-				40% {
-					opacity: 1;
-				}
+		.support-section {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			width: 100%;
+		}
 
-				100% {
-					opacity: 1;
-					transform: scale(1.5) translateY(0);
-					filter: blur(0px);
-				}
-			}
+		.icons {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+			gap: 1rem;
+			max-width: 420px;
+			margin: 0.75rem auto;
+		}
 
-			@keyframes waterSettle {
-				0% {
-					filter: blur(10px) saturate(1.4);
-				}
-				100% {
-					filter: blur(3px) saturate(1);
-				}
-			}
+		.icons svg,
+		.icons img {
+			display: block;
+			max-width: 100%;
+			max-height: 100%;
+			filter: drop-shadow(-1px -1px 0px #000000)
+						drop-shadow(2px -1px 0px #000000)
+						drop-shadow(2px 2px 0px #000000)
+						drop-shadow(-1px 2px 0px #000000);
+		}
 
-			#home-section {
-				opacity: 0;
-				transform: translateY(10px);
-				transition: 900ms ease;
-			}
-
-			body.loaded #home-section {
-				opacity: 1;
-				transform: translateY(0);
-			}
-
-			.support-section {
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				width: 100%;
-			}
-
-			.icons {
-				display: flex;
-				flex-wrap: grid;
-				justify-content: center;
-				align-items: center;
-				gap: 1rem;
-				max-width: 420px;
-				margin: 0.75rem auto;
-			}
-
-			.icons svg,
-			.icons img {
-				display: block;
-				max-width: 100%;
-				max-height: 100%;
-			}
-
-			.icons a {
-			width: clamp(110px, 18vw, 96px);
-			height: clamp(110px, 18vw, 96px);
-
+		.icons a {
+			width: clamp(56px, 18vw, 96px);
+			height: clamp(56px, 18vw, 96px);
 			display: flex;
 			align-items: center;
 			justify-content: center;
-
 			box-sizing: border-box;
-
 			transition: transform 180ms ease;
 			transform-origin: center;
+		}
+
+		.icons li {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		#icons01 li,
+		#icons02 li,
+		#icons03 li,
+		#icons04 li {
+			flex: 0 1 auto;
+		}
+
+		@media (hover: hover) and (pointer: fine) {
+			.icons a:hover {
+			transform: scale(1.12);
 			}
+		}
 
-			.icons li {
-				display: flex;
-				justify-content: center;
-				align-items: center;
-			}
-
-			#icons01 svg,
-			#icons02 svg,
-			#icons03 svg,
-			#icons03 img,
-			#icons04 svg {
-				object-fit: contain;
-
-				filter:
-					drop-shadow(-1px -1px 0px #000000)
-					drop-shadow(2px -1px 0px #000000)
-					drop-shadow(2px 2px 0px #000000)
-					drop-shadow(-1px 2px 0px #000000);
-			}
-
-			#icons01 li,
-			#icons02 li,
-			#icons03 li
-			{
-				flex: 0 1 auto;
-			}
-
-			#icons04 li,
-			{
-				flex: 0 1 auto;
-			}
-
-			@media (hover: hover) and (pointer: fine) {
-				.icons a:hover {
-					transform: scale(1.12);
-				}
-			}
-
-			@media (hover: none) {
+		@media (hover: none) {
 			.icons a:active {
-				transform: scale(0.95);
+			transform: scale(0.95);
 			}
-}
+		}
 
-			@media (min-width: 1200px) {
-				#icons01, #icons02 {
-					transform: translateX(0px) scale(1.15);
-				}
-
-				#icons03 {
-					transform: translateX(-15px) scale(1.15);
-				}
-
-				#icons04 {
-					scale: 1.1;
-					gap: 0.0125*2rem;
-				}
-
+		@media (min-width: 1200px) {
+			#icons01, #icons02 {
+			transform: translateX(0px) scale(1.15);
 			}
-
-			@media (max-width: 768px) {
-				.icons a {
-					display: flex;
-					align-items: center;
-					justify-content: center;
-				}
-
-				#icons01, #icons02 {
-					gap: 0.03rem;
-					transform: translateX(3px);
-				}
-
-				#icons03 {
-					transform: translateX(-10px);
-					gap: 0.0125rem;
-				}
-				
-				.water-overlay {
-					backdrop-filter: blur(2px);
-				}
-
-				.wave-layer {
-					opacity: 0.15;
-					animation-duration: 18s;
-				}
-
-				#splash-logo img {
-					width: min(60vw, 260px);
-				}
-
+			#icons03 {
+			transform: translateX(-15px) scale(1.15);
 			}
-
-			#icons01 .n01 svg {
-				fill: #FF0000;
-				filter: 
-				drop-shadow(-1px -1px 0px #000000) 
-				drop-shadow(2px -1px 0px #000000) 
-				drop-shadow(2px 2px 0px #000000)
-				drop-shadow(-1px 2px 0px #000000)
+			#icons04 {
+			scale: 1.1;
+			gap: 0.0125*2rem;
 			}
+		}
 
-			#icons01 .n02 svg {
-				fill: #008cff;
-				filter: 
-				drop-shadow(-1px -1px 0px #000000) 
-				drop-shadow(2px -1px 0px #000000) 
-				drop-shadow(2px 2px 0px #000000)
-				drop-shadow(-1px 2px 0px #000000)
+		@media (max-width: 768px) {
+			.icons a {
+			display: flex;
+			align-items: center;
+			justify-content: center;
 			}
-
-			
-			#icons01 .n03 svg {
-				fill: #7746ff;
-				filter: 
-				drop-shadow(-1px -1px 0px #000000) 
-				drop-shadow(2px -1px 0px #000000) 
-				drop-shadow(2px 2px 0px #000000)
-				drop-shadow(-1px 2px 0px #000000)
+			#icons01, #icons02 {
+			gap: 0.03rem;
+			transform: translateX(3px);
 			}
-
-			#icons02 .n04 svg {
-				fill: #46a6ff;
-				filter: 
-				drop-shadow(-1px -1px 0px #000000) 
-				drop-shadow(2px -1px 0px #000000) 
-				drop-shadow(2px 2px 0px #000000)
-				drop-shadow(-1px 2px 0px #000000)
+			#icons03 {
+			transform: translateX(-10px);
+			gap: 0.0125rem;
 			}
-
-			#icons02 .n05 svg {
-				fill: #00ff55;
-				filter: 
-				drop-shadow(-1px -1px 0px #000000) 
-				drop-shadow(2px -1px 0px #000000) 
-				drop-shadow(2px 2px 0px #000000)
-				drop-shadow(-1px 2px 0px #000000)
+			.water-overlay {
+			backdrop-filter: blur(2px);
 			}
-
-
-			#icons02 .n06 svg {
-				filter: 
-				drop-shadow(-1px -1px 0px #000000) 
-				drop-shadow(2px -1px 0px #000000) 
-				drop-shadow(2px 2px 0px #000000)
-				drop-shadow(-1px 2px 0px #000000)
+			.wave-layer {
+			opacity: 0.15;
+			animation-duration: 18s;
 			}
-
-			
-			#icons03 .n07 img {
-				width: 95px;
-				height: 95px;
-				filter: 
-				drop-shadow(-1px -1px 0px #000000) 
-				drop-shadow(2px -1px 0px #000000) 
-				drop-shadow(2px 2px 0px #000000)
-				drop-shadow(-1px 2px 0px #000000);
+			#splash-logo img {
+			width: min(60vw, 260px);
 			}
+		}
 
-						
-			#icons03 .n08 svg {
-				filter: 
-				drop-shadow(-1px -1px 0px #000000) 
-				drop-shadow(2px -1px 0px #000000) 
-				drop-shadow(2px 2px 0px #000000)
-				drop-shadow(-1px 2px 0px #000000)
-			}
+		/* Individual icon colors — no filter needed, moved to .icons a */
+		#icons01 .n01 svg { fill: #FF0000; }
+		#icons01 .n02 svg { fill: #008cff; }
+		#icons01 .n03 svg { fill: #7746ff; }
+		#icons02 .n04 svg { fill: #46a6ff; }
+		#icons02 .n05 svg { fill: #00ff55; }
+		#icons03 .n07 img { width: 95px; height: 95px; }
+		#icons03 .n09 svg { fill: url(#throne-gradient); }
 
-			#icons03 .n09 svg {
-				filter: 
-				drop-shadow(-1px -1px 0px #000000) 
-				drop-shadow(2px -1px 0px #000000) 
-				drop-shadow(2px 2px 0px #000000)
-				drop-shadow(-1px 2px 0px #000000)
-			}
+		#icons04 .n11 svg {
+			width: 100%;
+			height: 100%;
+			max-width: 95px;
+			max-height: 95px;
+			filter:
+			drop-shadow(-1px -1px 0px #ffffff)
+			drop-shadow(2px -1px 0px #ffffff)
+			drop-shadow(2px 2px 0px #ffffff)
+			drop-shadow(-1px 2px 0px #ffffff);
+		}
 
-			#icons04 .n10 svg {
-				filter: 
-				drop-shadow(-1px -1px 0px #000000) 
-				drop-shadow(2px -1px 0px #000000) 
-				drop-shadow(2px 2px 0px #000000)
-				drop-shadow(-1px 2px 0px #000000)
-			}
-
-			#icons04 .n11 svg {
-				width: 100%;
-				height: 100%;
-				max-width: 95px;
-				max-height: 95px;
-				filter: 
-				drop-shadow(-1px -1px 0px #ffffff) 
-				drop-shadow(2px -1px 0px #ffffff) 
-				drop-shadow(2px 2px 0px #ffffff)
-				drop-shadow(-1px 2px 0px #ffffff)
-			}
-
-			ul {
-				list-style: none;
-			}
-
-			h1,
-			h2,
-			h3,
-			h4,
-			h5,
-			h6 {
-				margin: 0 0 0.5rem 0;
-				color: white;
-				line-height: 1.2;
-				font-family: 'Pulang', sans-serif;
-			}
-
-			
-
+		ul {
+			list-style: none;
+		}
 		</style>
 	</body>
 

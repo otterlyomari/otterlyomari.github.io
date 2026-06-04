@@ -1,22 +1,21 @@
 export const prerender = false;
 
 const ACCOUNT_ID = import.meta.env.CF_ACCOUNT_ID;
-const WORKER = import.meta.env.CF_WORKER_NAME;
 
 export async function POST({ request }) {
   const { deploymentId } = await request.json();
 
   if (!deploymentId) {
-    return new Response("Missing deploymentId", { status: 400 });
+    return new Response('Missing deploymentId', { status: 400 });
   }
 
   const res = await fetch(
     `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/workers/deployments/${deploymentId}/rollback`,
     {
-      method: "POST",
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${import.meta.env.CF_API_TOKEN}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }
   );
@@ -24,6 +23,6 @@ export async function POST({ request }) {
   const data = await res.json();
 
   return new Response(JSON.stringify(data), {
-    headers: { "content-type": "application/json" },
+    headers: { 'content-type': 'application/json' },
   });
 }

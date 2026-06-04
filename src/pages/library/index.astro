@@ -16,17 +16,14 @@ const allTypes = [...new Set(archive.map(entry => entry.data.type))];
   <head>
     <BaseHead title="OtterlyOmari | Library" description={SITE_DESCRIPTION} />
 
-    <!-- Fuse -->
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
-
-    <!-- Engine -->
+    <!-- Library dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2" defer></script>
     <script src="/scripts/archive-core.js" defer></script>
+    
   </head>
 
   <body class="archive-mode">
-
     <main>
-
       <!-- HERO -->
       <section class="archive-hero">
         <h1 class="t-outline">The Library</h1>
@@ -37,14 +34,22 @@ const allTypes = [...new Set(archive.map(entry => entry.data.type))];
       <!-- CONTROLS -->
       <section class="archive-controls">
         <SearchBar />
+
+        <!-- Filter by Entry Type -->
         <TypeFilter types={allTypes} />
+
+        <!-- Sort Controls -->
+        <div class="sort-controls">
+          <select id="archiveSort" class="sort-select t-outline">
+            <option value="default">Sort: Default</option>
+            <option value="az">A → Z</option>
+            <option value="za">Z → A</option>
+          </select>
+        </div>
       </section>
 
       <!-- GRID (JS owns this now) -->
       <section class="archive-grid" id="archiveGrid"></section>
-
-      <br>
-      <br>
 
       <!-- BACK -->
    		<MenuButton class="menu-button-lib" href="/" label="Go Back" />
@@ -54,23 +59,18 @@ const allTypes = [...new Set(archive.map(entry => entry.data.type))];
 
     <!-- DATA INJECTION -->
     <script is:inline define:vars={{ archive }}>
-      window.archiveData = archive.map(entry => ({
+      window.archiveData = archive.map((entry) => ({
         id: entry.id,
         title: entry.data.title,
         description: entry.data.description,
         tags: entry.data.tags,
         type: entry.data.type,
-        cover: entry.data.cover ?? null
+        cover: entry.data.cover ?? null,
       }));
     </script>
-
-  </body>
-</html>
-
   <style>
     .menu-button-lib {
       font-family: "Source Serif 4", serif;
-      font-size: 1.5rem;
       transition: 0.2s ease;
     }
 
@@ -86,7 +86,6 @@ const allTypes = [...new Set(archive.map(entry => entry.data.type))];
       font-family: 'Source Serif 4', sans-serif;
     }
 
-
     .archive-mode {
       margin: 0;
       padding: 0;
@@ -95,7 +94,7 @@ const allTypes = [...new Set(archive.map(entry => entry.data.type))];
       font-family: "Georgia", serif;
 
       
-      background-image: url('/library-bg.jpeg');
+      background-image: url('/library-bg.webp');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -142,16 +141,24 @@ const allTypes = [...new Set(archive.map(entry => entry.data.type))];
       margin-top: 0.5rem;
     }
 
+    /* Replace the existing .archive-controls and .archive-controls > * rules */
     .archive-controls {
       display: flex;
-      flex-direction: row; /* IMPORTANT */
-      align-items: center;
+      flex-direction: row;
+      align-items: flex-start;
       gap: 1rem;
       padding: 1rem 0 2rem;
+      flex-wrap: wrap;
     }
 
-    .archive-controls > * {
-      width: min(700px, 100%);
+    /* Search bar gets most of the space, filters wrap naturally */
+    .archive-controls > *:first-child {
+      flex: 1 1 300px;
+      min-width: 0;
+    }
+
+    .archive-controls > *:not(:first-child) {
+      flex: 0 1 auto;
     }
 
     .archive-grid {
@@ -159,6 +166,7 @@ const allTypes = [...new Set(archive.map(entry => entry.data.type))];
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 1.2rem;
       padding-top: 1rem;
+      margin-bottom: 2.5rem;
     }
 
     /* tablets */
@@ -256,9 +264,34 @@ const allTypes = [...new Set(archive.map(entry => entry.data.type))];
       button > a > h4 {
         font-size: 1.2rem;
       }
+      
     }
+
+    .sort-select {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .sort-select option {
+    background: #1a1a1a;
+    color: white;
+  }
+
+  .sort-select:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.6);
+  }
 
 
 
   </style>
+  </body>
 </html>

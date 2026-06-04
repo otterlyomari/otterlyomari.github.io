@@ -9,116 +9,130 @@ import Footer from '../components/Footer.astro';
 <!doctype html>
 <html lang="en">
 <head>
-	<BaseHead title={"OtterlyOmari | Gallery"} description={SITE_DESCRIPTION} />
+  <BaseHead title={"OtterlyOmari | Gallery"} description={SITE_DESCRIPTION} />
 </head>
 
 <body>
 
-<script type="module" src="/scripts/gallery-core.js?reload"></script>
-<script type="module" src="/scripts/hackermantm.js?v=1"></script>
+<script type="module" src="/scripts/gallery-core.js"></script>
 
 <main id="content">
-
 <div id="home-section">
 
-	<a href="/" arial-label="Home">
-		<img src="/logo.png" class="image" alt="Omari Tidemere" />
-	</a>
+  <a href="/" aria-label="Home">
+    <img src="/logo.png" class="image" alt="Omari Tidemere" width="1372" height="213" />
+  </a>
 
-	<h5 class="t-outline" style="text-align:center;">
-		the cute motherfluffer your mom warned you about
-	</h5>
+  <h5 class="t-outline" style="text-align:center;">
+    the cute motherfluffer your mom warned you about
+  </h5>
 
-	<br>
-	<h4 class="t-outline filters-title">Filters</h4>
+  <h4 class="t-outline filters-title">Filters</h4>
 
-	<div class="gallery-controls">
-		<button class="filter-btn active" data-filter="all">All</button>
-		<button class="filter-btn" data-filter="art">🎨 Artwork</button>
-		<button class="filter-btn" data-filter="vrchat">📸 VRChat</button>
-	</div>
+  <div class="gallery-controls">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="art">🎨 Artwork</button>
+    <button class="filter-btn" data-filter="vrchat">📸 VRChat</button>
+  </div>
 
-	<!-- MASONRY ROOT -->
-	<div id="gallery"></div>
-
-	<br />
-
-	<MenuButton href="/" label="Go Back" />
+  <MenuButton href="/" label="Go Back" />
 
 </div>
-
 </main>
-<Footer/>
 
+<div id="gallery"></div>
+
+<Footer/>
 <ScrollToggle />
 
+<!--
+  LIGHTBOX STRUCTURE
+  ══════════════════
+  #lightbox                  full-screen backdrop (click outside to close)
+    #lightbox-prev/next      nav arrows, sit outside player-container
+    .player-container        flex column — video above, controls below on mobile
+      .player-wrap           sized to video; overflow:hidden clips desktop overlay
+        #lightbox-media      holds <img> or <video>
+        .vc-click-overlay    play/pause tap target (videos only, injected by JS)
+      .video-controls        injected by JS
+                             desktop: position:absolute, overlaid on player-wrap
+                             mobile:  position:static, flows below player-wrap
+-->
+<div id="lightbox" class="lightbox hidden">
+  <button id="lightbox-prev" class="lightbox-nav" aria-label="Previous" style="display:none">‹</button>
 
+  <div class="player-container">
+    <div class="player-wrap">
+      <div id="lightbox-media"></div>
+      <!-- .vc-click-overlay and .video-controls injected here by JS -->
+    </div>
+    <!-- .video-controls also appended here on mobile via CSS repositioning -->
+  </div>
+
+  <button id="lightbox-next" class="lightbox-nav" aria-label="Next" style="display:none">›</button>
+</div>
 
 <style>
+html, body {
+  overscroll-behavior: none;
+}
+
 main {
-	backdrop-filter: blur(0.4rem);
-	background: transparent;
+  backdrop-filter: blur(0.4rem);
+  background: transparent;
 }
 
 #home-section {
-	max-width: none;
-	width: 100%;
-	margin: 0;
+  max-width: none;
+  width: 100%;
+  margin: 0;
 }
 
-.t-has-hover {
-	transition: color 0.1s ease;
-	text-align: center;
-}
+/* ========================= FILTERS ========================= */
 
-.t-has-hover:hover {
-	color: black;
+.filters-title {
+  margin: 1.5rem 0 0.5rem;
+  text-align: center;
+  opacity: 0.85;
+  letter-spacing: 1px;
 }
 
 .gallery-controls {
-	display: flex;
-	justify-content: center;
-	gap: 10px;
-	flex-wrap: wrap;
-	margin: 1.5rem 0;
-}
-
-.filters-title {
-	margin: 1rem 0 0.5rem;
-	text-align: center;
-	opacity: 0.85;
-	letter-spacing: 1px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 1.5rem 0;
 }
 
 .filter-btn {
-	padding: 6px 12px;
-	font-size: 1.5rem;
-	font-family: 'Pulang', sans-serif;
-	border: 1px solid #fff;
-	background: rgba(0,0,0,0.35);
-	color: white;
-	border-radius: 6px;
-	cursor: pointer;
+  padding: 6px 12px;
+  font-size: 1.5rem;
+  font-family: 'Pulang', sans-serif;
+  border: 1px solid #fff;
+  background: rgba(0, 0, 0, 0.35);
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .filter-btn.active {
-	background: white;
-	color: black;
+  background: white;
+  color: black;
 }
+
+/* ========================= GALLERY ========================= */
 
 #gallery {
   position: relative;
-
-  /* FULL BLEED HACK */
   width: 100vw;
   max-width: 100vw;
-
-  /* break out of centered container */
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-
   overflow: visible;
+  transition: opacity 0.15s ease;
 }
+
+/* ========================= ITEMS ========================= */
 
 .gallery-item-wrapper {
   position: absolute;
@@ -129,6 +143,11 @@ main {
   will-change: transform;
   backface-visibility: hidden;
   transform: translateZ(0);
+  contain: layout paint;
+  cursor: pointer;
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+  animation-delay: calc(var(--item-index, 0) * 40ms);
 }
 
 .gallery-item-wrapper img,
@@ -137,67 +156,46 @@ main {
   height: 100%;
   object-fit: cover;
   display: block;
+  opacity: 0;
+  transition: opacity 0.25s ease;
 }
 
-.gallery-item-wrapper img.loaded {
+.gallery-item-wrapper img.loaded,
+.gallery-item-wrapper video {
   opacity: 1;
 }
 
-@media (max-width: 700px) {
-	#gallery {
-		width: 100vw;
-		left: auto;
-		transform: none;
-	}
+.gallery-item-wrapper img.load-error {
+  background: #1a1a1a;
+  opacity: 0.4;
 }
 
-@media (max-width: 480px) {
-
-	.gallery-controls {
-		flex-direction: column;
-		align-items: center;
-	}
-
-	.filter-btn {
-		width: 100%;
-		max-width: 220px;
-	}
-
+@keyframes fadeIn {
+  to { opacity: 1; }
 }
 
+/* ========================= SKELETON ========================= */
 
-.gallery-item-wrapper img.loaded {
-  opacity: 1;
+.gallery-skeleton {
+  position: relative;
+  background: #1a1a1a;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 200px;
+  animation: shimmer 1.4s ease-in-out calc(var(--sk-delay, 0s)) infinite;
 }
 
-@media (max-width: 480px) {
-	.filter-btn {
-		width: 100%;
-		max-width: 220px;
-	}
-
-	.gallery-controls {
-		flex-direction: column;
-		align-items: center;
-	}
+@keyframes shimmer {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.8; }
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	margin: 0 0 0.5rem 0;
-	color: white;
-	line-height: 1.2;
-	font-family: 'Pulang', sans-serif;
-}
+/* ========================= LIGHTBOX ========================= */
 
 #lightbox {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.75);
+  background: rgba(0, 0, 0, 0.88);
   backdrop-filter: blur(10px);
   display: flex;
   justify-content: center;
@@ -210,38 +208,626 @@ h6 {
   display: none;
 }
 
-#lightbox-media {
+:global(.lightbox-count) {
   position: absolute;
+  top: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.3rem;
+  color: black;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  z-index: 10000;
+  text-shadow:
+    -1px -1px 0 #fff,
+     1px -1px 0 #fff,
+    -1px  1px 0 #fff,
+     1px  1px 0 #fff;
+}
 
-  width: 45%;
-  height: auto;
+:global(.lightbox-credit) {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+  color: black;
+  padding: 0.3rem 0.8rem;
+  white-space: nowrap;
+  z-index: 10000;
+  text-shadow:
+    -1px -1px 0 #fff,
+     1px -1px 0 #fff,
+    -1px  1px 0 #fff,
+     1px  1px 0 #fff;
+}
 
-  will-change: transform;
+@media (max-width: 600px) {
+  :global(.lightbox-count) {
+    top: 1rem;
+    font-size: 1rem;
+  }
 
-  /* hide no-drop/forbidden cursor */
- -webkit-user-drag: none;
+  :global(.lightbox-credit) {
+    bottom: 1rem;
+    font-size: 1.1rem;
+    white-space: normal;
+    text-align: center;
+    max-width: 80vw;
+  }
+}
+
+/* ========================= PLAYER CONTAINER ========================= */
+
+/*
+ * Flex column so .video-controls flows below .player-wrap on mobile.
+ * On desktop the controls are position:absolute inside player-wrap instead.
+ */
+.player-container {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  max-width: 90vw;
+  max-height: 95vh;
+}
+
+/* ========================= PLAYER WRAP ========================= */
+
+.player-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;  /* clips desktop gradient overlay to video boundary */
+  border-radius: 4px 4px 0 0;
+  flex-shrink: 0;
+}
+
+.player-wrap.is-image {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: visible; 
+  border-radius: 4px 4px 0 0;
+  flex-shrink: 0;
+}
+
+#lightbox-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(280px, 60vw, 960px);
+  -webkit-user-drag: none;
   user-select: none;
   -webkit-touch-callout: none;
-  pointer-events: auto;
 }
 
 #lightbox-media img,
 #lightbox-media video {
-  cursor: grab;
+  display: block;
+  max-width: 100%;
+  object-fit: contain;
 }
 
-#lightbox-media img:active,
-#lightbox-media video:active {
-  cursor: grabbing;
+/* Desktop: let the video breathe, leaving room for the overlay controls */
+#lightbox-media img  { max-height: 80vh; cursor: grab; }
+#lightbox-media img:active { cursor: grabbing; }
+#lightbox-media video { max-height: 75vh; cursor: default; }
+
+/* ========================= NAV BUTTONS ========================= */
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+  color: white;
+  font-size: 1.6rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10000;
+  user-select: none;
+  -webkit-user-select: none;
+  opacity: 0.85;
+  transform: translateY(-50%) scale(1);
+  transition: opacity 0.2s ease, transform 0.15s ease;
+  animation: lb-breathe 2s ease-in-out infinite;
 }
-html, body {
-  overscroll-behavior: none;
+
+.lightbox-nav:hover {
+  opacity: 1;
+  animation-play-state: paused;
+}
+
+#lightbox-prev { left: 16px; }
+#lightbox-next { right: 16px; }
+
+@keyframes lb-breathe {
+  0%, 100% { transform: translateY(-50%) scale(1); }
+  50%       { transform: translateY(-50%) scale(1.05); }
+}
+
+/* ========================= CLICK OVERLAY ========================= */
+
+.vc-click-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10001;
+  pointer-events: auto;
+}
+
+.vc-overlay-icon {
+  font-size: 4rem;
+  color: white;
+  opacity: 0;
+  transform: scale(0.7);
+  transition: none;
+}
+
+.vc-click-overlay.flash .vc-overlay-icon {
+  animation: vc-flash 0.5s ease forwards;
+}
+
+@keyframes vc-flash {
+  0%   { opacity: 0.9; transform: scale(1); }
+  60%  { opacity: 0.7; transform: scale(1.15); }
+  100% { opacity: 0;   transform: scale(1.3); }
+}
+
+/* ========================= VIDEO CONTROLS — DESKTOP ========================= */
+
+/*
+ * Desktop: overlaid at the bottom of .player-wrap.
+ * Auto-hides via .visible class toggled in JS.
+ * CSS hover on player-wrap does NOT force visibility — that was breaking
+ * the auto-hide entirely. JS owns the visible state.
+ */
+.video-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.45) 55%,
+    transparent         100%
+  );
+
+  padding: 48px 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 10002;
+
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.video-controls.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* ── Progress row ── */
+
+:global(.vc-progress-wrap) {
+  width: 100%;
+  padding: 4px 0;
+  margin-bottom: 4px; /* add this */
+}
+
+:global(.vc-progress-row) {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* YouTube-red filled track via --progress CSS variable */
+:global(.vc-progress) {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  transition: height 0.15s ease;
+  background: linear-gradient(
+    to right,
+    #ff0000                   var(--progress, 0%),
+    rgba(255,255,255,0.25)    var(--progress, 0%)
+  );
+}
+
+:global(.vc-progress-wrap:hover) :global(.vc-progress) { height: 6px; }
+
+:global(.vc-progress::-webkit-slider-thumb) {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+:global(.vc-progress::-moz-range-thumb) {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  border: none;
+}
+
+/* Timestamp */
+.vc-time {
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: white;
+  white-space: nowrap;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+/* Scrub and seek tooltip */
+:global(.vc-thumb-tooltip) {
+  position: fixed;
+  bottom: calc(100% + 8px);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  pointer-events: none;
+  z-index: 10003;
+}
+
+:global(.vc-thumb-canvas) {
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.2);
+  display: block;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+}
+
+:global(.vc-thumb-time) {
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: white;
+  background: rgba(0,0,0,0.7);
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  text-shadow:
+    -1px -1px 0 #000,
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000;
+}
+
+@media (max-width: 700px) {
+  :global(.vc-thumb-canvas) {
+    display: none !important;
+  }
+
+  :global(.vc-thumb-tooltip) {
+    bottom: calc(100% + 4px);
+  }
+}
+
+/* ── Controls row ── */
+
+.vc-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.vc-spacer { flex: 1; }
+
+/* ── Buttons ── */
+
+.vc-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 7px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  transition: background 0.1s ease;
+}
+
+.vc-btn:hover { background: rgba(255, 255, 255, 0.15); }
+
+/* ── Volume ── */
+
+.vc-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* White filled volume track via --vol CSS variable */
+.vc-volume {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 70px;
+  height: 3px;
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  background: linear-gradient(
+    to right,
+    white              var(--vol, 0%),
+    rgba(255,255,255,0.3) var(--vol, 0%)
+  );
+}
+
+.vc-volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+}
+
+.vc-volume::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: white;
+  border: none;
+  cursor: pointer;
+}
+
+:global(.vc-vol-slider) {
+  width: 70px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.25);
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+  transition: height 0.15s ease;
+}
+
+:global(.vc-vol-slider:hover) {
+  height: 5px;
+}
+
+:global(.vc-vol-fill) {
+  height: 100%;
+  border-radius: 999px;
+  background: white;
+  width: 0%;
+  transition: width 0.05s ease;
+  pointer-events: none;
+}
+
+/* ── Speed section ── */
+
+.vc-speed-section {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.vc-label {
+  font-size: 0.72rem;
+  opacity: 0.7;
+  white-space: nowrap;
+  margin-right: 2px;
+}
+
+.vc-pill-row {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.vc-speed-pill {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 999px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.vc-speed-pill:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+.vc-speed-pill.active {
+  background: white;
+  color: black;
+  border-color: white;
+}
+
+/* ========================= VIDEO CONTROLS — MOBILE ========================= */
+
+/*
+ * On mobile, controls leave position:absolute and become a static block
+ * below the video inside .player-container.
+ *
+ * Layout:
+ *   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0:12 / 1:04
+ *   ▶  🔊━━━━
+ *   Speed   − 0.5× 1× 1.5× 2× +
+ *   ⛶ fullscreen
+ */
+@media (max-width: 700px) {
+  #lightbox {
+    align-items: flex-start;
+    padding-top: 5vh;
+    overflow-y: auto;
+  }
+
+  .player-container {
+    max-width: 100vw;
+    width: 100vw;
+    max-height: none;
+  }
+
+  .player-wrap {
+    border-radius: 0;
+    width: 100vw;
+  }
+
+  #lightbox-media {
+    width: 100vw;
+  }
+
+  #lightbox-media video { max-height: 56vw; } /* 16:9 on full-width */
+  #lightbox-media img   { max-height: 70vw; }
+
+  /* Detach from absolute, flow below video */
+  .video-controls {
+    position: static;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 12px 16px 16px;
+    border-radius: 0 0 8px 8px;
+    overflow: visible;
+
+    /* Always visible on mobile — no auto-hide */
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+
+  /* Progress + timestamp row */
+  .vc-progress-wrap { 
+    padding: 4px 0; 
+    width: 100%;
+    position: relative;
+    overflow: visible;
+  }
+
+  /* Play + volume row */
+  .vc-row {
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .vc-spacer { display: none; } /* no spacer needed on mobile */
+
+  /* Speed section: full-width block below play/vol */
+  .vc-speed-section {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    order: 3; /* below play row */
+  }
+
+  .vc-label {
+    font-size: 0.8rem;
+    opacity: 0.85;
+    margin: 0;
+  }
+
+  .vc-pill-row {
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  .vc-speed-pill {
+    font-size: 0.85rem;
+    padding: 5px 12px;
+  }
+
+  /* Fullscreen button — own row at the bottom */
+  .vc-btn[aria-label="Fullscreen"],
+  .vc-btn[aria-label="Exit fullscreen"] {
+    width: 100%;
+    justify-content: center;
+    padding: 8px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    margin-top: 6px;
+    font-size: 1rem;
+    order: 4;
+  }
+
+  .vc-volume { width: 80px; }
+
+  /* Nav arrows hidden on mobile — use swipe instead */
+  .lightbox-nav { display: none !important; }
+}
+
+/* ========================= FULLSCREEN ========================= */
+
+.player-wrap:fullscreen,
+.player-wrap:-webkit-full-screen {
+  max-width: 100vw;
+  max-height: 100vh;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  background: black;
+}
+
+.player-wrap:fullscreen .video-controls,
+.player-wrap:-webkit-full-screen .video-controls {
+  position: absolute;
+  z-index: 10002;
+}
+
+.player-wrap:fullscreen #lightbox-media,
+.player-wrap:-webkit-full-screen #lightbox-media {
+  width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+}
+
+.player-wrap:fullscreen video,
+.player-wrap:-webkit-full-screen video {
+  max-height: 100vh;
+  width: auto;
+  max-width: 100vw;
+}
+
+/* ========================= RESPONSIVE ========================= */
+
+@media (max-width: 480px) {
+  .gallery-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .filter-btn {
+    width: 100%;
+    max-width: 220px;
+  }
 }
 </style>
-
-<div id="lightbox" class="lightbox hidden">
-  <div id="lightbox-media"></div>
-</div>
 
 </body>
 </html>

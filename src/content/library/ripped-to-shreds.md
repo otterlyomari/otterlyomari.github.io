@@ -1,5 +1,4 @@
 ---
-id: "shreds"
 title: "Ripped to Shreds"
 description: "I found this song on Spotify by Canadian musician 'ThxSoMuch' called 'Spit in my Face' in 2024— and I absolutely vibed to the lyrics, sure, it's thematically dark, but the meaning was so damn powerful, and resonant within me that I had to adapt it into prose!
 "

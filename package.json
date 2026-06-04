@@ -1,7 +1,7 @@
 {
   "name": "otterlyomari",
   "type": "module",
-  "version": "3.2.12",
+  "version": "3.3.0",
   "standard-version": {
     "scripts": {
       "postbump": "echo version bumped"
@@ -10,29 +10,28 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "release": "standard-version",
     "release:patch": "standard-version --release-as patch",
     "release:minor": "standard-version --release-as minor",
-    "release:major": "standard-version --release-as major"
+    "release:major": "standard-version --release-as major",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
-    "@astrojs/cloudflare": "^13.5.5",
+    "@astrojs/cloudflare": "^13.6.0",
     "@astrojs/mdx": "^5.0.6",
-    "@astrojs/react": "^5.0.5",
+    "@astrojs/react": "^5.0.6",
     "@astrojs/rss": "^4.0.18",
-    "@astrojs/sitemap": "^3.7.2",
     "@iconify-json/bi": "^1.1.23",
     "@iconify-json/carbon": "^1.1.30",
     "@jop-software/astro-cookieconsent": "^3.0.0",
     "@types/react": "^18.2.58",
     "@types/react-dom": "^18.2.19",
-    "astro": "^6.3.8",
-    "astro-bootstrap": "^0.6.2",
-    "astro-icon": "^1.1.0",
+    "astro": "^6.4.2",
+    "astro-icon": "^1.1.5",
     "astro-navbar": "^2.3.1",
     "bootstrap-icons": "^1.11.3",
     "fuse.js": "^7.3.0",
@@ -42,10 +41,13 @@
     "react-dom": "^18.2.0",
     "typescript": "^5.3.3",
     "vanilla-cookieconsent": "^3.0.0",
+    "vite-plugin-html": "^3.2.2",
     "wrangler": "^4.95.0"
   },
   "devDependencies": {
     "@iconify-json/mdi": "^1.1.64",
+    "prettier": "^3.6.2",
+    "prettier-plugin-astro": "^0.14.1",
     "sass": "^1.71.1",
     "standard-version": "^9.5.0",
     "vite": "^7.3.3"

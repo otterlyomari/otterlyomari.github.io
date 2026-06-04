@@ -4,45 +4,48 @@ This document outlines planned improvements and future development goals for thi
 
 ---
 
-## Short-Term Goals
+## Completed
 
-- Improve gallery lightbox UI
-  - Add next/previous navigation buttons
-  - Improve `.webm` playback handling
-  - Optimize mobile gesture controls
-
-- Improve library page UX
-  - Faster search performance
-  - Refine filter layout and spacing
-  - Add sorting options
-
-- General polish
-  - Fix minor accessibility issues
-  - Improve page load performance
-  - Refactor repeated UI components
+- ~~Improve gallery lightbox UI (navigation, video playback, mobile gestures)~~
+- ~~Improve library page UX (search, filters, sorting)~~
+- ~~General polish (accessibility, performance, refactors)~~
+- ~~Improved metadata structure for gallery items~~
+- ~~Better SEO optimization across all pages~~
+- ~~Improve gallery lightbox UI & UX for desktop & mobile users~~
+  - ~~Add swipe-to-dismiss lightbox (mobile, spring-based motion)~~
+  - ~~Add hover preview timeline for `.webm` playback~~
+  - ~~Improve playback slider design (less generic, more stylized)~~
+- ~~- Improve gallery layout display~~
+  - ~~- Improve lightbox so that portrait videos scale proportionately~~
+  - -~~(For .webm files with audio) make audio unmuted by default~~
 
 ---
 
-## Mid-Term Goals
+## Planned
 
-- Expand content system
-  - Better tagging system for written works
-  - Improved metadata structure for gallery items
-  - More flexible archive filtering
-
----
-
-## Long-Term Goals
-
-- Better SEO optimization across all pages
-- Performance audit and optimization pass
-- Potential migration improvements (if needed)
-
----
-
-## Experimental Ideas
+### UI / UX Experiments
 
 - Animated transitions between sections
+
+---
+
+## Optional / Experimental
+
+### Performance & Memory
+
+- Lazy-unload off-screen images and restore on view
+
+### Content System Expansion
+
+- Better tagging system for written works
+- More flexible archive filtering
+
+---
+
+## Future Considerations
+
+- Performance audit and optimization pass
+- Potential migration improvements (if needed)
 
 ---
 

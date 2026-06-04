@@ -20,14 +20,14 @@ const { entry } = Astro.props;
     )
   }
 
-  <h3>{entry.data.title}</h3>
+  <h3 class="t-outline">{entry.data.title}</h3>
 
-  <p>{entry.data.description}</p>
+  <p class="t-outline">{entry.data.description}</p>
 
-  <div class="tag-row">
+  <div class="tag-row t-outline">
     {
       entry.data.tags.map((tag: unknown) => (
-        <span class="tag">{tag}</span>
+        <span class="tag t-outline">{tag}</span>
       ))
     }
   </div>
