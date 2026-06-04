@@ -8,15 +8,7 @@ import cloudflare from '@astrojs/cloudflare';
 export default defineConfig({
   site: 'https://otterlyomari.com',
   output: 'server',
-  adapter: cloudflare({
-    mode: 'advanced',
-    kvNamespaces: [
-      {
-        binding: 'SESSION',
-        id: 'otterlyomari-session',
-      }
-    ]
-  }),
+  adapter: cloudflare(),
 
   vite: {
     plugins: [
