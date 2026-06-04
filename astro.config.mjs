@@ -8,7 +8,9 @@ import cloudflare from '@astrojs/cloudflare';
 export default defineConfig({
   site: 'https://otterlyomari.com',
   output: 'server',
-  adapter: cloudflare(),
+  adapter: cloudflare({
+    mode: 'advanced',
+  }),
 
   vite: {
     plugins: [
@@ -18,6 +20,9 @@ export default defineConfig({
     ],
     build: {
       minify: 'esbuild',
+      rollupOptions: {
+        external: [],  // Force everything to bundle
+      },
     },
   },
 
