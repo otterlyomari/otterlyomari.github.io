@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.3.1](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.3.0...v3.3.1) (2026-06-04)
+
+
+### Bug Fixes
+
+* use cloudflare adapter with advanced mode for Pages SSR ([4dc1299](https://github.com/otterlyomari/otterlyomari.github.io/commit/4dc12992c6ed42db2ee4c010ca8d035af9bd3fe5))
+
+### [3.2.12](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.2.11...v3.2.12) (2026-06-04)
+
+### [3.2.11](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.2.10...v3.2.11) (2026-05-28)
 
 ## [3.3.0] - 2026-06-04
 
