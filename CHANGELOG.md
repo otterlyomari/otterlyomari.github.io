@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.3.3](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.3.2...v3.3.3) (2026-06-04)
+
+
+### Bug Fixes
+
+* add existing KV namespace ID to config ([7436b05](https://github.com/otterlyomari/otterlyomari.github.io/commit/7436b0507e5a775f824df3af5d3d4b9d8e8bd8c2))
+
 ### [3.3.2](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.3.1...v3.3.2) (2026-06-04)
 
 ### [3.3.1](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.3.0...v3.3.1) (2026-06-04)
