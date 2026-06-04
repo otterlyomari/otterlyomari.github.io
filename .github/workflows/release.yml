@@ -26,16 +26,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Configure git (required for tagging in CI)
+      # Configure git
       - name: Configure Git
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-      # Generate version + CHANGELOG + tag
-      - name: Create release
-        run: npx standard-version
+      # Generate CHANGELOG only (no version bump, no tag)
+      - name: Update CHANGELOG
+        run: npx standard-version --first-release --skip.bump=true --skip.tag=true
 
-      # Push commit + tags back to repo
-      - name: Push release
-        run: git push --follow-tags origin main
+      # Push CHANGELOG changes back to repo
+      - name: Push changes
+        run: git push origin main

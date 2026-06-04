@@ -13,7 +13,7 @@ export default defineConfig({
     kvNamespaces: [
       {
         binding: 'SESSION',
-        id: 'otterlyomari-website-session',
+        id: 'otterlyomari-session',
       }
     ]
   }),
