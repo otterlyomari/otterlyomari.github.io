@@ -14,7 +14,7 @@ This document outlines planned improvements and future development goals for thi
 - ~~Improve gallery lightbox UI & UX for desktop & mobile users~~
   - ~~Add swipe-to-dismiss lightbox (mobile, spring-based motion)~~
   - ~~Add hover preview timeline for `.webm` playback~~
-  - ~~Improve volume slider design (less generic, more stylized)~~
+  - ~~Improve playback slider design (less generic, more stylized)~~
   - ~~Reduce gallery image quality while lightbox is active (adaptive rendering)~~
 
 ---

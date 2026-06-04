@@ -21,15 +21,15 @@ Briefly describe what this PR changes.
 
 ## Related Branch / Issue
 
-(e.g. `feature/gallery-lightbox-navigation`)
+(e.g. `feature/gallery-lightbox-navigation` or "none")
 
 ---
 
 ## Changes Made
 
-- 
-- 
-- 
+- Add ...
+- Fix ...
+- Remove ...
 
 ---
 
