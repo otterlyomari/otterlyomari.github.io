@@ -5,7 +5,6 @@
 > “Everyone you meet is fighting a battle you know nothing about. Be kind. Always.” — Robin Williams
 
 ![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-181717?logo=github)
-![Deploy](https://img.shields.io/github/deployments/otterlyomari/otterlyomari.github.io/production?label=deploy)
 
 ---
 
