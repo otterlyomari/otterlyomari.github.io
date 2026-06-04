@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.2.12](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.2.11...v3.2.12) (2026-06-04)
+
 ### [3.2.11](https://github.com/otterlyomari/otterlyomari.github.io/compare/v3.2.10...v3.2.11) (2026-05-28)
 
 ## [3.2.0] - 2026-05-28
