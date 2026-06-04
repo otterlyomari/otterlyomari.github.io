@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
-    "@astrojs/cloudflare": "^13.6.0",
     "@astrojs/mdx": "^5.0.6",
     "@astrojs/react": "^5.0.6",
     "@astrojs/rss": "^4.0.18",
@@ -41,8 +40,7 @@
     "react-dom": "^18.2.0",
     "typescript": "^5.3.3",
     "vanilla-cookieconsent": "^3.0.0",
-    "vite-plugin-html": "^3.2.2",
-    "wrangler": "^4.95.0"
+    "vite-plugin-html": "^3.2.2"
   },
   "devDependencies": {
     "@iconify-json/mdi": "^1.1.64",

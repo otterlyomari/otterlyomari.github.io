@@ -65,7 +65,6 @@ function main() {
   writeLedger();
   build();
   deploy();
-  snapshot();
 
   console.log(`✅ Deploy complete: ${version}`);
 }
