@@ -20,22 +20,19 @@ export async function GET() {
 
     const latest = deployments[0];
 
-    const version =
-      latest?.versions?.[0]?.tag ||
-      latest?.deployment_id?.slice(0, 7) ||
-      "unknown";
+    const version = latest?.versions?.[0]?.tag || latest?.deployment_id?.slice(0, 7) || 'unknown';
 
     return new Response(
       JSON.stringify({
         schemaVersion: 1,
-        label: "deploy",
+        label: 'deploy',
         message: version,
-        color: "green",
+        color: 'green',
       }),
       {
         headers: {
-          "content-type": "application/json",
-          "cache-control": "no-store",
+          'content-type': 'application/json',
+          'cache-control': 'no-store',
         },
       }
     );
@@ -43,12 +40,12 @@ export async function GET() {
     return new Response(
       JSON.stringify({
         schemaVersion: 1,
-        label: "deploy",
-        message: "offline",
-        color: "red",
+        label: 'deploy',
+        message: 'offline',
+        color: 'red',
       }),
       {
-        headers: { "content-type": "application/json" },
+        headers: { 'content-type': 'application/json' },
       }
     );
   }

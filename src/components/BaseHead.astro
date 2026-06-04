@@ -88,13 +88,13 @@ const resolvedImage = new URL(image, Astro.url);
 <meta name="twitter:image:alt" content={title} />
 
 <script is:inline>
-document.addEventListener('contextmenu', e => {
+document.addEventListener('contextmenu', (e) => {
   if (e.target.closest('img, svg')) {
     e.preventDefault();
   }
 });
 
-document.addEventListener('dragstart', e => {
+document.addEventListener('dragstart', (e) => {
   if (e.target.closest('img, svg')) {
     e.preventDefault();
   }

@@ -16,29 +16,30 @@ This document outlines planned improvements and future development goals for thi
   - ~~Add hover preview timeline for `.webm` playback~~
   - ~~Improve playback slider design (less generic, more stylized)~~
   - ~~Reduce gallery image quality while lightbox is active (adaptive rendering)~~
+- ~~- Improve gallery layout display~~
+  - ~~- Improve lightbox so that portrait videos scale proportionately~~
+  - -~~(For .webm files with audio) make audio unmuted by default~~
 
 ---
 
 ## Planned
 
-### Gallery Improvements
-- Improve gallery layout display
-  - Add portait format media support 
-  -~~(For .webm files with audio) make audio unmuted by default~~
+### UI / UX Experiments
+
+- Animated transitions between sections
 
 ---
 
 ## Optional / Experimental
 
 ### Performance & Memory
+
 - Lazy-unload off-screen images and restore on view
 
 ### Content System Expansion
+
 - Better tagging system for written works
 - More flexible archive filtering
-
-### UI / UX Experiments
-- Animated transitions between sections
 
 ---
 

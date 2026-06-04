@@ -40,7 +40,7 @@ let sx = 0, sy = 0, sScale = 1;
 let dragging = false;
 let lastX = 0, lastY = 0;
 
-let pointers          = new Map();
+const pointers          = new Map();
 let lastPinchDistance = null;
 
 let lastTapTime = 0;
@@ -258,13 +258,21 @@ function setMedia(item) {
   const src = typeof item === 'string' ? item : item.src;
   const artist = item?.artist ?? null;
 
+  // Clean up previous video
+  if (currentVideo) {
+    currentVideo.pause();
+    currentVideo.src = "";
+    currentVideo.load();
+    currentVideo = null;
+  }
+
   media.innerHTML = "";
   playerContainer.querySelector(".video-controls")?.remove();
   playerWrap.querySelector(".vc-click-overlay")?.remove();
   lightbox.querySelector(".lightbox-count")?.remove();
   lightbox.querySelector(".lightbox-credit")?.remove();
 
-  // count — top
+  // Count display
   if (playlist.length > 1) {
     const count = document.createElement("div");
     count.className = "lightbox-count";
@@ -273,29 +281,39 @@ function setMedia(item) {
   }
 
   const isVideo = src.endsWith(".webm") || src.endsWith(".mp4");
-  isVideoMedia  = isVideo;
-  currentVideo  = null;
+  isVideoMedia = isVideo;
+  currentVideo = null;
 
   if (isVideo) {
-    const video       = document.createElement("video");
-    video.src         = src;
-    video.loop        = true;
-    video.muted       = true;
+    const video = document.createElement("video");
+    video.src = src;
+    video.loop = true;
+    video.muted = true;
     video.playsInline = true;
-    video.autoplay    = true;
-    video.draggable   = false;
+    video.autoplay = true;
+    video.draggable = false;
+
+    // Apply video-specific size constraints
+    video.style.cssText = `
+      max-width: 560px;
+      max-height: 420px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      transform-origin: center;
+      cursor: default;
+      display: block;
+      margin: 0 auto;
+    `;
 
     // Preserve pitch when playback rate changes
-    video.preservesPitch    = true; // Chrome, Safari, Edge
-    video.mozPreservesPitch = true; // Firefox
+    video.preservesPitch = true;
+    video.mozPreservesPitch = true;
 
-    applyMediaStyles(video);
     media.appendChild(video);
-
     currentVideo = video;
 
     video.addEventListener('loadedmetadata', () => {
-      // Check for audio track presence
       const hasAudio = video.mozHasAudio || 
                       video.webkitAudioDecodedByteCount !== undefined ||
                       (video.audioTracks && video.audioTracks.length > 0);
@@ -305,26 +323,32 @@ function setMedia(item) {
       }
     });
 
-    // buildVideoControls returns { bar, overlay } — both appended to playerWrap
     const { bar, overlay } = buildVideoControls(video, playerWrap);
     playerWrap.appendChild(overlay);
     playerContainer.appendChild(bar);
 
     video.play().catch(() => {});
   } else {
-    const img     = document.createElement("img");
-    img.src       = src;
+    const img = document.createElement("img");
+    img.src = src;
     img.draggable = false;
 
-    // Fade in once decoded — prevents blank flash while src loads
-    img.style.opacity    = "0";
+    // Images can use larger constraints
+    img.style.cssText = `
+      max-width: min(90vw, 1200px);
+      max-height: 80vh;
+      object-fit: contain;
+      transform-origin: center;
+      cursor: grab;
+      display: block;
+    `;
+
+    img.style.opacity = "0";
     img.style.transition = "opacity 0.2s ease";
-    img.style.pointerEvents = "none"; // avoid blocking gestures while loading
+    img.style.pointerEvents = "none";
     img.onload = () => { img.style.opacity = "1"; };
 
     playerWrap.classList.toggle('is-image', !isVideo);
-
-    applyMediaStyles(img);
     media.appendChild(img);
   }
 
@@ -334,17 +358,6 @@ function setMedia(item) {
     credit.textContent = `Art by ${artist}`;
     lightbox.appendChild(credit);
   }
-}
-
-function applyMediaStyles(el) {
-  el.style.cssText = `
-    max-width: 100%;
-    max-height: 80vh;
-    object-fit: contain;
-    transform-origin: center;
-    cursor: ${isVideoMedia ? "default" : "grab"};
-    display: block;
-  `;
 }
 
 /* ========================= RESET ========================= */

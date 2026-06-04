@@ -3,16 +3,20 @@ import { getCollection } from 'astro:content';
 export async function GET() {
   const library = await getCollection('library');
 
-const entries = library.map(entry => `
+  const entries = library
+    .map(
+      (entry) => `
     <url>
       <loc>https://otterlyomari.com/library/${entry.id}</loc>
       <lastmod>${entry.data.pubDate ? new Date(entry.data.pubDate).toISOString() : new Date().toISOString()}</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.7</priority>
     </url>
-  `).join('');
+  `
+    )
+    .join('');
 
-   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://otterlyomari.com/</loc>
@@ -38,6 +42,6 @@ const entries = library.map(entry => `
     </urlset>`;
 
   return new Response(sitemap, {
-    headers: { 'Content-Type': 'application/xml' }
+    headers: { 'Content-Type': 'application/xml' },
   });
 }

@@ -55,80 +55,83 @@
 
 <script is:inline>
 function initScrollToggle() {
-	if (window.__scrollToggleInit) {
-		return;
-	}
-	window.__scrollToggleInit = true;
+  if (window.__scrollToggleInit) {
+    return;
+  }
+  window.__scrollToggleInit = true;
 
-	const btn = document.getElementById("scroll-toggle");
-	const icon = document.getElementById("scroll-icon");
-	if (!btn || !icon) return;
+  const btn = document.getElementById('scroll-toggle');
+  const icon = document.getElementById('scroll-icon');
+  if (!btn || !icon) return;
 
-	const scrollEl = document.scrollingElement || document.documentElement;
+  const scrollEl = document.scrollingElement || document.documentElement;
 
-	let mode = "down";
-	let idleTimer = null;
+  let mode = 'down';
+  let idleTimer = null;
 
-	// store latest layout size (no forcing scroll)
-	let latestMaxScroll = () =>
-		scrollEl.scrollHeight - window.innerHeight;
+  // store latest layout size (no forcing scroll)
+  const latestMaxScroll = () => scrollEl.scrollHeight - window.innerHeight;
 
-	function updateMode() {
-		const pos = scrollEl.scrollTop;
-		const max = latestMaxScroll();
+  function updateMode() {
+    const pos = scrollEl.scrollTop;
+    const max = latestMaxScroll();
 
-		if (pos <= 5) {
-			mode = "down";
-			icon.textContent = "↓";
-		} else if (pos >= max - 5) {
-			mode = "up";
-			icon.textContent = "↑";
-		} else {
-			mode = pos < max / 2 ? "down" : "up";
-			icon.textContent = mode === "up" ? "↑" : "↓";
-		}
-	}
+    if (pos <= 5) {
+      mode = 'down';
+      icon.textContent = '↓';
+    } else if (pos >= max - 5) {
+      mode = 'up';
+      icon.textContent = '↑';
+    } else {
+      mode = pos < max / 2 ? 'down' : 'up';
+      icon.textContent = mode === 'up' ? '↑' : '↓';
+    }
+  }
 
-	// ---------- SAFE SCROLL ----------
-	function scrollToTarget() {
-		// always compute at click time (critical fix)
-		const max = latestMaxScroll();
-		const pos = scrollEl.scrollTop;
+  // ---------- SAFE SCROLL ----------
+  function scrollToTarget() {
+    // always compute at click time (critical fix)
+    const max = latestMaxScroll();
+    const pos = scrollEl.scrollTop;
 
-		const target = pos <= 5 ? max : 0;
+    const target = pos <= 5 ? max : 0;
 
-		scrollEl.scrollTo({
-			top: target,
-			behavior: "smooth"
-		});
-	}
+    scrollEl.scrollTo({
+      top: target,
+      behavior: 'smooth',
+    });
+  }
 
-	// ---------- RESIZE OBSERVER (NO SCROLLING HERE) ----------
-	const ro = new ResizeObserver(() => {
-		// only update internal state, NEVER scroll
-		// (this removes flicker completely)
-		updateMode();
-	});
+  // ---------- RESIZE OBSERVER (NO SCROLLING HERE) ----------
+  const ro = new ResizeObserver(() => {
+    // only update internal state, NEVER scroll
+    // (this removes flicker completely)
+    updateMode();
+  });
 
-	ro.observe(document.documentElement);
+  ro.observe(document.documentElement);
 
-	// ---------- EVENTS ----------
-	btn.addEventListener("click", () => {
-		updateMode();
-		scrollToTarget();
-	});
+  // ---------- EVENTS ----------
+  btn.addEventListener('click', () => {
+    updateMode();
+    scrollToTarget();
+  });
 
-	window.addEventListener("scroll", () => {
-		updateMode();
+  window.addEventListener(
+    'scroll',
+    () => {
+      updateMode();
 
-		clearTimeout(idleTimer);
-		idleTimer = setTimeout(updateMode, 120);
-	}, { passive: true });
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(updateMode, 120);
+    },
+    { passive: true }
+  );
 
-	window.addEventListener("resize", updateMode);
-	window.addEventListener("load", updateMode);
+  window.addEventListener('resize', updateMode);
+  window.addEventListener('load', updateMode);
 
-	requestAnimationFrame(updateMode);
+  requestAnimationFrame(updateMode);
 }
 
 initScrollToggle();
