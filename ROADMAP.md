@@ -9,17 +9,22 @@ This document outlines planned improvements and future development goals for thi
 - ~~Improve gallery lightbox UI (navigation, video playback, mobile gestures)~~
 - ~~Improve library page UX (search, filters, sorting)~~
 - ~~General polish (accessibility, performance, refactors)~~
+- ~~Improved metadata structure for gallery items~~
+- ~~Better SEO optimization across all pages~~
+- ~~Improve gallery lightbox UI & UX for desktop & mobile users~~
+  - ~~Add swipe-to-dismiss lightbox (mobile, spring-based motion)~~
+  - ~~Add hover preview timeline for `.webm` playback~~
+  - ~~Improve volume slider design (less generic, more stylized)~~
+  - ~~Reduce gallery image quality while lightbox is active (adaptive rendering)~~
 
 ---
 
 ## Planned
 
-### Gallery Lightbox Improvements
-- Improve gallery lightbox UI & UX for desktop & mobile users
-  - Add swipe-to-dismiss lightbox (mobile, spring-based motion)
-  - Add hover preview timeline for `.webm` playback
-  - Improve volume slider design (less generic, more stylized)
-  - Improve playback speed control (dropdown system, under consideration)
+### Gallery Improvements
+- Improve gallery layout display
+  - Add portait format media support 
+  -~~(For .webm files with audio) make audio unmuted by default~~
 
 ---
 
@@ -27,11 +32,9 @@ This document outlines planned improvements and future development goals for thi
 
 ### Performance & Memory
 - Lazy-unload off-screen images and restore on view
-- Reduce gallery image quality while lightbox is active (adaptive rendering)
 
 ### Content System Expansion
 - Better tagging system for written works
-- Improved metadata structure for gallery items
 - More flexible archive filtering
 
 ### UI / UX Experiments
@@ -41,7 +44,6 @@ This document outlines planned improvements and future development goals for thi
 
 ## Future Considerations
 
-- Better SEO optimization across all pages
 - Performance audit and optimization pass
 - Potential migration improvements (if needed)
 

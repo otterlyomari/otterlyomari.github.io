@@ -80,6 +80,116 @@ export function buildVideoControls(videoEl, playerWrap) {
     return h > 0 ? `${h}:${m.toString().padStart(2, "0")}:${ss}` : `${m}:${ss}`;
   }
 
+  // Lazy thumbnail cache — generated on first scrub
+  let thumbs = null;
+  let thumbW = 60;
+  let thumbH = 107;
+  let thumbCount = 0;
+  let thumbsReady = false;
+
+  function initThumbs() {
+    if (thumbs !== null) return;
+    thumbs = [];
+    console.log("initThumbs called");
+    console.log("video dimensions:", videoEl.videoWidth, videoEl.videoHeight);
+    console.log("duration:", videoEl.duration);
+
+    const aspect = videoEl.videoWidth / videoEl.videoHeight;
+    const isPortrait = videoEl.videoHeight > videoEl.videoWidth;
+    thumbW = isPortrait ? 60 : 107;
+    thumbH = isPortrait ? 107 : Math.round(107 / aspect);
+
+    // Update canvas dimensions now that we know the size
+    tooltipThumb.width  = thumbW;
+    tooltipThumb.height = thumbH;
+
+    // One thumb every 2s, capped at 300
+    thumbCount = Math.min(300, Math.ceil(videoEl.duration / 2));
+
+    const canvas = document.createElement("canvas");
+    canvas.width  = thumbW;
+    canvas.height = thumbH;
+    const ctx = canvas.getContext("2d");
+
+    // Seek a hidden video clone to capture frames
+    const seeker = document.createElement("video");
+    seeker.src          = videoEl.src;
+    seeker.muted        = true;
+    seeker.playsInline  = true;
+    seeker.preload      = "auto";
+    seeker.style.display = "none";
+
+    let i = 0;
+
+    function captureNext() {
+      if (i >= thumbCount) {
+        thumbsReady = true;
+        seeker.src = ""; // free memory
+        return;
+      }
+      seeker.currentTime = (i / thumbCount) * videoEl.duration;
+    }
+
+    seeker.addEventListener("seeked", () => {
+      ctx.drawImage(seeker, 0, 0, thumbW, thumbH);
+      thumbs[i] = canvas.toDataURL("image/webp", 0.4);
+      i++;
+      requestIdleCallback ? requestIdleCallback(captureNext) : setTimeout(captureNext, 16);
+    });
+
+    seeker.addEventListener("loadedmetadata", captureNext);
+  }
+
+  // Tooltip — thumbnail + timestamp
+  const tooltip = document.createElement("div");
+  tooltip.className = "vc-thumb-tooltip";
+  tooltip.style.display = "none";
+
+  const tooltipThumb = document.createElement("canvas");
+  tooltipThumb.className = "vc-thumb-canvas";
+  tooltipThumb.width  = thumbW;
+  tooltipThumb.height = thumbH;
+
+  const tooltipTime = document.createElement("span");
+  tooltipTime.className = "vc-thumb-time";
+
+  tooltip.append(tooltipThumb, tooltipTime);
+  // Hide thumbnail canvas on mobile — timestamp only
+  if (!window.matchMedia("(hover: hover)").matches) {
+    tooltipThumb.style.display = "none";
+  }
+
+  function updateTooltip(pct) {
+     if (!videoEl.duration) return;
+
+    const time = pct * videoEl.duration;
+    tooltipTime.textContent = fmt(time);
+
+    const progressRect = progress.getBoundingClientRect();
+    const x = progressRect.left + (pct * progressRect.width) - (thumbW / 2);
+    const clamped = Math.max(progressRect.left, Math.min(x, progressRect.right - thumbW));
+    
+    tooltip.style.left = `${clamped}px`;
+    tooltip.style.bottom = `${window.innerHeight - progressRect.top + 8}px`;
+    tooltip.style.display = "flex";
+
+
+    // Draw thumbnail if ready
+    if (thumbsReady && thumbs.length) {
+      tooltipThumb.style.display = "block"; // restore after being hidden
+      const idx = Math.round(pct * (thumbCount - 1));
+      const img = new Image();
+      img.onload = () => {
+        const ctx = tooltipThumb.getContext("2d");
+        ctx.drawImage(img, 0, 0, thumbW, thumbH);
+      };
+      img.src = thumbs[idx];
+    } else {
+      // Thumbs not ready yet — show timestamp only
+      tooltipThumb.style.display = "none";
+    }
+  }
+
   function syncProgress() {
     if (!videoEl.duration) return;
     const pct = (videoEl.currentTime / videoEl.duration) * 1000;
@@ -92,13 +202,55 @@ export function buildVideoControls(videoEl, playerWrap) {
   videoEl.addEventListener("timeupdate", syncProgress);
   videoEl.addEventListener("loadedmetadata", syncProgress);
 
+  let isScrubbing = false;
+
+  progress.addEventListener("pointerdown", (e) => {
+    e.stopPropagation();
+    isScrubbing = true;
+    initThumbs(); // lazy init on first scrub
+    videoEl.pause();
+
+    const pct = parseFloat(progress.value) / 1000;
+    updateTooltip(pct);
+  });
+
+  progress.addEventListener("pointermove", (e) => {
+    e.stopPropagation();
+    if (!videoEl.duration) return;
+
+    const rect = progress.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    updateTooltip(pct);
+
+    // Only seek while actively scrubbing
+    if (isScrubbing) {
+      videoEl.currentTime = pct * videoEl.duration;
+      syncProgress();
+    }
+  });
+
+  progress.addEventListener("pointerup", (e) => {
+    e.stopPropagation();
+    isScrubbing = false;
+    tooltip.style.display = "none";
+    videoEl.play().catch(() => {});
+  });
+
+  progress.addEventListener("pointerleave", () => {
+    if (!isScrubbing) tooltip.style.display = "none";
+  });
+
+  progress.addEventListener("pointerenter", () => {
+      console.log("pointerenter on progress");
+    initThumbs();
+  });
+
   progress.addEventListener("input", (e) => {
     e.stopPropagation();
     if (!videoEl.duration) return;
     videoEl.currentTime = (parseFloat(e.target.value) / 1000) * videoEl.duration;
     syncProgress();
   });
-  progress.addEventListener("pointerdown", (e) => e.stopPropagation());
 
   /* ── Main controls row: [▶  🔊────  spacer  speed  ⛶] ── */
   const row = document.createElement("div");
@@ -118,29 +270,56 @@ export function buildVideoControls(videoEl, playerWrap) {
     syncVol();
   });
 
-  const volSlider = document.createElement("input");
-  volSlider.type      = "range";
-  volSlider.className = "vc-slider vc-volume";
-  volSlider.min = "0"; volSlider.max = "1"; volSlider.step = "0.05"; volSlider.value = "0";
+  const volSlider = document.createElement("div");
+  volSlider.className = "vc-vol-slider";
   volSlider.setAttribute("aria-label", "Volume");
-  volSlider.addEventListener("input", (e) => {
-    e.stopPropagation();
-    const v = parseFloat(e.target.value);
-    videoEl.volume = v;
-    videoEl.muted  = v === 0;
-    // Drive volume fill gradient
-    volSlider.style.setProperty("--vol", `${(v * 100).toFixed(1)}%`);
+  volSlider.setAttribute("role", "slider");
+  volSlider.setAttribute("aria-valuemin", "0");
+  volSlider.setAttribute("aria-valuemax", "1");
+
+  const volFill = document.createElement("div");
+  volFill.className = "vc-vol-fill";
+  volSlider.appendChild(volFill);
+
+  let volDragging = false;
+
+  function setVolFromPointer(e) {
+    const rect = volSlider.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    videoEl.volume = pct;
+    videoEl.muted = pct === 0;
     syncVol();
+  }
+
+  volSlider.addEventListener("pointerdown", (e) => {
+    e.stopPropagation();
+    volDragging = true;
+    volSlider.setPointerCapture(e.pointerId);
+    setVolFromPointer(e);
   });
-  volSlider.addEventListener("pointerdown", (e) => e.stopPropagation());
+
+  volSlider.addEventListener("pointermove", (e) => {
+    e.stopPropagation();
+    if (!volDragging) return;
+    setVolFromPointer(e);
+  });
+
+  volSlider.addEventListener("pointerup", (e) => {
+    e.stopPropagation();
+    volDragging = false;
+  });
+
+  volSlider.addEventListener("pointercancel", () => {
+    volDragging = false;
+  });
 
   function syncVol() {
     const muted = videoEl.muted || videoEl.volume === 0;
     muteBtn.textContent = muted ? "🔇" : "🔊";
     muteBtn.setAttribute("aria-label", muted ? "Unmute" : "Mute");
     const v = muted ? 0 : videoEl.volume;
-    volSlider.value = String(v);
-    volSlider.style.setProperty("--vol", `${(v * 100).toFixed(1)}%`);
+    volFill.style.width = `${(v * 100).toFixed(1)}%`;
+    volSlider.setAttribute("aria-valuenow", String(v));
   }
 
   const volGroup = document.createElement("div");
@@ -240,6 +419,8 @@ export function buildVideoControls(videoEl, playerWrap) {
    * The speed section and fullscreen button rearrange via CSS grid/flex.
    */
   bar.append(progressWrap, row);
+  const lightbox = document.getElementById("lightbox");
+  lightbox.appendChild(tooltip);
 
   /* ── Auto-hide ──
    * Shows on any pointer activity inside playerWrap.

@@ -14,7 +14,7 @@ let resizeTimer = null;
 
 /* ========================= INIT ========================= */
 
-export function initGallery() {
+function initGallery() {
   gallery = document.getElementById("gallery");
   buttons = document.querySelectorAll(".filter-btn");
 
@@ -30,33 +30,35 @@ export function initGallery() {
     {
       category: "art",
       images: [
-        "/fursona-art/gyatt.webp",
-        "/fursona-art/aussiekittenOma.webp",
-        "/fursona-art/omariBorger.webp",
-        "/fursona-art/omariHotter.webp",
-        "/fursona-art/flirtotterbox.webp",
-        "/fursona-art/inlove-11.webm",
-        "/fursona-art/gayJuice.webp",
-        "/fursona-art/fingerheartSkylar.webp",
-        "/fursona-art/omariBaka.webp",
-        "/fursona-art/hoodieblep.webp",
-        "/fursona-art/otterbox.webp",
-        "/fursona-art/boxHug.webp",
-        "/fursona-art/awtterOma.webp",
-        "/fursona-art/cute.webp",
-        "/fursona-art/omariBlep.webp",
-        "/fursona-art/swerveCuddle.webp",
-        "/fursona-art/omariAnime.webp",
-        "/fursona-art/otterfox.webp",
-        "/fursona-art/omariCute.webp",
-        "/fursona-art/149_-_Omari_Symm_Headshot_gift.webp",
-        "/fursona-art/IMG_3250.webp",
-        "/fursona-art/IMG_3251.webp",
-        "/fursona-art/IMG_3253.webp",
-        "/fursona-art/image.webp",
-        "/fursona-art/Omari-maw (4).webp",
-        "/fursona-art/IMG_2010.webp",
-        "/fursona-art/photo_2025-10-15_16-18-21.webp"
+        { src: "/fursona-art/gyatt.webp", artist: "Kelouring" },
+        { src: "/fursona-art/aussiekittenOma.webp", artist: "AussieKitten" },
+        { src: "/fursona-art/omariBorger.webp", artist: "Zulples" },
+        { src: "/fursona-art/omariHotter.webp", artist: "DivineTofu" },
+        { src: "/fursona-art/flirtotterbox.webp", artist: "tbcMart (Base by Skunkify)" },
+        { src: "/fursona-art/inlove-11.webm", artist: "RawBootyMeat" },
+        { src: "/fursona-art/gayJuice.webp", artist: "Kelouring (Base by Skunkify)" },
+        { src: "/fursona-art/fingerheartSkylar.webp", artist: "KeyniTheSnep (Base by Skunkify)" },
+        { src: "/fursona-art/omariBaka.webp", artist: "Whatify" },
+        { src: "/fursona-art/hoodieblep.webp", artist: "KeyniTheSnep (Base by Skunkify)" },
+        { src: "/fursona-art/otterbox.webp", artist: "KeyniTheSnep (Base by arcadec0re)" },
+        { src: "/fursona-art/boxHug.webp", artist: "EggVortex" },
+        { src: "/fursona-art/awtterOma.webp", artist: "Omari Allyn Tidemere" },
+        { src: "/fursona-art/cute.webp", artist: "Unknown" },
+        { src: "/fursona-art/omariBlep.webp", artist: "CoalColorHusky" },
+        { src: "/fursona-art/swerveCuddle.webp", artist: "TsukiTheBunny" },
+        { src: "/fursona-art/omariAnime.webp", artist: "DoggieMedia" },
+        { src: "/fursona-art/otterfox.webp", artist: "SataOwO" },
+        { src: "/fursona-art/omariCute.webp", artist: "Pocki Lori" },
+        { src: "/fursona-art/149_-_Omari_Symm_Headshot_gift.webp", artist: "Siozend" },
+        { src: "/fursona-art/IMG_3250.webp", artist: "Unknown" },
+        { src: "/fursona-art/IMG_3251.webp", artist: "Unknown" },
+        { src: "/fursona-art/IMG_3253.webp", artist: "Unknown" },
+        { src: "/fursona-art/image.webp", artist: "Siozend" },
+        { src: "/fursona-art/Omari-maw (4).webp", artist: "Grey" },
+        { src: "/fursona-art/IMG_2010.webp", artist: "Paraslider" },
+        { src: "/fursona-art/photo_2025-10-15_16-18-21.webp", artist: "Grey" },
+        { src: "/fursona-art/omari_hello.webm", artist: "Unknown" },
+        { src: "/fursona-art/omariBakaColoured.webp", artist: "Whatify" },
       ]
     },
     {
@@ -95,7 +97,9 @@ export function initGallery() {
         "/vrchat-pics/VRChat_2026_013.webp",
         "/vrchat-pics/VRChat_2026_014.webp",
         "/vrchat-pics/VRChat_2026_015.webp",
-        "/vrchat-pics/VRChat_2026_016.webp"
+        "/vrchat-pics/VRChat_2026_016.webp",
+        "/vrchat-pics/yass.webm",
+        "/vrchat-pics/cutie_detected.webm",
       ]
     }
   ];
@@ -117,20 +121,43 @@ export function initGallery() {
   /* ========================= POOL ========================= */
 
   function buildPool(filter) {
-    return filter === "all"
-      ? galleryData.flatMap(s =>
-          s.images.map(src => ({ src, category: s.category }))
-        )
-      : galleryData
-          .find(s => s.category === filter)
-          ?.images.map(src => ({ src, category: filter })) || [];
+    return galleryData.flatMap(section => {
+      if (filter !== "all" && section.category !== filter) return [];
+
+      return section.images.map(src => {
+        // ART ONLY: enrich with metadata object
+        if (section.category === "art") {
+          if (typeof src === "string") {
+            return {
+              src,
+              category: section.category,
+              artist: section.artist || null
+            };
+          }
+
+          return {
+            src: src.src,
+            category: section.category,
+            artist: src.artist || section.artist || null
+          };
+        }
+
+        // EVERYTHING ELSE: unchanged
+        return {
+          src: typeof src === 'string' ? src : src.src,
+          category: section.category,
+          artist: null
+        };
+      });
+    });
   }
 
   async function setPool(newPoolRaw, { transition = false } = {}) {
     const pool = newPoolRaw.map(item => ({
       src: item.src,
       ratio: getRatio(item),
-      type: getType(item.src)
+      type: getType(item.src),
+      artist: item.artist ?? null
     }));
 
     if (transition) {
@@ -236,6 +263,65 @@ export function initGallery() {
     { threshold: 0.25 }
   );
 
+  /* ========================= ADAPTIVE RENDERING ========================= */
+
+  const originalSrcs = new WeakMap();
+  let degradeQueue = [];
+  let degrading = false;
+
+  function degradeImage(img) {
+    if (originalSrcs.has(img)) return;
+    if (!img.complete || !img.naturalWidth) return;
+
+    const canvas = document.createElement("canvas");
+    const w = Math.max(1, Math.floor(img.naturalWidth  * 0.4));
+    const h = Math.max(1, Math.floor(img.naturalHeight * 0.4));
+
+    // Draw small then stretch back up — quality degrades, size stays same
+    const temp = document.createElement("canvas");
+    temp.width  = w;
+    temp.height = h;
+    temp.getContext("2d").drawImage(img, 0, 0, w, h);
+
+    canvas.width  = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    canvas.getContext("2d").drawImage(temp, 0, 0, img.naturalWidth, img.naturalHeight);
+
+    originalSrcs.set(img, img.src);
+    img.src = canvas.toDataURL("image/webp", 0.4);
+  }
+
+  function restoreImage(img) {
+    if (!originalSrcs.has(img)) return;
+    img.src = originalSrcs.get(img);
+    originalSrcs.delete(img);
+  }
+
+  function processQueue() {
+    if (!degradeQueue.length) {
+      degrading = false;
+      return;
+    }
+    const img = degradeQueue.shift();
+    degradeImage(img);
+    requestIdleCallback(processQueue);
+  }
+
+  window.addEventListener("lightbox:open", () => {
+    degradeQueue = Array.from(gallery.querySelectorAll("img.loaded"));
+    if (!degradeQueue.length || degrading) return;
+    degrading = true;
+    requestIdleCallback(processQueue);
+  });
+
+  window.addEventListener("lightbox:close", () => {
+    degradeQueue = [];
+    degrading = false;
+    for (const img of gallery.querySelectorAll("img")) {
+      restoreImage(img);
+    }
+  });
+
   /* ========================= PRELOAD ========================= */
 
   function warmupMedia(list) {
@@ -297,7 +383,7 @@ export function initGallery() {
       }
 
       video.addEventListener("click", () =>
-        openLightbox(src, currentSources(), index)
+        openLightbox(item, currentSources(), index)
       );
 
       videoObserver.observe(video);
@@ -318,7 +404,7 @@ export function initGallery() {
 
     observer.observe(img);
     img.addEventListener("click", () =>
-      openLightbox(src, currentSources(), index)
+      openLightbox(item, currentSources(), index)
     );
 
     wrapper.appendChild(img);
@@ -328,7 +414,7 @@ export function initGallery() {
   /* ========================= PLAYLIST ========================= */
 
   function currentSources() {
-    return layoutMap.map(item => item.src);
+    return layoutMap.map(item => ({ src: item.src, artist: item.artist ?? null }));
   }
 
   /* ========================= RENDER ========================= */

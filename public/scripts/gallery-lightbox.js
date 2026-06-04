@@ -47,6 +47,7 @@ let lastTapTime = 0;
 let lastTapX    = 0, lastTapY = 0;
 
 let swipeStartX = 0, swipeStartY = 0;
+let swipeStartTime = 0;
 
 /* ========================= CONFIG ========================= */
 
@@ -154,6 +155,13 @@ function onKeyDown(e) {
       e.preventDefault();
       toggleFullscreen();
       break;
+    case "esc":
+    case "Escape":
+      if (document.fullscreenElement) {
+        e.preventDefault();
+        closeLightbox();
+      }
+      break;
   }
 }
 
@@ -174,11 +182,15 @@ function toggleFullscreen() {
 export function openLightbox(src, list = null, index = 0) {
   isOpen   = true;
   playlist = Array.isArray(list) && list.length ? list : [src];
+
+  window.__lightboxActive = true;
+
   currentIndex = index >= 0 && index < playlist.length
     ? index
     : Math.max(0, playlist.indexOf(src));
 
   lightbox.classList.remove("hidden");
+  window.dispatchEvent(new CustomEvent("lightbox:open"));
   document.body.style.overflow = "hidden";
 
   reset();
@@ -187,14 +199,32 @@ export function openLightbox(src, list = null, index = 0) {
 }
 
 export function closeLightbox() {
+  // Pause and clean up any playing video
+  if (currentVideo) {
+    currentVideo.pause();
+    currentVideo.src = "";  // Clear src to stop loading/decoding
+    currentVideo.load();    // Force reset
+    currentVideo = null;
+  }
+  
   isOpen       = false;
   isVideoMedia = false;
-  currentVideo = null;
+
+  window.__lightboxActive = false;
 
   lightbox.classList.add("hidden");
+  window.dispatchEvent(new CustomEvent("lightbox:close"));
   document.body.style.overflow = "";
+  
+  // Remove controls and overlay
   playerContainer.querySelector(".video-controls")?.remove();
   playerWrap.querySelector(".vc-click-overlay")?.remove();
+  
+  // Clear media container completely
+  if (media) {
+    media.innerHTML = "";  // This removes the video element entirely
+  }
+  
   reset();
 }
 
@@ -224,10 +254,23 @@ function updateNavButtons() {
 
 /* ========================= MEDIA ========================= */
 
-function setMedia(src) {
+function setMedia(item) {
+  const src = typeof item === 'string' ? item : item.src;
+  const artist = item?.artist ?? null;
+
   media.innerHTML = "";
   playerContainer.querySelector(".video-controls")?.remove();
   playerWrap.querySelector(".vc-click-overlay")?.remove();
+  lightbox.querySelector(".lightbox-count")?.remove();
+  lightbox.querySelector(".lightbox-credit")?.remove();
+
+  // count — top
+  if (playlist.length > 1) {
+    const count = document.createElement("div");
+    count.className = "lightbox-count";
+    count.textContent = `${currentIndex + 1} out of ${playlist.length}`;
+    lightbox.insertBefore(count, lightbox.firstChild);
+  }
 
   const isVideo = src.endsWith(".webm") || src.endsWith(".mp4");
   isVideoMedia  = isVideo;
@@ -251,6 +294,17 @@ function setMedia(src) {
 
     currentVideo = video;
 
+    video.addEventListener('loadedmetadata', () => {
+      // Check for audio track presence
+      const hasAudio = video.mozHasAudio || 
+                      video.webkitAudioDecodedByteCount !== undefined ||
+                      (video.audioTracks && video.audioTracks.length > 0);
+      
+      if (hasAudio && window.__lightboxActive) {
+        video.muted = false;
+      }
+    });
+
     // buildVideoControls returns { bar, overlay } — both appended to playerWrap
     const { bar, overlay } = buildVideoControls(video, playerWrap);
     playerWrap.appendChild(overlay);
@@ -265,10 +319,20 @@ function setMedia(src) {
     // Fade in once decoded — prevents blank flash while src loads
     img.style.opacity    = "0";
     img.style.transition = "opacity 0.2s ease";
+    img.style.pointerEvents = "none"; // avoid blocking gestures while loading
     img.onload = () => { img.style.opacity = "1"; };
+
+    playerWrap.classList.toggle('is-image', !isVideo);
 
     applyMediaStyles(img);
     media.appendChild(img);
+  }
+
+  if (artist) {
+    const credit = document.createElement("div");
+    credit.className = "lightbox-credit";
+    credit.textContent = `Art by ${artist}`;
+    lightbox.appendChild(credit);
   }
 }
 
@@ -323,6 +387,7 @@ function loop() {
 /* ========================= POINTER EVENTS (images only) ========================= */
 
 function startPointer(e) {
+
   if (!isOpen || isVideoMedia) return; // videos use click overlay instead
   e.preventDefault();
 
@@ -349,6 +414,7 @@ function startPointer(e) {
     lastY       = e.clientY;
     swipeStartX = e.clientX;
     swipeStartY = e.clientY;
+    swipeStartTime = performance.now();
   }
 }
 
@@ -378,11 +444,24 @@ function onPointerMove(e) {
     ty += e.clientY - lastY;
     lastX = e.clientX;
     lastY = e.clientY;
+
+    // Only fade background on touch (Not meant for mouse dragging, which is more likely to be precise and intentional. Touch dragging can be less precise and may indicate an intent to swipe away.)
+    if (e.pointerType !== 'mouse') {
+      const progress = Math.abs(ty) / 300;
+      lightbox.style.backgroundColor = `rgba(0,0,0,${Math.max(0, 0.85 - progress)})`;
+    }
   }
 }
 
 function endPointer(e) {
   if (isVideoMedia) return;
+  if (e.pointerType === 'mouse') {
+    // skip swipe-to-dismiss logic for mouse, still handle pointer cleanup
+    pointers.delete(e.pointerId);
+    if (pointers.size < 2) lastPinchDistance = null;
+    if (pointers.size === 0) dragging = false;
+    return;
+  }
 
   const wasOneFinger = pointers.size === 1;
   pointers.delete(e.pointerId);
@@ -393,12 +472,30 @@ function endPointer(e) {
     const dx = e.clientX - swipeStartX;
     const dy = e.clientY - swipeStartY;
 
+    /* Swipe to navigate if the swipe is primarily horizontal and exceeds the threshold. */
     if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy) * 1.5) {
       dx < 0 ? showNext() : showPrev();
     }
+
+    /* Swipe to close if the swipe is primarily vertical and exceeds the threshold. */
+    if (Math.abs(dy) > 120 && Math.abs(dy) > Math.abs(dx) * 1.5) {
+      const elapsed = performance.now() - swipeStartTime;
+      const velocity = Math.abs(dy) / elapsed; // px/ms
+
+      if (velocity > 0.3) {
+        closeLightbox();
+      } else {
+        // too slow — snap back
+        ty = 0;
+        lightbox.style.backgroundColor = '';
+      }
+    }
   }
 
-  if (pointers.size === 0) dragging = false;
+  if (pointers.size === 0)  {
+    dragging = false; 
+    lightbox.style.backgroundColor = ''; // let CSS take over again
+  }
 }
 
 /* ========================= ZOOM (images only) ========================= */

@@ -55,15 +55,7 @@ This is ultimately just a space for me to showcase things I enjoy, but I activel
 ---
 
 ## Potential Future Additions
-
-* Quality-of-life improvements to the gallery lightbox UI
-  * Previous/next navigation arrows
-  * Improved `.webm` playback handling
-  * Minor CSS refinements in `gallery.astro`
-
-* Improvements to the library landing page
-  * Faster and more responsive search
-  * Layout refinements for filters and search bar
+See `ROADMAP.md` for further details
 
 ---
 

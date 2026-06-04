@@ -37,6 +37,7 @@ function computeLayout(pool, width) {
       i,
       src: item.src,
       type: item.type,
+      artist: item.artist ?? null,
       x,
       y,
       w: colW,
