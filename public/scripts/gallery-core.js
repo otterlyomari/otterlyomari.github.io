@@ -162,8 +162,12 @@ function initGallery() {
 
     if (transition) {
       gallery.style.opacity = "0";
-      void gallery.offsetHeight; // force reflow so transition fires
-      await new Promise(r => setTimeout(r, 150));
+
+      await new Promise(resolve => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(resolve);
+        });
+      });
       showSkeletons(pool.length);
     }
 
@@ -356,6 +360,11 @@ function initGallery() {
     img.alt = "";
     img.decoding = "async";
     img.loading = "lazy";
+
+    img.fetchPriority = index < 3 ? "high" : "low";
+
+    img.width = 350;
+    img.height = 350;
 
     img.onerror = () => {
       img.classList.add("load-error");
