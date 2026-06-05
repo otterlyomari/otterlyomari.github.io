@@ -167,6 +167,20 @@ function initGallery() {
       showSkeletons(pool.length);
     }
 
+    gallery.replaceChildren();
+
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < newPoolRaw.length; i++) {
+      const div = document.createElement("div");
+      div.className = "gallery-item-wrapper";
+      div.style.height = "200px"; // prevents layout shift
+
+      fragment.appendChild(div);
+    }
+
+    gallery.appendChild(fragment);
+
     worker.postMessage({ type: "INIT", data: { pool } });
     requestLayout();
 
@@ -244,24 +258,24 @@ function initGallery() {
   // Video intersection observer — only responsible for pausing when off-screen.
   // Playing is driven by hover on desktop (see createItem), and by this observer
   // on touch devices where hover doesn't exist.
-  videoObserver = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        const video = entry.target;
+  videoObserver = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      const video = entry.target;
 
-        if (!entry.isIntersecting) {
-          video.pause();
-          continue;
-        }
-
-        // On touch-only devices (no hover), play when scrolled into view
-        if (!window.matchMedia("(hover: hover)").matches) {
-          video.play().catch(() => {});
-        }
+      if (!entry.isIntersecting) {
+        video.pause();
+        continue;
       }
-    },
-    { threshold: 0.25 }
-  );
+
+      if (!video.src) {
+        video.src = video.dataset.src;
+      }
+
+      if (!window.matchMedia("(hover: hover)").matches) {
+        video.play().catch(() => {});
+      }
+    }
+  }, { threshold: 0.25 });
 
   window.addEventListener("lightbox:open", () => {});
   window.addEventListener("lightbox:close", () => {});
@@ -336,9 +350,26 @@ function initGallery() {
     }
 
     const img = document.createElement("img");
+
+    const isFirstVisibleItem = index === 0;
+
     img.dataset.src = src;
     img.alt = "";
     img.decoding = "async";
+    img.loading = "lazy";
+
+    if (isFirstVisibleItem) {
+      img.loading = "eager";
+      img.fetchPriority = "high";
+      img.decoding = "async";
+
+      // preload hint
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "image";
+      link.href = src;
+      document.head.appendChild(link);
+    }
 
     img.onerror = () => {
       img.classList.add("load-error");

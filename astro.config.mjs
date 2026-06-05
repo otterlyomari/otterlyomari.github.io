@@ -1,8 +1,8 @@
 import { defineConfig } from 'astro/config';
-import { createHtmlPlugin } from 'vite-plugin-html';
 import mdx from '@astrojs/mdx';
 import icon from 'astro-icon';
 import react from '@astrojs/react';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://otterlyomari.com',
@@ -11,16 +11,10 @@ export default defineConfig({
   base: '/',
 
   vite: {
-    plugins: [
-      createHtmlPlugin({
-        minify: true,
-      }),
-    ],
     build: {
       minify: 'esbuild',
     },
   },
-
   integrations: [
     mdx(),
     icon({
@@ -29,5 +23,6 @@ export default defineConfig({
       },
     }),
     react(),
+    sitemap(),
   ],
 });

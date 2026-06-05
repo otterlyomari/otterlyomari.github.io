@@ -189,9 +189,13 @@ export function openLightbox(src, list = null, index = 0) {
     ? index
     : Math.max(0, playlist.indexOf(src));
 
+  const scrollY = window.scrollY;
   lightbox.classList.remove("hidden");
   window.dispatchEvent(new CustomEvent("lightbox:open"));
   document.body.style.overflow = "hidden";
+  document.body.style.position = "fixed";
+  document.body.style.width = "100%";
+  document.body.style.top = `-${scrollY}px`;
 
   reset();
   setMedia(playlist[currentIndex]);
@@ -214,7 +218,12 @@ export function closeLightbox() {
 
   lightbox.classList.add("hidden");
   window.dispatchEvent(new CustomEvent("lightbox:close"));
+  const scrollY = parseInt(document.body.style.top || "0") * -1;
   document.body.style.overflow = "";
+  document.body.style.position = "";
+  document.body.style.width = "";
+  document.body.style.top = "";
+  window.scrollTo(0, scrollY);  
   
   // Remove controls and overlay
   playerContainer.querySelector(".video-controls")?.remove();
