@@ -48,6 +48,10 @@
     font-display: swap;
 }
 
+.force-pulang {
+  font-family: 'Pulang', sans-serif !important;
+}
+
 html,
 body {
   width: 100%;
