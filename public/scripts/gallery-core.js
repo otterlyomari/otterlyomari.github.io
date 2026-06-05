@@ -351,25 +351,11 @@ function initGallery() {
 
     const img = document.createElement("img");
 
-    const isFirstVisibleItem = index === 0;
 
     img.dataset.src = src;
     img.alt = "";
     img.decoding = "async";
     img.loading = "lazy";
-
-    if (isFirstVisibleItem) {
-      img.loading = "eager";
-      img.fetchPriority = "high";
-      img.decoding = "async";
-
-      // preload hint
-      const link = document.createElement("link");
-      link.rel = "preload";
-      link.as = "image";
-      link.href = src;
-      document.head.appendChild(link);
-    }
 
     img.onerror = () => {
       img.classList.add("load-error");
