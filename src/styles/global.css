@@ -48,8 +48,20 @@
     font-display: swap;
 }
 
-.force-pulang {
+#home-screen h4,
+#home-screen h5,
+#home-screen p,
+#home-screen .t-outline {
   font-family: 'Pulang', sans-serif !important;
+  font-style: normal !important;
+}
+
+#home-section h4,
+#home-section h5,
+#home-section p,
+#home-section .t-outline {
+  font-family: 'Pulang', sans-serif !important;
+  font-style: normal !important;
 }
 
 html,

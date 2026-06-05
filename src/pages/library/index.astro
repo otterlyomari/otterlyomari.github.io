@@ -16,9 +16,6 @@ const allTypes = [...new Set(archive.map(entry => entry.data.type))];
   <head>
     <BaseHead title="OtterlyOmari | Library" description={SITE_DESCRIPTION} />
 
-    <link rel="preload" href="/fonts/Whisper-Regular.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/SourceSerif4Roman-Regular.woff2" as="font" type="font/woff2" crossorigin />
-
     <!-- Library dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2" defer></script>
     <script src="/scripts/archive-core.js" defer></script>
