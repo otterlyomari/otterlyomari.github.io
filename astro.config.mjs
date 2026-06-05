@@ -13,6 +13,7 @@ export default defineConfig({
   vite: {
     build: {
       minify: 'esbuild',
+      cssCodeSplit: false,
     },
   },
   integrations: [

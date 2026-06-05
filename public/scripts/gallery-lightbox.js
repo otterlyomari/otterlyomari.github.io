@@ -46,6 +46,9 @@ let lastPinchDistance = null;
 let lastTapTime = 0;
 let lastTapX    = 0, lastTapY = 0;
 
+let lastPointerX = 0;
+let lastPointerY = 0;
+
 let swipeStartX = 0, swipeStartY = 0;
 let swipeStartTime = 0;
 
@@ -103,7 +106,7 @@ export function initLightbox() {
     const dx = e.changedTouches[0].clientX - touchStartX;
     const dy = e.changedTouches[0].clientY - touchStartY;
     if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      dx < 0 ? showNext() : showPrev();
+      dx > 0 ? showNext() : showPrev();
     }
   }, { passive: true });
 
@@ -218,12 +221,10 @@ export function closeLightbox() {
 
   lightbox.classList.add("hidden");
   window.dispatchEvent(new CustomEvent("lightbox:close"));
-  const scrollY = parseInt(document.body.style.top || "0") * -1;
   document.body.style.overflow = "";
   document.body.style.position = "";
   document.body.style.width = "";
   document.body.style.top = "";
-  window.scrollTo(0, scrollY);  
   
   // Remove controls and overlay
   playerContainer.querySelector(".video-controls")?.remove();
@@ -409,7 +410,6 @@ function loop() {
 /* ========================= POINTER EVENTS (images only) ========================= */
 
 function startPointer(e) {
-
   if (!isOpen || isVideoMedia) return; // videos use click overlay instead
   e.preventDefault();
 
@@ -427,13 +427,20 @@ function startPointer(e) {
     lastTapY    = e.clientY;
   }
 
-  media.setPointerCapture?.(e.pointerId);
+  if (media.setPointerCapture && e.pointerType === "mouse") {
+    media.setPointerCapture(e.pointerId);
+  }
   pointers.set(e.pointerId, e);
 
   if (pointers.size === 1) {
-    dragging    = true;
-    lastX       = e.clientX;
-    lastY       = e.clientY;
+    dragging = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    
+    // Initialize lastPointer for swipe detection
+    lastPointerX = e.clientX;
+    lastPointerY = e.clientY;
+
     swipeStartX = e.clientX;
     swipeStartY = e.clientY;
     swipeStartTime = performance.now();
@@ -466,8 +473,12 @@ function onPointerMove(e) {
     ty += e.clientY - lastY;
     lastX = e.clientX;
     lastY = e.clientY;
+    
+    // Update lastPointer for swipe detection
+    lastPointerX = e.clientX;
+    lastPointerY = e.clientY;
 
-    // Only fade background on touch (Not meant for mouse dragging, which is more likely to be precise and intentional. Touch dragging can be less precise and may indicate an intent to swipe away.)
+    // Only fade background on touch
     if (e.pointerType !== 'mouse') {
       const progress = Math.abs(ty) / 300;
       lightbox.style.backgroundColor = `rgba(0,0,0,${Math.max(0, 0.85 - progress)})`;
@@ -491,30 +502,39 @@ function endPointer(e) {
   if (pointers.size < 2) lastPinchDistance = null;
 
   if (wasOneFinger && pointers.size === 0 && tScale <= 1.05) {
-    const dx = e.clientX - swipeStartX;
-    const dy = e.clientY - swipeStartY;
+    const dx = lastPointerX - swipeStartX;
+    const dy = lastPointerY - swipeStartY;
 
-    /* Swipe to navigate if the swipe is primarily horizontal and exceeds the threshold. */
+    // Ignore tiny movements (taps)
+    if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+
+    // Horizontal swipe - navigate
     if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      dx < 0 ? showNext() : showPrev();
+      // Swipe LEFT (dx < 0) = NEXT, Swipe RIGHT (dx > 0) = PREV
+      if (dx > 0) {
+        showNext();  // Left swipe = next item
+      } else {
+        showPrev();  // Right swipe = previous item
+      }
+      return;  // Don't also try to dismiss
     }
 
-    /* Swipe to close if the swipe is primarily vertical and exceeds the threshold. */
-    if (Math.abs(dy) > 120 && Math.abs(dy) > Math.abs(dx) * 1.5) {
+    // Vertical swipe - dismiss (but only if not zoomed and not a horizontal swipe)
+    if (Math.abs(dy) > 120 && Math.abs(dy) > Math.abs(dx) * 1.5 && tScale <= 1.05) {
       const elapsed = performance.now() - swipeStartTime;
-      const velocity = Math.abs(dy) / elapsed; // px/ms
+      const velocity = Math.abs(dy) / elapsed;
 
       if (velocity > 0.3) {
         closeLightbox();
       } else {
-        // too slow — snap back
+        // Snap back if too slow
         ty = 0;
         lightbox.style.backgroundColor = '';
       }
     }
   }
 
-  if (pointers.size === 0)  {
+  if (pointers.size === 0) {
     dragging = false; 
     lightbox.style.backgroundColor = ''; // let CSS take over again
   }

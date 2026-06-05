@@ -57,7 +57,7 @@ function initGallery() {
         { src: "/fursona-art/Omari-maw (4).webp", artist: "Grey" },
         { src: "/fursona-art/IMG_2010.webp", artist: "Paraslider" },
         { src: "/fursona-art/photo_2025-10-15_16-18-21.webp", artist: "Grey" },
-        { src: "/fursona-art/omari_hello.webm", artist: "Unknown" },
+        { src: "/fursona-art/omari_hello-av1.webm", artist: "Unknown" },
         { src: "/fursona-art/omariBakaColoured.webp", artist: "Whatify" },
       ]
     },
@@ -98,8 +98,8 @@ function initGallery() {
         "/vrchat-pics/VRChat_2026_014.webp",
         "/vrchat-pics/VRChat_2026_015.webp",
         "/vrchat-pics/VRChat_2026_016.webp",
-        "/vrchat-pics/yass.webm",
-        "/vrchat-pics/cutie_detected.webm",
+        "/vrchat-pics/yass-av1.webm",
+        "/vrchat-pics/cutie_detected-av1.webm",
       ]
     }
   ];
@@ -162,28 +162,10 @@ function initGallery() {
 
     if (transition) {
       gallery.style.opacity = "0";
-
-      await new Promise(resolve => {
-        requestAnimationFrame(() => {
-          requestAnimationFrame(resolve);
-        });
-      });
+      void gallery.offsetHeight; // force reflow so transition fires
+      await new Promise(r => setTimeout(r, 150));
       showSkeletons(pool.length);
     }
-
-    gallery.replaceChildren();
-
-    const fragment = document.createDocumentFragment();
-
-    for (let i = 0; i < newPoolRaw.length; i++) {
-      const div = document.createElement("div");
-      div.className = "gallery-item-wrapper";
-      div.style.height = "200px"; // prevents layout shift
-
-      fragment.appendChild(div);
-    }
-
-    gallery.appendChild(fragment);
 
     worker.postMessage({ type: "INIT", data: { pool } });
     requestLayout();
@@ -262,24 +244,24 @@ function initGallery() {
   // Video intersection observer — only responsible for pausing when off-screen.
   // Playing is driven by hover on desktop (see createItem), and by this observer
   // on touch devices where hover doesn't exist.
-  videoObserver = new IntersectionObserver((entries) => {
-    for (const entry of entries) {
-      const video = entry.target;
+  videoObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        const video = entry.target;
 
-      if (!entry.isIntersecting) {
-        video.pause();
-        continue;
-      }
+        if (!entry.isIntersecting) {
+          video.pause();
+          continue;
+        }
 
-      if (!video.src) {
-        video.src = video.dataset.src;
+        // On touch-only devices (no hover), play when scrolled into view
+        if (!window.matchMedia("(hover: hover)").matches) {
+          video.play().catch(() => {});
+        }
       }
-
-      if (!window.matchMedia("(hover: hover)").matches) {
-        video.play().catch(() => {});
-      }
-    }
-  }, { threshold: 0.25 });
+    },
+    { threshold: 0.25 }
+  );
 
   window.addEventListener("lightbox:open", () => {});
   window.addEventListener("lightbox:close", () => {});
@@ -354,17 +336,9 @@ function initGallery() {
     }
 
     const img = document.createElement("img");
-
-
     img.dataset.src = src;
     img.alt = "";
     img.decoding = "async";
-    img.loading = "lazy";
-
-    img.fetchPriority = index < 3 ? "high" : "low";
-
-    img.width = 350;
-    img.height = 350;
 
     img.onerror = () => {
       img.classList.add("load-error");
