@@ -14,7 +14,9 @@ import Footer from '../components/Footer.astro';
 
 <body>
 
-<script type="module" src="/src/scripts/gallery/gallery-core.js" defer></script>
+<script>
+  import("../scripts/gallery/gallery-core.js");
+</script>
 
 <main id="content">
 <div id="home-section">
