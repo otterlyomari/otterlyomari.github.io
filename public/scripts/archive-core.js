@@ -117,6 +117,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const a = document.createElement("a");
     a.className = "archive-card";
     a.href = `/library/${item.id}`;
+    a.rel = `prefetch`
     a.tabIndex = 0;
 
     const titleMatch = matches.find(m => m.key === "title");

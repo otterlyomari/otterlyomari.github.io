@@ -10,6 +10,9 @@
     splash?.remove();
     splashBg && (splashBg.style.opacity = "0");
     document.body.classList.add("loaded");
+
+    // 🔥 notify instantly
+    window.dispatchEvent(new Event("splash:done"));
     return;
   }
 
@@ -30,6 +33,8 @@
       splash?.remove();
       splashBg && (splashBg.style.pointerEvents = "none");
       document.body.classList.remove("splash-active");
+
+      window.dispatchEvent(new Event("splash:done"));
     }, 1200);
   }, 2400);
 })();

@@ -20,6 +20,7 @@ const allTypes = [...new Set(archive.map(entry => entry.data.type))];
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2" defer></script>
     <script src="/scripts/archive-core.js" defer></script>
     
+    
   </head>
 
   <body class="archive-mode">
@@ -52,7 +53,7 @@ const allTypes = [...new Set(archive.map(entry => entry.data.type))];
       <section class="archive-grid" id="archiveGrid"></section>
 
       <!-- BACK -->
-   		<MenuButton class="menu-button-lib" href="/" label="Go Back" />
+   		<MenuButton class="menu-button-lib" href="/" label="Go Back"  data-astro-prefetch/>
 
     </main>
     <Footer class="t-outline"/>

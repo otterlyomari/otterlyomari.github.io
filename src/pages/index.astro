@@ -2,7 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import MenuButton from '../components/MenuButton.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { SITE_DESCRIPTION } from '../consts';
 ---
 
 <!doctype html>
@@ -140,7 +140,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 					
 					<!-- YouTube icon -->
 					<li>
-						<a class="n01" href="https://www.youtube.com/@otterlyomari" aria-label="YouTube channel">
+						<a class="n01" href="https://www.youtube.com/@otterlyomari" aria-label="YouTube channel"  data-astro-prefetch>
 							<svg viewBox="0 0 60 60" aria-hidden="true">
 								<use href="#icon-youtube"></use>
 							</svg>
@@ -149,7 +149,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 					<!-- BlueSky icon [INACTIVE ACCOUNT TILL 2030] -->
 					<li>
-						<a class="n02" href="https://bsky.app/profile/otterlyomari.fursona.club" aria-label="Bluesky page, inactive till 2030">
+						<a class="n02" href="https://bsky.app/profile/otterlyomari.fursona.club" aria-label="Bluesky page, inactive till 2030"  data-astro-prefetch>
 							<svg viewBox="0 0 60 60" aria-hidden="true">
 								<use href="#icon-bluesky"></use>
 							</svg>
@@ -158,7 +158,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 					<!-- Discord icon  (join my server!) -->
 					<li>
-						<a class="n03" href="https://discord.gg/42v3WrmrH3" aria-label="Discord icon">
+						<a class="n03" href="https://discord.gg/42v3WrmrH3" aria-label="Discord icon"  data-astro-prefetch>
 							<svg viewBox="0 0 60 60" aria-hidden="true">
 								<use href="#icon-discord"></use>
 							</svg>
@@ -170,7 +170,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 					<!-- Spotify icon (major releases) -->
 					<li>
-						<a class="n04" href="https://open.spotify.com/artist/20blxN25QMgBZyDoheCuKS?si=vt39RrCfT7eGi_TM6CSelw" aria-label="Spotify artist profile" >
+						<a class="n04" href="https://open.spotify.com/artist/20blxN25QMgBZyDoheCuKS?si=vt39RrCfT7eGi_TM6CSelw" aria-label="Spotify artist profile" data-astro-prefetch >
 							<svg viewBox="0 0 60 60" aria-hidden="true">
 								<use href="#icon-spotify"></use>
 							</svg>
@@ -179,7 +179,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 					<!-- TikTok icon (major releases) -->
 					<li>
-						<a class="n05" href="https://www.tiktok.com/@otterlyomari" aria-label="TikTok page">
+						<a class="n05" href="https://www.tiktok.com/@otterlyomari" aria-label="TikTok page"  data-astro-prefetch>
 							<svg viewBox="0 0 60 60" aria-hidden="true">
 								<use href="#icon-tiktok"></use>
 							</svg>
@@ -188,7 +188,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 					<!-- Twitch icon (major releases) -->
 						<li>
-						<a class="n06" href="https://twitch.tv/otterlyomarittv" aria-label="Twitch page">
+						<a class="n06" href="https://twitch.tv/otterlyomarittv" aria-label="Twitch page"  data-astro-prefetch>
 							<svg viewBox="0 0 60 60" aria-hidden="true">
 								<use href="#icon-twitch"></use>
 							</svg>
@@ -200,7 +200,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 					<!-- FurAffinity icon -->
 					<li>
-						<a class="n07" href="https://www.furaffinity.net/user/furradical" aria-label="FurAffinity page">
+						<a class="n07" href="https://www.furaffinity.net/user/furradical" aria-label="FurAffinity page"  data-astro-prefetch>
 							<svg viewBox="0 0 60 60" aria-hidden="true">
 								<use href="#icon-furaffinity"></use>
 							</svg>
@@ -209,7 +209,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 					<!-- Steam icon because am gaymer ott, ja? -->
 					<li>
-						<a class="n08" href="https://steamcommunity.com/id/otterlyomari/" aria-label="Steam page">
+						<a class="n08" href="https://steamcommunity.com/id/otterlyomari/" aria-label="Steam page"  data-astro-prefetch>
 							<svg viewBox="0 0 60 60" aria-hidden="true">
 								<use href="#icon-steam"></use>
 							</svg>
@@ -218,7 +218,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 					<!-- Throne icon (gift me stuff uwu) -->
 					<li>
-						<a class="n09" href="https://throne.com/otterlyomari" aria-label="Throne page">
+						<a class="n09" href="https://throne.com/otterlyomari" aria-label="Throne page"  data-astro-prefetch>
 							<svg viewBox="0 0 60 60" aria-hidden="true">
 								<use href="#icon-throne"></use>
 							</svg>
@@ -233,7 +233,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 					<ul id="icons04" class="icons">
 						<!-- Ko-fi icon -->
 						<li>
-							<a class="n10" href="https://ko-fi.com/otterlyomari" aria-label="Ko-fi page">
+							<a class="n10" href="https://ko-fi.com/otterlyomari" aria-label="Ko-fi page" data-astro-prefetch>
 								<svg viewBox="0 0 60 60" aria-hidden="true">
 									<use href="#icon-kofi"></use>
 								</svg>
@@ -242,7 +242,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 						<!-- Patreon icon -->
 						<li>
-							<a class="n11" href="https://patreon.com/otterlyomari" aria-label="Patreon page">
+							<a class="n11" href="https://patreon.com/otterlyomari" aria-label="Patreon page"  data-astro-prefetch>
 								<svg viewBox="0 0 60 60" aria-hidden="true">
 									<use href="#icon-patreon"></use>
 								</svg>
@@ -253,13 +253,13 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 				<!-- SUPPORT SECTION END -->
 
-				<MenuButton href="/about" label="About Me" />
-				<MenuButton href="/gallery" label="Gallery" />
-				<MenuButton href="/library" label="The Library" />
-				<MenuButton href="https://youtube.com/@symphonyoftidemereyt" label="Discography" />
+				<MenuButton href="/about" label="About Me"  data-astro-prefetch />
+				<MenuButton href="/gallery" data-swup-animation="slide" label="Gallery"   data-astro-prefetch/>
+				<MenuButton href="/library" label="The Library"   data-astro-prefetch/>
+				<MenuButton href="https://youtube.com/@symphonyoftidemereyt" label="Discography"   data-astro-prefetch/>
 		</main>
 		<Footer/>
-		
+
 		<style>
 		main {
 			backdrop-filter: blur(0.4rem);

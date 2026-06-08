@@ -18,9 +18,14 @@
  */
 
 import { buildVideoControls } from "./gallery-video-controls.js";
+import { attachGesture } from "./gesture-engine.js";
 
 let lightbox, playerContainer, playerWrap, media, prevBtn, nextBtn;
 let isOpen = false;
+
+let bgTarget = 0.85;
+let bgCurrent = 0.85;
+let gestureActive = false;
 
 /* ========================= MEDIA STATE ========================= */
 
@@ -31,32 +36,21 @@ let currentVideo = null;  // reference to the active <video> element
 
 let playlist     = [];
 let currentIndex = 0;
+let thumbnailStrip; 
 
 /* ========================= TRANSFORM STATE ========================= */
 
 let tx = 0, ty = 0, tScale = 1;
 let sx = 0, sy = 0, sScale = 1;
 
-let dragging = false;
-let lastX = 0, lastY = 0;
-
-const pointers          = new Map();
-let lastPinchDistance = null;
-
-let lastTapTime = 0;
-let lastTapX    = 0, lastTapY = 0;
-
-let lastPointerX = 0;
-let lastPointerY = 0;
-
-let swipeStartX = 0, swipeStartY = 0;
+let swipeStartX = 0;
+let swipeStartY = 0;
 let swipeStartTime = 0;
 
 /* ========================= CONFIG ========================= */
 
 const MIN_SCALE       = 1;
 const MAX_SCALE       = 5;
-const SWIPE_THRESHOLD = 60;
 const FRAME_DURATION  = 1 / 30; // seconds — used for J/L frame scrubbing
 
 /* ========================= INIT ========================= */
@@ -66,51 +60,150 @@ export function initLightbox() {
   playerContainer = document.querySelector(".player-container");
   playerWrap = document.querySelector(".player-wrap");
   media      = document.getElementById("lightbox-media");
+  thumbnailStrip = document.getElementById("lightbox-thumbnails");
   prevBtn    = document.getElementById("lightbox-prev");
   nextBtn    = document.getElementById("lightbox-next");
+  const closeBtn = document.getElementById("lightbox-close");
 
-  if (!lightbox || !media || !playerWrap || !playerContainer) return;
+  closeBtn?.addEventListener("click", closeLightbox);
+  document.addEventListener("keydown", onKeyDown);
 
-  // Close on backdrop click (player-wrap clicks don't bubble to lightbox)
-  lightbox.addEventListener("click", (e) => {
-    if (e.target === lightbox) closeLightbox();
+  if (!lightbox || !media || !playerWrap || !playerContainer) {
+    console.error("Lightbox missing required DOM elements", {
+      lightbox,
+      media,
+      playerWrap,
+      playerContainer
+    });
+    return;
+  }
+
+  attachGesture(playerWrap, {
+    onSwipe: handleSwipe,
+    onVertical: handleVertical,
+    onPan: handleDrag,
+
+    onPinch: handlePinch,
+    onWheel: handleWheel,
+    onDoubleTap: handleDoubleTap,
+
+    onEnd: onGestureEnd
   });
 
-  window.addEventListener("keydown", onKeyDown);
-
-  prevBtn?.addEventListener("click", showPrev);
-  nextBtn?.addEventListener("click", showNext);
-
-  // Gesture listeners — all handlers check isVideoMedia and bail for video
-  media.addEventListener("pointerdown", startPointer, { passive: false });
-  window.addEventListener("pointermove", onPointerMove, { passive: false });
-  window.addEventListener("pointerup", endPointer);
-  window.addEventListener("pointercancel", endPointer);
-
-  media.addEventListener("wheel", onWheel, { passive: false });
-  media.addEventListener("dblclick", onDoubleClick);
-
-  // Mobile swipe-to-navigate for video.
-  // Images use the existing pointer handler; video bails early from that path
-  // so we handle touch separately here using passive touch events.
-  let touchStartX = 0, touchStartY = 0;
-
-  lightbox.addEventListener("touchstart", (e) => {
-    if (!isOpen || !isVideoMedia) return;
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
-  }, { passive: true });
-
-  lightbox.addEventListener("touchend", (e) => {
-    if (!isOpen || !isVideoMedia) return;
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    const dy = e.changedTouches[0].clientY - touchStartY;
-    if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      dx > 0 ? showNext() : showPrev();
-    }
-  }, { passive: true });
-
   requestAnimationFrame(loop);
+}
+
+/* ======================== GESTURE HANDLERS ================= */
+let gestureType = "none";
+
+function handleSwipe({ direction, velocity }) {
+  if (!isOpen) return;
+
+  // left = next, right = prev
+  if (velocity > 0.4) {
+    direction === "left" ? showPrev() : showNext();
+    return;
+  }
+
+  direction === "left" ? showPrev() : showNext();
+}
+
+function handleVertical({ velocity, dy }) {
+  if (!isOpen) return;
+
+  if (velocity > 0.3 && Math.abs(dy) > 120) {
+    closeLightbox();
+  }
+}
+
+function handleDrag({ ddx, ddy, event }) {
+  if (!isOpen || isVideoMedia) return;
+
+  gestureActive = true;
+
+  tx += ddx;
+  ty += ddy;
+
+  if (event?.pointerType !== "mouse") {
+    const progress = Math.abs(ty) / 300;
+    bgTarget = 0.85 - Math.min(progress, 0.4);
+  }
+}
+
+function handlePinch({ scale }) {
+  if (!isOpen || isVideoMedia) return;
+
+  tScale = clamp(tScale * scale);
+}
+
+function handleWheel({ deltaY, x, y }) {
+  if (!isOpen || isVideoMedia) return;
+
+  const el = media.firstElementChild;
+  if (!el) return;
+
+  const rect = el.getBoundingClientRect();
+
+  const cx = x - (rect.left + rect.width / 2);
+  const cy = y - (rect.top + rect.height / 2);
+
+  const prev = tScale;
+  const next = clamp(prev - deltaY * 0.002);
+  const ratio = next / prev;
+
+  tx = cx - (cx - tx) * ratio;
+  ty = cy - (cy - ty) * ratio;
+  tScale = next;
+}
+
+function handleDoubleTap({ x, y }) {
+  if (!isOpen || isVideoMedia) return;
+
+  zoomAtPoint(x, y);
+}
+
+function onGestureEnd() {
+  gestureActive = false;
+
+  const dx = lastPointerX - swipeStartX;
+  const dy = lastPointerY - swipeStartY;
+
+  const movedEnough = Math.hypot(dx, dy) > 25;
+
+  if (!movedEnough) {
+    snapBack();
+    return;
+  }
+
+  if (tScale > 1.05) {
+    snapBack();
+    return;
+  }
+
+  const isHorizontal =
+    Math.abs(dx) > 60 &&
+    Math.abs(dx) > Math.abs(dy) * 1.5;
+
+  if (isHorizontal) {
+    dx > 0 ? showPrev() : showNext();
+    snapBack();
+    return;
+  }
+
+  const isVertical =
+    Math.abs(dy) > 120 &&
+    Math.abs(dy) > Math.abs(dx) * 1.5;
+
+  const velocity = Math.abs(dy) / Math.max(performance.now() - swipeStartTime, 1);
+
+  if (isVertical && velocity > 0.3) {
+    closeLightbox();
+    return;
+  }
+
+  snapBack();
+
+  console.log("This works!")
 }
 
 /* ========================= KEYBOARD ========================= */
@@ -118,12 +211,18 @@ export function initLightbox() {
 function onKeyDown(e) {
   if (!isOpen) return;
 
-  // Global shortcuts (work for both image and video)
-  if (e.key === "Escape")      { closeLightbox(); return; }
-  if (e.key === "ArrowLeft")   { showPrev(); return; }
-  if (e.key === "ArrowRight")  { showNext(); return; }
+  const isArrow = e.key === "ArrowLeft" || e.key === "ArrowRight";
 
-  // Video-only shortcuts
+  if (isArrow) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  if (e.key === "Escape") { closeLightbox(); return; }
+
+  if (e.key === "ArrowLeft") { showPrev(); return; }
+  if (e.key === "ArrowRight") { showNext(); return; }
+
   if (!isVideoMedia || !currentVideo) return;
 
   switch (e.key) {
@@ -157,13 +256,6 @@ function onKeyDown(e) {
     case "F":
       e.preventDefault();
       toggleFullscreen();
-      break;
-    case "esc":
-    case "Escape":
-      if (document.fullscreenElement) {
-        e.preventDefault();
-        closeLightbox();
-      }
       break;
   }
 }
@@ -203,6 +295,7 @@ export function openLightbox(src, list = null, index = 0) {
   reset();
   setMedia(playlist[currentIndex]);
   updateNavButtons();
+  renderThumbnails();
 }
 
 export function closeLightbox() {
@@ -225,6 +318,8 @@ export function closeLightbox() {
   document.body.style.position = "";
   document.body.style.width = "";
   document.body.style.top = "";
+
+  document.removeEventListener("keydown", onKeyDown);
   
   // Remove controls and overlay
   playerContainer.querySelector(".video-controls")?.remove();
@@ -242,18 +337,12 @@ export function closeLightbox() {
 
 function showPrev() {
   if (currentIndex <= 0) return;
-  currentIndex--;
-  reset();
-  setMedia(playlist[currentIndex]);
-  updateNavButtons();
+  switchTo(currentIndex - 1);
 }
 
 function showNext() {
   if (currentIndex >= playlist.length - 1) return;
-  currentIndex++;
-  reset();
-  setMedia(playlist[currentIndex]);
-  updateNavButtons();
+  switchTo(currentIndex + 1);
 }
 
 function updateNavButtons() {
@@ -293,6 +382,10 @@ function setMedia(item) {
   const isVideo = src.endsWith(".webm") || src.endsWith(".mp4");
   isVideoMedia = isVideo;
   currentVideo = null;
+
+  if (thumbnailStrip) {
+    thumbnailStrip.style.display = isVideo ? "none" : "";
+  }
 
   if (isVideo) {
     const video = document.createElement("video");
@@ -368,6 +461,68 @@ function setMedia(item) {
     credit.textContent = `Art by ${artist}`;
     lightbox.appendChild(credit);
   }
+
+  preloadAdjacent();
+}
+
+function renderThumbnails() {
+  if (!thumbnailStrip) return;
+
+  thumbnailStrip.innerHTML = "";
+
+  playlist.forEach((item, index) => {
+    const src = typeof item === "string" ? item : item.src;
+
+    const thumb = document.createElement("img");
+
+    thumb.src = item.thumb ?? src;
+    thumb.className = "lightbox-thumb";
+    thumb.loading = "lazy"
+    thumb.decoding = "async"
+    thumb.setAttribute("aria-current", index === currentIndex);
+
+    if (index === currentIndex) {
+      thumb.classList.add("active");
+    }
+
+   thumb.addEventListener("click", () => {
+    if (index === currentIndex) return;
+    switchTo(index);
+   });
+
+    thumbnailStrip.appendChild(thumb);
+  });
+}
+
+function updateThumbnailSelection() {
+  const thumbs =
+    thumbnailStrip?.querySelectorAll(".lightbox-thumb");
+
+  if (!thumbs) return;
+
+  thumbs.forEach((thumb, i) => {
+    thumb.classList.toggle("active", i === currentIndex);
+  });
+
+  const isMobile = matchMedia("(pointer: coarse)").matches;
+
+  thumbs[currentIndex]?.scrollIntoView({
+    behavior: isMobile ? "auto" : "smooth",
+    inline: "center",
+    block: "nearest"
+  });
+}
+
+function updateUIVisibility() {
+  const shouldHide =
+    !isVideoMedia &&
+    (
+      tScale > 1.05 ||
+      Math.abs(tx) > 20 ||
+      Math.abs(ty) > 20
+    );
+
+  lightbox.classList.toggle("ui-hidden", shouldHide);
 }
 
 /* ========================= RESET ========================= */
@@ -375,12 +530,11 @@ function setMedia(item) {
 function reset() {
   tx = ty = sx = sy = 0;
   tScale = sScale = 1;
-  dragging = false;
-  pointers.clear();
-  lastPinchDistance = null;
 }
 
 /* ========================= RENDER LOOP ========================= */
+
+let lastTransform = "";
 
 function apply() {
   const el = media.firstElementChild;
@@ -391,153 +545,38 @@ function apply() {
   sy     += (ty     - sy)     * alpha;
   sScale += (tScale - sScale) * alpha;
 
-  el.style.transform = `translate(${sx}px, ${sy}px) scale(${sScale})`;
+  const transform = `translate(${sx}px, ${sy}px) scale(${sScale})`;
+
+  if (transform !== lastTransform) {
+    el.style.transform = transform;
+    lastTransform = transform;
+  }
+
+  updateUIVisibility();
 }
 
 function loop() {
   if (isOpen) {
-    if (!dragging && tScale <= 1.02) {
-      tx *= 0.85;
-      ty *= 0.85;
+    updateBg();
+
+    if (!gestureActive && tScale <= 1.02) {
+      tx += (0 - tx) * 0.15;
+      ty += (0 - ty) * 0.15;
+
       if (Math.abs(tx) < 0.5) tx = 0;
       if (Math.abs(ty) < 0.5) ty = 0;
     }
-    apply();
+  apply();
   }
   requestAnimationFrame(loop);
 }
 
-/* ========================= POINTER EVENTS (images only) ========================= */
+let bgLock;
 
-function startPointer(e) {
-  if (!isOpen || isVideoMedia) return; // videos use click overlay instead
-  e.preventDefault();
-
-  const now = performance.now();
-
-  if (pointers.size === 0) {
-    const dt = now - lastTapTime;
-    if (dt < 300) {
-      zoomAtPoint(lastTapX, lastTapY);
-      lastTapTime = 0;
-      return;
-    }
-    lastTapTime = now;
-    lastTapX    = e.clientX;
-    lastTapY    = e.clientY;
-  }
-
-  if (media.setPointerCapture && e.pointerType === "mouse") {
-    media.setPointerCapture(e.pointerId);
-  }
-  pointers.set(e.pointerId, e);
-
-  if (pointers.size === 1) {
-    dragging = true;
-    lastX = e.clientX;
-    lastY = e.clientY;
-    
-    // Initialize lastPointer for swipe detection
-    lastPointerX = e.clientX;
-    lastPointerY = e.clientY;
-
-    swipeStartX = e.clientX;
-    swipeStartY = e.clientY;
-    swipeStartTime = performance.now();
-  }
-}
-
-function onPointerMove(e) {
-  if (!isOpen || isVideoMedia || !pointers.has(e.pointerId)) return;
-  e.preventDefault();
-
-  pointers.set(e.pointerId, e);
-
-  if (pointers.size === 2) {
-    const [p1, p2] = [...pointers.values()];
-    const dist = Math.hypot(p1.clientX - p2.clientX, p1.clientY - p2.clientY);
-
-    if (lastPinchDistance != null) {
-      tScale = clamp(tScale + (dist - lastPinchDistance) * 0.01);
-    }
-
-    lastPinchDistance = dist;
-    dragging = false;
-    return;
-  }
-
-  lastPinchDistance = null;
-
-  if (dragging && pointers.size === 1) {
-    tx += e.clientX - lastX;
-    ty += e.clientY - lastY;
-    lastX = e.clientX;
-    lastY = e.clientY;
-    
-    // Update lastPointer for swipe detection
-    lastPointerX = e.clientX;
-    lastPointerY = e.clientY;
-
-    // Only fade background on touch
-    if (e.pointerType !== 'mouse') {
-      const progress = Math.abs(ty) / 300;
-      lightbox.style.backgroundColor = `rgba(0,0,0,${Math.max(0, 0.85 - progress)})`;
-    }
-  }
-}
-
-function endPointer(e) {
-  if (isVideoMedia) return;
-  if (e.pointerType === 'mouse') {
-    // skip swipe-to-dismiss logic for mouse, still handle pointer cleanup
-    pointers.delete(e.pointerId);
-    if (pointers.size < 2) lastPinchDistance = null;
-    if (pointers.size === 0) dragging = false;
-    return;
-  }
-
-  const wasOneFinger = pointers.size === 1;
-  pointers.delete(e.pointerId);
-
-  if (pointers.size < 2) lastPinchDistance = null;
-
-  if (wasOneFinger && pointers.size === 0 && tScale <= 1.05) {
-    const dx = lastPointerX - swipeStartX;
-    const dy = lastPointerY - swipeStartY;
-
-    // Ignore tiny movements (taps)
-    if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
-
-    // Horizontal swipe - navigate
-    if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      // Swipe LEFT (dx < 0) = NEXT, Swipe RIGHT (dx > 0) = PREV
-      if (dx > 0) {
-        showNext();  // Left swipe = next item
-      } else {
-        showPrev();  // Right swipe = previous item
-      }
-      return;  // Don't also try to dismiss
-    }
-
-    // Vertical swipe - dismiss (but only if not zoomed and not a horizontal swipe)
-    if (Math.abs(dy) > 120 && Math.abs(dy) > Math.abs(dx) * 1.5 && tScale <= 1.05) {
-      const elapsed = performance.now() - swipeStartTime;
-      const velocity = Math.abs(dy) / elapsed;
-
-      if (velocity > 0.3) {
-        closeLightbox();
-      } else {
-        // Snap back if too slow
-        ty = 0;
-        lightbox.style.backgroundColor = '';
-      }
-    }
-  }
-
-  if (pointers.size === 0) {
-    dragging = false; 
-    lightbox.style.backgroundColor = ''; // let CSS take over again
-  }
+function updateBg() {
+  bgCurrent += (bgTarget - bgCurrent) * 0.12;
+  lightbox.style.backgroundColor =
+    `rgba(0,0,0,${bgCurrent})`;
 }
 
 /* ========================= ZOOM (images only) ========================= */
@@ -559,31 +598,59 @@ function zoomAtPoint(clientX, clientY) {
   tScale = next;
 }
 
-function onWheel(e) {
-  if (!isOpen || isVideoMedia) return;
-  e.preventDefault();
-
-  const el = media.firstElementChild;
-  if (!el) return;
-
-  const rect  = el.getBoundingClientRect();
-  const cx    = e.clientX - (rect.left + rect.width  / 2);
-  const cy    = e.clientY - (rect.top  + rect.height / 2);
-  const prev  = tScale;
-  const next  = clamp(prev - e.deltaY * 0.002);
-  const ratio = next / prev;
-
-  tx     = cx - (cx - tx) * ratio;
-  ty     = cy - (cy - ty) * ratio;
-  tScale = next;
-}
-
-function onDoubleClick(e) {
-  if (isVideoMedia) return;
-  zoomAtPoint(e.clientX, e.clientY);
-}
-
 /* ========================= UTILS ========================= */
+
+const preloadCache = new Set();
+
+function preload(item) {
+  if (!item) return;
+
+  const src = typeof item === "string" ? item : item.src;
+  if (!src || preloadCache.has(src)) return;
+  if (src.endsWith(".mp4") || src.endsWith(".webm")) return;
+
+  const img = new Image();
+  img.decoding = "async";
+  img.loading = "eager";
+  img.src = src;
+
+  preloadCache.add(src);
+}
+
+function preloadAdjacent() {
+  preload(playlist[currentIndex - 2]);
+  preload(playlist[currentIndex - 1]);
+  preload(playlist[currentIndex + 1]);
+  preload(playlist[currentIndex + 2]);
+}
+
+function switchTo(index) {
+  currentIndex = index;
+
+  reset();
+
+  lightbox.classList.add("switching");
+
+  setTimeout(() => {
+    setMedia(playlist[currentIndex]);
+    updateNavButtons();
+    updateThumbnailSelection();
+
+    requestAnimationFrame(() => {
+      lightbox.classList.remove("switching");
+    });
+  }, 100);
+}
+
+function snapBack() {
+  console.log("This is working!")
+  tx = 0;
+  ty = 0;
+  tScale = Math.max(1, tScale);
+
+  bgTarget = 0.85;
+  lightbox.classList.remove("ui-hidden");
+}
 
 function clamp(v) {
   return Math.min(Math.max(v, MIN_SCALE), MAX_SCALE);

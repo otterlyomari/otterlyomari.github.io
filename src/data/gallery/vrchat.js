@@ -1,0 +1,42 @@
+export default [
+  { src: "/gallery/vrchat-pics/VRChat_2022_001.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2022_001.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2022_002.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2022_002.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2022_003.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2022_003.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2022_004.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2022_004.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2022_005.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2022_005.webp" },
+
+  { src: "/gallery/vrchat-pics/VRChat_2023_001.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2023_001.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2023_002.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2023_002.webp" },
+
+  { src: "/gallery/vrchat-pics/VRChat_2025_001.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2025_001.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2025_002.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2025_002.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2025_003.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2025_003.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2025_004.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2025_004.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2025_005.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2025_005.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2025_006.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2025_006.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2025_007.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2025_007.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2025_008.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2025_008.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2025_009.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2025_009.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2025_010.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2025_010.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2025_011.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2025_011.webp" },
+
+  { src: "/gallery/vrchat-pics/VRChat_2026_001.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2026_001.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2026_002.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2026_002.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2026_003.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2026_003.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2026_004.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2026_004.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2026_005.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2026_005.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2026_006.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2026_006.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2026_007.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2026_007.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2026_008.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2026_008.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2026_009.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2026_009.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2026_010.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2026_010.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2026_011.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2026_011.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2026_012.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2026_012.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2026_013.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2026_013.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2026_014.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2026_014.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2026_015.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2026_015.webp" },
+  { src: "/gallery/vrchat-pics/VRChat_2026_016.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2026_016.webp" },
+
+  { src: "/gallery/vrchat-pics/yass-av1.webm", thumb: "/gallery/thumbs/vrchat/yass.webp" },
+  { src: "/gallery/vrchat-pics/cutie_detected-av1.webm", thumb: "/gallery/thumbs/vrchat/cutie_detected.webp" }
+];

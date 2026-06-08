@@ -1,0 +1,190 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import MenuButton from '../components/MenuButton.astro';
+import { SITE_DESCRIPTION } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={"404 - OtterlyOmari"} description={SITE_DESCRIPTION} />
+  </head>
+  <body id="home-screen">
+
+    <div id="bg-layer-base" aria-hidden="true"></div>
+
+        <main id="content">
+        <div id="home-section">
+            <a href="/" aria-label="Home">
+            <img src="/logo.png" class="image" alt="Omari Tidemere" width="1372" height="213" />
+            </a>
+
+            <h5 class="t-outline" style="text-align: center;">
+            404 — you swam too far out 🦦
+            </h5>
+
+            <h4 class="t-outline" style="text-align: center;">
+            This page doesn't exist (or got lost at sea)
+            </h4>
+
+            <p id="status-text" class="t-outline-w" style="text-align:center; opacity:0.85;"></p>
+            <p id="redirect-text" class="t-outline-w" style="text-align:center; opacity:0.7;"></p>
+
+            <div id="suggestions" class="t-outline" style="text-align:center; margin-top: 1.5rem;"></div>
+
+        </div>
+        </main>
+
+        <Footer />
+
+        <script is:inline>
+        /* -----------------------------
+        CONFIG
+        ------------------------------ */
+        const REDIRECT_DELAY = 20;
+
+        const routes = [
+        { path: "/", label: "Home" },
+        { path: "/about", label: "About Me" },
+        { path: "/gallery", label: "Gallery" },
+        { path: "/library", label: "Library" }
+        ];
+
+        /* -----------------------------
+        ELEMENTS
+        ------------------------------ */
+        const statusEl = document.getElementById("status-text");
+        const redirectEl = document.getElementById("redirect-text");
+        const suggestionsEl = document.getElementById("suggestions");
+
+        const attempted = window.location.pathname.toLowerCase();
+
+        /* -----------------------------
+        LEVENSHTEIN
+        ------------------------------ */
+        function levenshtein(a, b) {
+        const matrix = Array.from({ length: b.length + 1 }, () => []);
+
+        for (let i = 0; i <= b.length; i++) matrix[i][0] = i;
+        for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+
+        for (let i = 1; i <= b.length; i++) {
+            for (let j = 1; j <= a.length; j++) {
+            matrix[i][j] =
+                b[i - 1] === a[j - 1]
+                ? matrix[i - 1][j - 1]
+                : Math.min(
+                    matrix[i - 1][j - 1] + 1,
+                    matrix[i][j - 1] + 1,
+                    matrix[i - 1][j] + 1
+                    );
+            }
+        }
+
+        return matrix[b.length][a.length];
+        }
+
+        function similarity(a, b) {
+        const maxLen = Math.max(a.length, b.length);
+        return 1 - levenshtein(a, b) / maxLen;
+        }
+
+        /* -----------------------------
+        ROUTE MATCHING
+        ------------------------------ */
+        const scored = routes
+        .map(r => ({
+            ...r,
+            score: similarity(attempted, r.path)
+        }))
+        .sort((a, b) => b.score - a.score);
+
+        const best = scored[0];
+
+        /* -----------------------------
+        SUGGESTIONS
+        ------------------------------ */
+        if (best.score > 0.35) {
+        statusEl.textContent = "We found something close:";
+        suggestionsEl.innerHTML = scored
+            .slice(0, 3)
+            .map(r => `<a class="suggestion-link" href="${r.path}">${r.label}</a>`)
+            .join("<br/>");
+        } else {
+        statusEl.textContent = "No matching page found.";
+        }
+
+        /* -----------------------------
+        COUNTDOWN REDIRECT
+        ------------------------------ */
+        let timeLeft = REDIRECT_DELAY;
+
+        redirectEl.textContent = `Returning to home page in ${timeLeft}s...`;
+
+        const interval = setInterval(() => {
+        timeLeft--;
+
+        if (timeLeft > 0) {
+            redirectEl.textContent = `Returning to home page in ${timeLeft}s...`;
+        } else {
+            clearInterval(interval);
+            redirectEl.textContent = "Returning to home page...";
+
+            setTimeout(() => {
+            window.location.href = "/";
+            }, 700);
+        }
+        }, 1000);
+        </script>
+
+        <style is:global>
+        main {
+            backdrop-filter: blur(0.4rem);
+            z-index: 9999;
+            background-color: transparent;
+        }
+
+        #bg-layer-base {
+            position: fixed;
+            inset: 0;
+            background-image: url("/bg.webp");
+            background-size: cover;
+            background-position: center;
+            z-index: -2;
+        }
+
+        #home-section .image {
+            display: block;
+            margin: 0 auto 1.5rem;
+        }
+
+        #home-section > h5 {
+            margin-bottom: 2.5rem;
+        }
+
+        #home-section > h4 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .suggestion-link {
+            color: #4ade80; /* nice green */
+            text-decoration: none;
+            display: inline-block;
+            margin: 0.25rem 0;
+            transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+
+        .suggestion-link:hover {
+            color: white;
+            opacity: 0.85;
+            transform: translateY(-1px);
+            text-decoration: underline;
+        }
+        </style>
+
+
+
+    </body>
+</html>

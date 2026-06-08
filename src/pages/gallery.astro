@@ -14,7 +14,7 @@ import Footer from '../components/Footer.astro';
 
 <body>
 
-<script type="module" src="/scripts/gallery-core.js"></script>
+<script type="module" src="/src/scripts/gallery/gallery-core.js" defer></script>
 
 <main id="content">
 <div id="home-section">
@@ -35,7 +35,9 @@ import Footer from '../components/Footer.astro';
     <button class="filter-btn" data-filter="vrchat">📸 VRChat</button>
   </div>
 
-  <MenuButton href="/" label="Go Back" />
+  <MenuButton href="mailto:legal@otterlyomari.com" label="⚖️ DMCA" />
+
+  <MenuButton href="/"  data-astro-prefetch label="Go Back" />
 
 </div>
 </main>
@@ -59,12 +61,19 @@ import Footer from '../components/Footer.astro';
                              mobile:  position:static, flows below player-wrap
 -->
 <div id="lightbox" class="lightbox hidden">
+
+  <button id="lightbox-close" class="lightbox-close" aria-label="Close lightbox" type="button">✕</button>
   <button id="lightbox-prev" class="lightbox-nav" aria-label="Previous" style="display:none">‹</button>
 
   <div class="player-container">
     <div class="player-wrap">
       <div id="lightbox-media"></div>
       <!-- .vc-click-overlay and .video-controls injected here by JS -->
+
+      <!-- Thumbnail horizontal strip (mobile only!) -->
+      <div id="lightbox-thumbnails"></div>
+
+
     </div>
     <!-- .video-controls also appended here on mobile via CSS repositioning -->
   </div>
@@ -210,6 +219,129 @@ main {
   display: none;
 }
 
+#lightbox-thumbnails {
+  display: none;
+}
+
+.lightbox-close {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+
+  width: 44px;
+  height: 44px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(0, 0, 0, 0);
+  color: white;
+
+  font-size: 24px;
+  font-family: 'Pulang';
+  cursor: pointer;
+
+  z-index: 1000;
+}
+
+.lightbox-close,
+.lightbox-nav,
+:global(.lightbox-count),
+:global(.lightbox-credit),
+#lightbox-thumbnails {
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+#lightbox.ui-hidden .lightbox-close,
+#lightbox.ui-hidden .lightbox-nav,
+#lightbox.ui-hidden :global(.lightbox-count),
+#lightbox.ui-hidden :global(.lightbox-credit),
+#lightbox.ui-hidden #lightbox-thumbnails {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  #lightbox-thumbnails {
+    display: flex;
+    position: absolute;
+    gap: 0.5rem;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding: 0.75rem;
+
+    margin-top: 170%;
+
+    scroll-behavior: smooth;
+
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  #lightbox-media {
+    margin-top:12%;
+  }
+}
+
+:global(.lightbox-thumb) {
+  width: 60px;
+  height: 60px;
+  display: block;
+
+  flex-shrink: 0;
+
+  object-fit: cover;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  opacity: 0.7;
+
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+:global(.lightbox-thumb:not(.active)) {
+  width: 60x;
+  height: 35px;
+  display: block;
+
+
+  flex-shrink: 0;
+
+  object-fit: cover;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  opacity: 0.4;
+
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+:global(.lightbox-thumb:hover) {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+:global(.lightbox-thumb.active) {
+  opacity: 1;
+  outline: 2px solid white;
+}
+
+:global(.switching #lightbox-media) {
+  opacity: 0;
+}
+
 :global(.lightbox-count) {
   position: absolute;
   top: 2.5rem;
@@ -246,7 +378,7 @@ main {
 
 @media (max-width: 600px) {
   :global(.lightbox-count) {
-    top: 1rem;
+    top: 5rem;
     font-size: 1rem;
   }
 
@@ -254,7 +386,9 @@ main {
     bottom: 1rem;
     font-size: 1.1rem;
     white-space: normal;
+    min-width: max-content;
     text-align: center;
+    overflow: visible;
     max-width: 80vw;
   }
 }
@@ -285,6 +419,16 @@ main {
   overflow: hidden;  /* clips desktop gradient overlay to video boundary */
   border-radius: 4px 4px 0 0;
   flex-shrink: 0;
+
+  touch-action: none;
+  user-select: none;
+}
+
+.player-wrap img,
+.player-wrap video {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .player-wrap.is-image {
@@ -306,6 +450,8 @@ main {
   -webkit-user-drag: none;
   user-select: none;
   -webkit-touch-callout: none;
+
+  transition: opacity 150ms ease;
 }
 
 #lightbox-media img,

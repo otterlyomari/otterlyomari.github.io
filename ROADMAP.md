@@ -29,19 +29,6 @@ This document outlines planned improvements and future development goals for thi
 
 ---
 
-## Optional / Experimental
-
-### Performance & Memory
-
-- Lazy-unload off-screen images and restore on view
-
-### Content System Expansion
-
-- Better tagging system for written works
-- More flexible archive filtering
-
----
-
 ## Future Considerations
 
 - Performance audit and optimization pass

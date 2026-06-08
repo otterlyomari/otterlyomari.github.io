@@ -4,10 +4,11 @@ import Footer from '../components/Footer.astro';
 import MenuButton from '../components/MenuButton.astro';
 import ScrollToggle from '../components/ScrollToggle.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+
 ---
 
 <!doctype html>
-<html lang="en" transition:animate="slide">
+<html lang="en">
 	<head>
 		<BaseHead title={"OtterlyOmari | About"} description={SITE_DESCRIPTION} />
 	</head>
@@ -16,23 +17,24 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 		<main id="content">
 			<div id="home-section">
 				<a href="/" aria-label="Home">
-					<img src="/logo.png" class="image" alt="Omari Tidemere" width="1372" height="213">
+					<img src="/logo.png"  class="image" alt="Omari Tidemere" width="1372" height="213" />
 				</a>
 
-				<h5 class="t-outline">the cute motherfluffer your mom warned you about</h5>
+				<h5 class="t-outline no-pointer">the cute motherfluffer your mom warned you about</h5>
+
 				<div id="container">
 					<section id="section">
-						<h3 class="t-outline about-text" transition:animate="fade">About me</h3>
-						<p class="t-outline about-text">Hi there! It's me, your friendly neighborhood otter, Omari! 
+						<h3 class="t-outline about-text">About me</h3>
+						<p class="t-outline about-text">Hi there! It's me, your friendly neighborhood otter, Omari</p>
 						<p class="t-outline about-text">I'd like to thank you for taking the time to look at my website!</p>  
 						<p class="t-outline about-text">Now that you're here, I'd like to tell you a bit about myself</p>
 						<p class="t-outline about-text">I'm Omari Allyn Tidemere A fluffy sea otter on the internet who likes to help others and spread joy,</p>
 						<p class="t-outline about-text">if I can make as much as one person happy then  I'll be happy too. the smiles on others faces motivate me to keep going</p>	
 					    <p class="t-outline about-text">It's a reminder to me that no matter how hard things get, it's worth living life to the fullest.</p>
 						<p class="t-outline about-text">I absolutely love exploring nature, telling stories, whether it's a poem, a sonnet, a full-length novel, or even a video game.</p>
-						<p class="t-outline about-text">I'm also a music producer, and you can find my works <a href="https://www.youtube.com/@symphonyoftidemereyt/" style="color: lime;" class="no-deco">here</a>!
+						<p class="t-outline about-text">I'm also a music producer, and you can find my works <a href="https://www.youtube.com/@symphonyoftidemereyt/" style="color: lime;" class="no-deco">here</a>!</p>
 						<p class="t-outline about-text">my discography is varied, spanning multiple genres and styles, sometimes its covers, other times original compositions, I hope you enjoy them!</p>
-						<p class="t-outline about-text">And of course, as you may already know, I make content over on YouTube! 
+						<p class="t-outline about-text">And of course, as you may already know, I make content over on YouTube!</p>
 						<p class="t-outline about-text">Aimed at a diverse audience of furries and non-furries alike, my content is PG-13 at best,</p>
 						<p class="t-outline about-text">meaning there's no profanity, nor any raunchy stuff that's inappropriate for minors.</p>
 		
@@ -74,12 +76,27 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 						<p class="t-outline about-text">and I hope you can understand that as I wish to foster</p>
 						<p class="t-outline about-text">a positive, kind and caring community! Let's uplift one another,</p>
 						<p class="t-outline about-text">help each other and never bring others down. Help each others lights shine bright like the stars!</p>
+
+						<div class="contact-buttons">
+							<MenuButton href="mailto:omari@otterlyomari.com" label="✉️ Email" />
+							<MenuButton href="https://t.me/OtterlyOmari" label="📱 Telegram" />
+							<MenuButton href="https://discord.com/users/123456789012345678" label="💬 Discord DM" />
+						</div>
+
+						<h5 class="t-outline about-text" style="margin-top: 1rem; font-size: 0.9rem;">
+							💛 I try to respond within 2-3 days. Please be patient with me!
+						</h5>
+
 						<p class="t-outline about-text">Anyway, I don't want to stretch this too much longer so, have an amazing day, I love you all!</p>
 
 						<p class="t-outline about-text">~ Omari Allyn Tidemere</p>
 					</section>
 				</div>
-				<MenuButton href="/" label="Go Back" />
+				
+
+
+				<MenuButton href="/" data-astro-prefetch label="Go Back" />
+
 		</main>
 		<Footer/>
 
@@ -92,6 +109,14 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				background-color: transparent;
 			}
 
+			.contact-buttons {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				gap: 1rem;
+				margin: 1.5rem 0;
+			}
+
 			#section {
 				width: 100%; /* Adjust as needed */
 				margin: 0 auto;
@@ -99,6 +124,8 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				background: rgba(0,0,0,0.4);
 				border-radius: 8px;
 				padding: 1rem;
+				will-change: transform, opacity;
+				transform: translateZ(0);
 			}
 
 
@@ -136,6 +163,11 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 					padding: 0.5rem;
 					backdrop-filter: blur(0.3rem);
 				}
+			}
+
+			.no-pointer {
+				pointer-events: none;
+				transform: translateX(1.5rem);
 			}
 			
 			h1,

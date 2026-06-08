@@ -4,6 +4,10 @@ import icon from 'astro-icon';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 
+import playformCompress from '@playform/compress';
+
+import purgecss from 'astro-purgecss';
+
 export default defineConfig({
   site: 'https://otterlyomari.com',
   output: 'static',
@@ -16,14 +20,9 @@ export default defineConfig({
       cssCodeSplit: false,
     },
   },
-  integrations: [
-    mdx(),
-    icon({
-      include: {
-        bi: ['*'],
-      },
-    }),
-    react(),
-    sitemap(),
-  ],
+  integrations: [mdx(), icon({
+    include: {
+      bi: ['*'],
+    },
+  }), react(), sitemap(), playformCompress(), purgecss()]
 });
