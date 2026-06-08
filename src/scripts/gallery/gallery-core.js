@@ -27,6 +27,8 @@ let resizeObserver;
 let resizeTimer;
 let layoutSeq = 0;
 
+let activeFilterToken = 0;
+
 const loadedCategories = new Map();
 
 console.log("[gallery] loaded");
@@ -147,7 +149,13 @@ function continueInit() {
       buttons.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
 
+      const token = ++activeFilterToken;
+
       const pool = await buildPool(btn.dataset.filter);
+
+      // ignore stale async results
+      if (token !== activeFilterToken) return;
+
       setPool(pool, { transition: true });
     });
   });
@@ -265,8 +273,6 @@ document.addEventListener("astro:before-swap", () => {
 /* ========================= BOOT ========================= */
 
 function bootGallery() {
-  if (window.__galleryInit) return;
-  window.__galleryInit = true;
 
   const run = () => {
     console.log("[gallery] boot triggered");

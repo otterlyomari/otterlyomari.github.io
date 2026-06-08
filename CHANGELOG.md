@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.3.1] - 2026-06-08
+
+### Added
+
+  - (QOL) Horizontal thumbnail strip in `gallery.astro` 
+  - (QOL) Improved data filter stability
+  - Added a "DMCA" button for Artist Takedown/Removal requests via `legal@otterlyomari.com`
+  - Added contact information to `about.astro` improved about page structure, and linked to `omari@otterlyomari.com` for general purpose inquiries.
+
+### Changed
+
+  - Restructured gallery for ease of maintainace long-term
+    - Logic was split into `gallery-core.js` for init and pool creation, `gallery-render.js` for rendering, the worker remained the same, and observers were moved to `gallery-observers.js` all of which for clarity and ease of modification.
+    - Furthermore for the prior point, `gesture-engine.js` was created to cleanly manage gesture events in a clean and abstracted manner for ease of understanding and use
+    - To reduce initial lag and load times, images were changed from all being stored into a `galleryData` constant, to being loaded as asynchornous modules exported as default via `index.js`, which can be found in `src/data/gallery` 
+    
 ## [3.3.0] - 2026-06-04
 
 ### Added

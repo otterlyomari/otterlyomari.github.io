@@ -18,6 +18,11 @@ This document outlines planned improvements and future development goals for thi
 - ~~- Improve gallery layout display~~
   - ~~- Improve lightbox so that portrait videos scale proportionately~~
   - -~~(For .webm files with audio) make audio unmuted by default~~
+- ~~Further Improvements to gallery~~
+  - ~~Add horizontal strip with thumbnails for mobile users~~
+  - ~~Restructured & refactored gallery to split it into managable chunks~~
+  - ~~Modified `gallery.astro` CSS for rendering improvements~~
+  - ~~Improved performance on mboile~~
 
 ---
 
