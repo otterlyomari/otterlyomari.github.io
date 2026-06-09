@@ -1,9 +1,10 @@
 ---
 import { getCollection, render } from "astro:content";
-import BaseHead from "../../components/BaseHead.astro";
 import MenuButton from "../../components/MenuButton.astro";
 import Footer from "../../components/Footer.astro";
 import ScrollToggle from "../../components/ScrollToggle.astro";
+import BaseHead from "../../components/BaseHead.astro";
+import { SITE_DESCRIPTION } from "../../consts";
 
 export async function getStaticPaths() {
   const library = await getCollection("library");
@@ -18,172 +19,345 @@ const { slug } = Astro.params;
 const library = await getCollection("library");
 const entry = library.find((e) => e.id === slug);
 
-if (!entry) {
-  return Astro.redirect("/404");
-}
+if (!entry) return Astro.redirect("/404");
 
 const { Content } = await render(entry);
 
-const pubDate = entry.data.pubDate
-  ? new Date(entry.data.pubDate)
-  : null;
+const wordCount = entry.body?.split(/\s+/).length ?? 0;
+const readingTime = Math.max(1, Math.ceil(wordCount / 225));
 
-const isNovelSample = entry.data.type === "Novel Sample";
+const chapterCount =
+  (entry.body?.match(/^##\s+/gm) || []).length;
+
+const hasChapters = chapterCount > 0;
 ---
 
+<!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title={entry.data.title ?? "Library"} description={entry.data.description ?? ""} type="article" pubDate={pubDate ?? undefined}  tags={entry.data.tags}/>
+    <BaseHead title={entry.data.title} description={SITE_DESCRIPTION} />
   </head>
+
   <body class="entry-page">
-    <main class="entry-container">
+    <main class="entry-container" data-slug={slug}>
 
-        {!isNovelSample && (
-          <>
-            <h1 class="entry-title t-outline">
-              {entry.data.title}
-            </h1>
+      <!-- Progress bar -->
+      <div class="reader-progress">
+        <div class="reader-progress-fill"></div>
+      </div>
 
-            <p class="entry-description t-outline">
-              <i>{entry.data.description}</i>
-            </p>
-
-            <div class="entry-meta">
-              <span class="entry-type t-outline">{entry.data.type}</span>
-              <span class="entry-date t-outline">
-                {entry.data.pubDate.toDateString()}
-              </span>
-            </div>
-          </>
+      <!-- Header -->
+      <header class="entry-header">
+        {!hasChapters && (
+        <h1 class="entry-title t-outline">{entry.data.title}</h1>
         )}
+       
+        <p class="entry-description t-outline">
+          <i>{entry.data.description}</i>
+        </p>
 
-          {entry.data.cover && (
-            <img
-              src={entry.data.cover}
-              alt={entry.data.title}
-              class="entry-cover"
-            />
-          )}
-        </header>
+        <div class="entry-meta t-outline">
+          <span>{entry.data.type}</span>
+          <span>{entry.data.pubDate.toDateString()}</span>
+          <span>{readingTime} min read</span>
+        </div>
 
-          <article class="entry-content t-outline">
-            <Content />
-          </article>
+        {entry.data.cover && (
+          <img
+            class="entry-cover"
+            src={entry.data.cover}
+            alt={entry.data.title}
+          />
+        )}
+      </header>
 
-          <MenuButton class="menu-button-lib"  data-astro-prefetch href="/library" label="Go Back" />
+      <!-- Layout -->
+      <div class="reading-layout">
+        <article class="entry-content t-outline">
+          <Content />
+        </article>
 
-      </main>
-           
-      <Footer class="t-outline" />
-      <ScrollToggle />
+        <aside class="chapter-sidebar"></aside>
+      </div>
 
-      <style>
-        
-        :global(:is(h1, h2, h3, h4, h5, h6):not(.entry-title)) {
-          margin: 0 0 0.5rem 0;
-          color: white;
-          line-height: 1.2;
-          font-family: 'Source Serif 4', sans-serif !important;
-          font-style: italic;
-          font-weight: 500;
-        }
+      <MenuButton
+        class="menu-button-lib"
+        data-astro-prefetch
+        href="/library"
+        label="Go Back"
+      />
+    </main>
 
-       .menu-button-lib {
-          font-family: "Source Serif 4", serif;
-          transition: 0.2s ease;
-        }
+    <Footer class="t-outline" />
+    <ScrollToggle />
 
-        @media (max-width: 600px) {
-          .menu-button-lib {
-            width: 100%;
-          }
-        }
+    <!-- Reader Session Bar -->
+    {hasChapters && (
+    <div class="reader-session-bar">
+      <a class="rs-back" href="/library">← Back</a>
 
-        .entry-page::before {
-          content: "";
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          backdrop-filter: blur(5px);
-          z-index: -1;
-        }
+      <button class="rs-bookmark">🔖 Bookmark</button>
 
-        .entry-page {
-          color: #f2f2f2;
-          font-family: "Georgia", serif;
-          line-height: 1.6;
-          margin: 0;
-          padding: 0;
-          background-image: url('/library-bg.webp');
-          background-size: cover;
-          background-position: center;
-          background-repeat: no-repeat;
+      <select class="rs-chapters">
+        <option value="">Chapters</option>
+      </select>
+    </div>
+    )}
 
-          min-height: 100vh;
-        }
+    <!-- Reader logic -->
+    <script type="module" define:vars={{ slug }}>
+      import {
+        initProgressTracker,
+        initChapterSidebar,
+        initChapterTracking,
+        initResumePrompt,
+        initReaderSessionBar
+      } from "/src/scripts/library/reader.js";
 
-        .entry-container {
-          background-color: rgba(20, 20, 20, 0.75);
-          max-width: 800px;
-          margin: 0 auto;
-          padding: 3rem 1.5rem;
-          width: min(800px, 100%);
-          box-sizing: border-box;
-        }
+      initProgressTracker(slug);
+      initChapterTracking(slug);
+      initChapterSidebar(slug);
 
-        .entry-header {
-          margin-bottom: 2rem;
-        }
+      initReaderSessionBar(slug);
 
-        .entry-title {
-          font-size: clamp(2rem, 4vw, 3.5rem);
-          font-family: "Whisper", serif;
-          text-align: center;
-        }
+      requestAnimationFrame(() => {
+        initResumePrompt(slug);
+      });
+    </script>
+    <style>
+      :global(:is(h1, h2, h3, h4, h5, h6):not(.entry-title)) {
+        margin: 0 0 0.5rem 0;
+        color: white;
+        line-height: 1.2;
+        font-family: "Source Serif 4", sans-serif !important;
+        font-style: italic;
+        font-weight: 500;
+      }
 
-        .entry-description {
-          opacity: 0.75;
-          text-align: center;
-        }
+      :global(.entry-page) {
+        color: #f2f2f2;
+        font-family: Georgia, serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-image: url("/library-bg.webp");
+        background-size: cover;
+        background-position: center;
+        min-height: 100vh;
+      }
 
-        .entry-meta {
-          display: flex;
-          gap: 1rem;
-          font-size: 0.75rem;
-          opacity: 0.6;
-          justify-content: center;
+      :global(.entry-page::before) {
+        content: "";
+        position: fixed;
+        inset: 0;
+        backdrop-filter: blur(5px);
+        z-index: -1;
+      }
+
+      :global(.entry-container) {
+        width: min(1200px, 100%);
+        margin: 0 auto;
+        padding: 3rem 1.5rem;
+        background: rgba(20, 20, 20, 0.75);
+        box-sizing: border-box;
+      }
+
+      :global(.entry-header) {
+        margin-bottom: 2rem;
+      }
+
+      :global(.entry-title) {
+        text-align: center;
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        font-family: "Whisper", serif;
+      }
+
+      :global(.entry-description) {
+        text-align: center;
+        opacity: 0.75;
+      }
+
+      :global(.entry-meta) {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        font-size: 0.75rem;
+        opacity: 0.6;
+        flex-wrap: wrap;
+      }
+
+      :global(.entry-cover) {
+        width: 100%;
+        border-radius: 12px;
+        margin-top: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      :global(.reading-layout) {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 250px;
+        gap: 2rem;
+      }
+
+      :global(.reader-toast) {
+        position: fixed;
+        bottom: 1.5rem;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        background: rgba(0,0,0,0.75);
+        color: white;
+        pointer-events: auto;
+        cursor: pointer;
+        user-select: none;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        opacity: 0;
+        transition: all 0.25s ease;
+        z-index: 9999;
+        backdrop-filter: blur(10px);
+      }
+
+      :global(.reader-toast.show) {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      :global(.reader-session-bar) {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+
+        padding: 0.5rem 1rem;
+
+        background: rgba(0,0,0,0.65);
+        backdrop-filter: blur(12px);
+
+        z-index: 10000;
+
+        transition: transform 0.25s ease;
+      }
+
+      :global(.reader-session-bar a),
+      :global(.reader-session-bar button),
+      :global(.reader-session-bar select) {
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.12);
+        color: white;
+
+        padding: 0.4rem 0.7rem;
+        border-radius: 8px;
+
+        font-size: 0.85rem;
+
+        cursor: pointer;
+
+        transform: none !important;
+        transition: background 0.15s ease, border-color 0.15s ease;
+      }
+
+      :global(.reader-session-bar select) {
+        cursor: pointer;
+      }
+
+      @media (max-width: 600px) {
+        :global(.reader-session-bar) {
           flex-wrap: wrap;
+          gap: 0.4rem;
+          padding: 0.4rem 0.6rem;
+          backdrop-filter: blur(8px);
+          background: rgba(0,0,0,0.75);
         }
 
-        .entry-cover {
-          width: 100%;
-          border-radius: 12px;
-          margin-top: 1rem;
-          border: 1px solid rgba(255,255,255,0.08);
-          object-fit: cover;
+        :global(.reader-session-bar select),
+        :global(.reader-session-bar button) {
+          font-size: 0.75rem;
+          flex: 1;
+          min-width: 0;
+        }
+      }
+
+      @media (max-width: 900px) {
+        :global(.reading-layout) {
+          display: block;
         }
 
-        .entry-content {
-          line-height: 1.75;
-          font-size: 1rem;
-          font-family: "Source Serif 4", serif;
-          margin-bottom: 2.5rem;
+        :global(.chapter-sidebar) {
+          display: none;
         }
+      }
 
-        .entry-content p {
-          margin: 1rem 0;
-        }
+      :global(.chapter-sidebar) {
+        position: sticky;
+        align-self: start;
+        top: 5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
 
-        .entry-content img {
-          max-width: 100%;
-          border-radius: 10px;
-        }
+      :global(.chapter-sidebar a) {
+        color: rgba(255,255,255,0.85);
+        text-decoration: none;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.08);
+        backdrop-filter: blur(10px);
+        transition: all 0.2s ease;
+      }
 
-        .entry-content a {
-          color: #cfd8ff;
-          text-decoration: underline;
-        }
-      </style>
+      :global(.chapter-sidebar a:hover) {
+        background: rgba(255,255,255,0.12);
+      }
 
+      :global(.chapter-sidebar a.active) {
+        background: rgba(255,255,255,0.18);
+        border-color: rgba(255,255,255,0.25);
+        transform: translateX(4px);
+      }
+
+      :global(.entry-content) {
+        font-family: "Source Serif 4", serif;
+        font-size: 1rem;
+        line-height: 1.75;
+      }
+
+      :global(.entry-content p) {
+        margin: 1rem 0;
+      }
+
+      :global(.entry-content img) {
+        max-width: 100%;
+        border-radius: 10px;
+      }
+
+      :global(.entry-content a) {
+        color: #cfd8ff;
+        text-decoration: underline;
+      }
+
+      :global(.reader-progress) {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: rgba(255,255,255,0.08);
+        z-index: 9999;
+      }
+
+      :global(.reader-progress-fill) {
+        height: 100%;
+        width: 0%;
+        background: white;
+        transition: width 0.1s linear;
+      }
+    </style>
+  </body>
+</html>

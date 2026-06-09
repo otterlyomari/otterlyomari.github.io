@@ -9,28 +9,26 @@ const { entry } = Astro.props;
   data-id={entry.id}
   data-type={entry.data.type}
   data-astro-prefetch
-> 
+>
+  {entry.data.cover && (
+    <img
+      class="archive-card-cover"
+      src={entry.data.cover}
+      alt={entry.data.title}
+    />
+  )}
 
-  {
-    entry.data.cover && (
-      <img
-        src={entry.data.cover}
-        alt={entry.data.title}
-        class="archive-cover"
-      />
-    )
-  }
+  <div class="archive-card-content">
+    <h3 class="archive-card-title">{entry.data.title}</h3>
 
-  <h3 class="t-outline">{entry.data.title}</h3>
+    <p class="archive-card-meta">
+      <span>{entry.data.type}</span>
+      <span>{entry.data.pubDate.toDateString()}</span>
+    </p>
 
-  <p class="t-outline">{entry.data.description}</p>
-
-  <div class="tag-row t-outline">
-    {
-      entry.data.tags.map((tag: unknown) => (
-        <span class="tag t-outline">{tag}</span>
-      ))
-    }
+    <!-- Resume badge (populated client-side) -->
+    <div class="archive-resume" data-resume-id={entry.id}>
+      <!-- filled by JS if reading state exists -->
+    </div>
   </div>
-
 </a>

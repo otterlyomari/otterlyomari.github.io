@@ -69,230 +69,282 @@ const allTypes = [...new Set(archive.map(entry => entry.data.type))];
         cover: entry.data.cover ?? null,
       }));
     </script>
-  <style>
-    .menu-button-lib {
-      font-family: "Source Serif 4", serif;
-      transition: 0.2s ease;
-    }
 
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      margin: 0 0 0.5rem 0;
-      color: white;
-      line-height: 1.2;
-      font-family: 'Source Serif 4', sans-serif;
-    }
+    <script type="module">
+      import { initArchiveReadingState } from "/src/scripts/archive-reading-state.js";
 
-    .archive-mode {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      color: #f2f2f2;
-      font-family: "Georgia", serif;
+      function initWhenReady() {
+        const handler = () => {
+          window.removeEventListener("archive:rendered", handler);
+          initArchiveReadingState();
+        };
 
+        window.addEventListener("archive:rendered", handler);
+      }
+
+      initWhenReady();
+    </script>
+    <style>
+      .menu-button-lib {
+        font-family: "Source Serif 4", serif;
+        transition: 0.2s ease;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        margin: 0 0 0.5rem 0;
+        color: white;
+        line-height: 1.2;
+        font-family: 'Source Serif 4', sans-serif;
+      }
+
+      .archive-mode {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        color: #f2f2f2;
+        font-family: "Georgia", serif;
+
+        
+        background-image: url('/library-bg.webp');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+          backdrop-filter: blur(5px);
+
+        min-height: 100vh;
+      }
+
+      main  {
+        background: rgba(10, 10, 10, 0.4);
+      }
+
+      :global(.archive-resume) {
+        margin-top: 0.5rem;
+      }
+
+      :global(.resume-pill) {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.6rem;
+        border-radius: 999px;
+
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+
+        color: rgba(255, 255, 255, 0.85);
+        width: fit-content;
+        backdrop-filter: blur(10px);
+
+          display: inline-block;
+      }
       
-      background-image: url('/library-bg.webp');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-        backdrop-filter: blur(5px);
-
-      min-height: 100vh;
-    }
-
-    main  {
-      background: rgba(10, 10, 10, 0.4);
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(6px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .archive-mode main {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 2rem 1.5rem 4rem;
-    }
-
-    .archive-hero {
-      text-align: center;
-      padding: 3rem 1rem 2rem;
-    }
-
-    .archive-hero h1 {
-      font-size: 3rem;
-      font-family: "Whisper", serif;
-      margin: 0;
-      letter-spacing: 0.5px;
-    }
-
-    .archive-hero p {
-      opacity: 0.7;
-      margin-top: 0.5rem;
-    }
-
-    /* Replace the existing .archive-controls and .archive-controls > * rules */
-    .archive-controls {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 1rem;
-      padding: 1rem 0 2rem;
-      flex-wrap: wrap;
-    }
-
-    /* Search bar gets most of the space, filters wrap naturally */
-    .archive-controls > *:first-child {
-      flex: 1 1 300px;
-      min-width: 0;
-    }
-
-    .archive-controls > *:not(:first-child) {
-      flex: 0 1 auto;
-    }
-
-    .archive-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1.2rem;
-      padding-top: 1rem;
-      margin-bottom: 2.5rem;
-    }
-
-    /* tablets */
-    @media (max-width: 900px) {
-      .archive-hero h1 {
-        font-size: 2.5rem;
+      .resume-block {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        margin-top: 0.5rem;
       }
 
-      .archive-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      .resume-title {
+        font-size: 0.75rem;
+        opacity: 0.85;
+        letter-spacing: 0.2px;
       }
-    }
 
-    /* phones */
-    @media (max-width: 600px) {
+      .resume-meta {
+        font-size: 0.72rem;
+        opacity: 0.65;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
       .archive-mode main {
-        padding: 1rem 0.85rem 3rem;
-        width: 100%;
-        max-width: 100%;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 2rem 1.5rem 4rem;
       }
 
       .archive-hero {
-        padding: 1.5rem 0 1rem;
+        text-align: center;
+        padding: 3rem 1rem 2rem;
       }
 
       .archive-hero h1 {
-        font-size: 2rem;
-        line-height: 1;
+        font-size: 3rem;
+        font-family: "Whisper", serif;
+        margin: 0;
+        letter-spacing: 0.5px;
       }
 
       .archive-hero p {
-        font-size: 0.95rem;
-        line-height: 1.4;
-        padding: 0 0.5rem;
+        opacity: 0.7;
+        margin-top: 0.5rem;
       }
 
-      /* STACK SEARCH + FILTERS */
+      /* Replace the existing .archive-controls and .archive-controls > * rules */
       .archive-controls {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.8rem;
-
-        width: 100%;
-        padding: 0.5rem 0 1.5rem;
-      }
-
-      .archive-controls > * {
-        width: 100%;
-        max-width: 100%;
-      }
-
-      /* FILTER BUTTON WRAP */
-      .tag-filter {
-        justify-content: center;
-      }
-
-      .tag-btn {
-        flex: 1 1 auto;
-        justify-content: center;
-        min-height: 42px;
-      }
-
-      /* SINGLE COLUMN GRID */
-      .archive-grid {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
         gap: 1rem;
-        padding-top: 0.5rem;
+        padding: 1rem 0 2rem;
+        flex-wrap: wrap;
       }
 
-      /* CARD TWEAKS */
-      .archive-card {
-        padding: 0.9rem;
-        border-radius: 12px;
+      /* Search bar gets most of the space, filters wrap naturally */
+      .archive-controls > *:first-child {
+        flex: 1 1 300px;
+        min-width: 0;
       }
 
-      .archive-card h3 {
-        font-size: 1rem;
+      .archive-controls > *:not(:first-child) {
+        flex: 0 1 auto;
       }
 
-      .archive-card p {
-        font-size: 0.85rem;
-        line-height: 1.4;
+      .archive-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.2rem;
+        padding-top: 1rem;
+        margin-bottom: 2.5rem;
       }
 
-      .archive-cover {
-        height: 180px;
+      /* tablets */
+      @media (max-width: 900px) {
+        .archive-hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .archive-grid {
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
       }
 
-      /* BACK BUTTON */
-      button {
-        width: 100%;
+      /* phones */
+      @media (max-width: 600px) {
+
+        .archive-mode main {
+          padding: 1rem 0.85rem 3rem;
+          width: 100%;
+          max-width: 100%;
+        }
+
+        .archive-hero {
+          padding: 1.5rem 0 1rem;
+        }
+
+        .archive-hero h1 {
+          font-size: 2rem;
+          line-height: 1;
+        }
+
+        .archive-hero p {
+          font-size: 0.95rem;
+          line-height: 1.4;
+          padding: 0 0.5rem;
+        }
+
+        /* STACK SEARCH + FILTERS */
+        .archive-controls {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0.8rem;
+
+          width: 100%;
+          padding: 0.5rem 0 1.5rem;
+        }
+
+        .archive-controls > * {
+          width: 100%;
+          max-width: 100%;
+        }
+
+        /* FILTER BUTTON WRAP */
+        .tag-filter {
+          justify-content: center;
+        }
+
+        .tag-btn {
+          flex: 1 1 auto;
+          justify-content: center;
+          min-height: 42px;
+        }
+
+        /* SINGLE COLUMN GRID */
+        .archive-grid {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+          padding-top: 0.5rem;
+        }
+
+        /* CARD TWEAKS */
+        .archive-card {
+          padding: 0.9rem;
+          border-radius: 12px;
+        }
+
+        .archive-card h3 {
+          font-size: 1rem;
+        }
+
+        .archive-card p {
+          font-size: 0.85rem;
+          line-height: 1.4;
+        }
+
+        .archive-cover {
+          height: 180px;
+        }
+
+        /* BACK BUTTON */
+        button {
+          width: 100%;
+        }
+
+        button > a > h4 {
+          font-size: 1.2rem;
+        }
+        
       }
 
-      button > a > h4 {
-        font-size: 1.2rem;
-      }
-      
+      .sort-select {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
     }
 
-    .sort-select {
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-family: 'Source Serif 4', serif;
-    font-size: 0.9rem;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-  }
+    .sort-select option {
+      background: #1a1a1a;
+      color: white;
+    }
 
-  .sort-select option {
-    background: #1a1a1a;
-    color: white;
-  }
-
-  .sort-select:focus {
-    outline: none;
-    border-color: rgba(255, 255, 255, 0.6);
-  }
+    .sort-select:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.6);
+    }
 
 
 
-  </style>
+    </style>
   </body>
 </html>

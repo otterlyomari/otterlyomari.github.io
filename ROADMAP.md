@@ -23,14 +23,20 @@ This document outlines planned improvements and future development goals for thi
   - ~~Restructured & refactored gallery to split it into managable chunks~~
   - ~~Modified `gallery.astro` CSS for rendering improvements~~
   - ~~Improved performance on mboile~~
-
----
-
-## Planned
-
-### UI / UX Experiments
-
-- Animated transitions between sections
+- ~~Kindle-style reader system implementation~~
+  - ~~Added scroll-based progress tracking with persistent localStorage state~~
+  - ~~Implemented Kindle-style “location index” system (0–10000 scale)~~
+  - ~~Added resume toast system for continuing reading sessions~~
+  - ~~Implemented chapter tracking via IntersectionObserver~~
+  - ~~Built chapter sidebar navigation with active state syncing~~
+  - ~~Replaced scroll-only persistence with unified location engine~~
+  - ~~Improved restore system for accurate scroll restoration from progress state~~
+  - ~~Added bookmark system with persistent storage support~~
+  - ~~Added chapter jump dropdown in session bar~~
+  - ~~Implemented reader session bar (top navigation overlay)~~
+  - ~~Added auto-hide session bar (hide on scroll down, show on scroll up)~~
+  - ~~Improved mobile UX spacing for session bar and chapter sidebar~~
+  - ~~Fixed sidebar overlap by adjusting sticky offset relative to session bar~~
 
 ---
 

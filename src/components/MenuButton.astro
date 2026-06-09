@@ -2,11 +2,12 @@
 const {
 	href,
 	label,
-	class: className = ""
+	class: className = "",
+	id: idName = "",
 } = Astro.props;
 ---
 
-<a href={href} class={`menu-button no-deco ${className}`}>
+<a href={href} class={`menu-button no-deco ${className}`} id={`${idName}`} >
 	<span class="menu-button__text t-outline">
 		{label}
 	</span>

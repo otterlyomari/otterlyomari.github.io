@@ -7,6 +7,8 @@ import sitemap from '@astrojs/sitemap';
 import playformCompress from '@playform/compress';
 
 import purgecss from 'astro-purgecss';
+import remarkSlug from "remark-slug";
+import remarkAutolinkHeadings from "remark-autolink-headings";
 
 export default defineConfig({
   site: 'https://otterlyomari.com',
@@ -19,6 +21,17 @@ export default defineConfig({
       minify: 'esbuild',
       cssCodeSplit: false,
     },
+  },
+  markdown: {
+    remarkPlugins: [
+      remarkSlug,
+      [
+        remarkAutolinkHeadings,
+        {
+          behavior: "wrap"
+        }
+      ]
+    ]
   },
   integrations: [mdx(), icon({
     include: {

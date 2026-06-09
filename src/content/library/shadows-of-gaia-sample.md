@@ -297,7 +297,7 @@ The young man nodded, his face pale as Garrick turned to Aluxes.
 “Good.” Garrick moved toward the door, pausing briefly. His voice was quieter now, almost
 to himself. “Hold on, Harwin. We’re coming.”
 
-Chapter 2: Into the Woods
+## Chapter 2: Into the Woods
 The snow crunched underfoot as Garrick and Aluxes ventured into the dense forest beyond
 Eryndor. The trees, ancient and towering, seemed to lean inward as though whispering
 secrets to one another. Shadows danced in the faint moonlight, and the bitter wind carried
@@ -492,7 +492,7 @@ Ready yourselves.”
 The air grew colder, the shadows deeper, as the forest held its breath in anticipation of the
 coming battle.
 
-Chapter 3: The Beast in the Shadows
+## Chapter 3: The Beast in the Shadows
 The growl grew louder, reverberating through the forest like thunder. Aluxes gripped his
 sword tightly, his knuckles turning white. Beside him, Garrick steadied his stance, his eyes
 scanning the darkened treeline. Bjørn knelt, pressing his hand to the ground, his lips
@@ -698,7 +698,7 @@ Garrick rolled his eyes, muttering something under his breath about “mage talk
 His path ahead was clearer now. There was more to magic than what he’d known, and Bjørn
 was the guide he never expected but desperately needed.
 
-Chapter 4: The Vision
+## Chapter 4: The Vision
 The moon hung low in the sky, casting a pale silver glow through the cracks in the wooden
 walls of the cabin. Aluxes lay in his bed, the day's events swirling in his mind like a storm.
 His body was weary, and his thoughts were heavy with the teachings of Bjørn, the enigmatic

@@ -11,6 +11,12 @@ const archiveCollection = defineCollection({
     tags: z.array(z.string()),
     pubDate: z.coerce.date(),
     cover: z.string().optional(),
+    chapters: z.array(
+      z.object({
+        id: z.string(),
+        title: z.string()
+      })
+    ).optional(),
   }),
 });
 

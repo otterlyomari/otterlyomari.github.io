@@ -1,7 +1,7 @@
 const SWIPE_THRESHOLD = 60;
 const TAP_THRESHOLD = 10;
 const DOUBLE_TAP_DELAY = 300;
-const MOVE_THROTTLE = 1000 / 60; // 60fps cap
+const DOUBLE_TAP_DISTANCE = 25;
 
 let pointers = new Map();
 let lastPinchDistance = null;
@@ -121,14 +121,37 @@ function onPointerUp(e) {
   const isTap = absX < TAP_THRESHOLD && absY < TAP_THRESHOLD;
 
   if (isTap) {
-    handlers.onTap?.({
-      x: state.lastMoveX,
-      y: state.lastMoveY,
-      event: e,
-    });
+      const timeSinceLastTap = now - state.lastTapTime;
+      const tapDistance = Math.hypot(
+          state.lastMoveX - state.lastTapX,
+          state.lastMoveY - state.lastTapY
+      );
 
-    handlers.onEnd?.({ dx, dy, dt, event: e }); // ✅ ADD
-    return;
+      if (
+          timeSinceLastTap < DOUBLE_TAP_DELAY &&
+          tapDistance < DOUBLE_TAP_DISTANCE
+      ) {
+          handlers.onDoubleTap?.({
+              x: state.lastMoveX,
+              y: state.lastMoveY,
+              event: e,
+          });
+
+          state.lastTapTime = 0; // prevent triple-tap spam
+      } else {
+          handlers.onTap?.({
+              x: state.lastMoveX,
+              y: state.lastMoveY,
+              event: e,
+          });
+
+          state.lastTapTime = now;
+          state.lastTapX = state.lastMoveX;
+          state.lastTapY = state.lastMoveY;
+      }
+
+      handlers.onEnd?.({ dx, dy, dt, event: e });
+      return;
   }
 
   const velocity = absX / dt;

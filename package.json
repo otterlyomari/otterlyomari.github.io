@@ -36,6 +36,8 @@
     "purgecss": "^8.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "remark-autolink-headings": "^7.0.1",
+    "remark-slug": "^7.0.1",
     "sharp": "^0.34.5",
     "typescript": "^5.3.3",
     "vanilla-cookieconsent": "^3.0.0"

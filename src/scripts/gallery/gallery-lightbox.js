@@ -66,6 +66,8 @@ export function initLightbox() {
   const closeBtn = document.getElementById("lightbox-close");
 
   closeBtn?.addEventListener("click", closeLightbox);
+  prevBtn?.addEventListener("click", showPrev);
+  nextBtn?.addEventListener("click", showNext);
   document.addEventListener("keydown", onKeyDown);
 
   if (!lightbox || !media || !playerWrap || !playerContainer) {
@@ -164,9 +166,6 @@ function handleDoubleTap({ x, y }) {
 
 function onGestureEnd() {
   gestureActive = false;
-
-  const dx = lastPointerX - swipeStartX;
-  const dy = lastPointerY - swipeStartY;
 
   const movedEnough = Math.hypot(dx, dy) > 25;
 
@@ -574,7 +573,7 @@ function loop() {
 let bgLock;
 
 function updateBg() {
-  bgCurrent += (bgTarget - bgCurrent) * 0.12;
+  bgCurrent += (bgTarget - bgCurrent) * 0.18;
   lightbox.style.backgroundColor =
     `rgba(0,0,0,${bgCurrent})`;
 }
