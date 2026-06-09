@@ -10,53 +10,48 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [3.4.0] - 2026-06-09
 
-> ### Added
->
-> > - Kindle-style reader system overhaul
-> >   - Introduced unified scroll + location tracking system (0–10000 Kindle-style index)
-> >   - Added persistent reading state using `localStorage`
-> >   - Implemented automatic progress saving during scroll
-> >
-> > - Reading session UX system
-> >   - Added session bar (top overlay navigation for reader controls)
-> >   - Added chapter dropdown navigation inside session bar
-> >   - Added bookmark system with persistent storage
-> >   - Added bookmark creation via session bar button
-> >
-> > - Resume & continuity system
-> >   - Added Kindle-style resume toast for continuing reading sessions
-> >   - Implemented scroll restoration based on saved progress state
-> >   - Added chapter-aware resume context (continues from last active section)
-> >
-> > - Navigation improvements
-> >   - Improved chapter tracking using IntersectionObserver
-> >   - Enhanced chapter sidebar with active-state syncing
-> >   - Added smooth chapter navigation via sidebar + dropdown
+### Added
 
-> ### Changed
->
-> > - Refactored reader state model
-> >   - Unified `scrollY`, `progress`, and `locationIndex` into a single location engine
-> >   - Improved accuracy of saved reading position restoration
-> >
-> > - Improved session bar behavior
-> >   - Added auto-hide on scroll down
-> >   - Added auto-show on scroll up
-> >   - Reduced visual obstruction of reading layout
-> >
-> > - Updated chapter sidebar positioning
-> >   - Adjusted sticky offset to prevent overlap with session bar
-> >
-> > - Improved mobile UX behavior
-> >   - Reduced layout collision between session bar and sidebar
-> >   - Improved spacing consistency for reading interface
+- Kindle-style reader system overhaul
+ - Introduced unified scroll + location tracking system (0–10000 Kindle-style index)
+ - Added persistent reading state using `localStorage`
+ - Implemented automatic progress saving during scroll
+- Reading session UX system
+ - Added session bar (top overlay navigation for reader controls)
+ - Added chapter dropdown navigation inside session bar
+ - Added bookmark system with persistent storage
+ - Added bookmark creation via session bar button
+- Resume & continuity system
+  - Added Kindle-style resume toast for continuing reading sessions
+  - Implemented scroll restoration based on saved progress state
+  - Added chapter-aware resume context (continues from last active section)
+- Navigation improvements
+  - Improved chapter tracking using IntersectionObserver
+  - Enhanced chapter sidebar with active-state syncing
+  - Added smooth chapter navigation via sidebar + dropdown
 
-> ### Fixed
->
-> > - Fixed reading resume accuracy when restoring scroll position
-> > - Fixed chapter tracking timing inconsistencies during page load
-> > - Fixed sidebar active state desync on fast scrolling
-> > - Fixed session bar overlap with sticky sidebar on desktop layouts
+### Changed
+
+- Refactored reader state model
+  - Unified `scrollY`, `progress`, and `locationIndex` into a single location engine
+  - Improved accuracy of saved reading position restoration
+
+- Improved session bar behavior
+  - Added auto-hide on scroll down
+  - Added auto-show on scroll up
+  - Reduced visual obstruction of reading layout
+- Updated chapter sidebar positioning
+  - Adjusted sticky offset to prevent overlap with session bar
+- Improved mobile UX behavior
+  - Reduced layout collision between session bar and sidebar
+  - Improved spacing consistency for reading interface
+
+### Fixed
+
+- Fixed reading resume accuracy when restoring scroll position
+- Fixed chapter tracking timing inconsistencies during page load
+- Fixed sidebar active state desync on fast scrolling
+- Fixed session bar overlap with sticky sidebar on desktop layouts
 
 ## [3.3.1] - 2026-06-08
 
