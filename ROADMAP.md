@@ -40,6 +40,59 @@ This document outlines planned improvements and future development goals for thi
 
 ---
 
+## Planned 
+
+### 2026 (Q3-Q4)
+
+**Related Content**
+
+Add links between related content (e.g related gallery entries)
+
+**'Now' Section**
+
+A simple snapshot of current projects and interests!
+
+**Metadata Refinement**
+
+Improve social sharing previews and page-specific descriptions
+
+**Changelog Page**
+
+Human-readable site updates log for visitors.
+
+**Small CSS Polish**
+
+Minor spacing improvements and tweaks to the UI/UX for cleanliness
+
+**404 Suggestions**
+
+Refined suggestions and typo correction for `404.astro`
+
+### 2027 (Q2-Q3)
+
+**Projects Page**
+
+This will be a dedicated showcase for:
+* Websites
+* Games
+* Open-source projects
+* Experiments
+* Development Tools
+
+**Advanced Content Discovery**
+
+Potential additions include:
+* Site search
+* Related content automation
+* Better tag navigation
+
+**Architectural/Structural Changes**
+
+Only if real usage demonstrates a need, in the interest of 
+avoiding additions with complexity, without a clear problem to solve.
+
+---
+
 ## Future Considerations
 
 - Performance audit and optimization pass
