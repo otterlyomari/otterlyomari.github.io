@@ -4,12 +4,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [3.4.0] - 2026-06-09
 
-# Changelog
-
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
-
-## [3.4.0] - 2026-06-09
-
 ### Added
 
 - Kindle-style reader system overhaul
