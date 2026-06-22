@@ -47,4 +47,4 @@ Unauthorized use, reproduction, or redistribution of any part of this website or
 
 ## Contact
 
-For questions, permissions, or licensing inquiries, please contact: symphonyoftidemere@gmail.com
+For questions, permissions, or licensing inquiries, please contact: omari@otterlyomari.com
