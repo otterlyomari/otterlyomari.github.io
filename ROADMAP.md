@@ -37,6 +37,10 @@ This document outlines planned improvements and future development goals for thi
   - ~~Added auto-hide session bar (hide on scroll down, show on scroll up)~~
   - ~~Improved mobile UX spacing for session bar and chapter sidebar~~
   - ~~Fixed sidebar overlap by adjusting sticky offset relative to session bar~~
+  - ~~Implemented changelog page~~
+  - ~~Minor CSS polish and cleanup~~
+  - ~~Added 404 suggestions and typo correction~~
+  - ~~Implemented now/spotlight page~~ 
 
 ---
 
@@ -44,29 +48,9 @@ This document outlines planned improvements and future development goals for thi
 
 ### 2026 (Q3-Q4)
 
-**Related Content**
-
-Add links between related content (e.g related gallery entries)
-
-**'Now' Section**
-
-A simple snapshot of current projects and interests!
-
 **Metadata Refinement**
 
 Improve social sharing previews and page-specific descriptions
-
-**Changelog Page**
-
-Human-readable site updates log for visitors.
-
-**Small CSS Polish**
-
-Minor spacing improvements and tweaks to the UI/UX for cleanliness
-
-**404 Suggestions**
-
-Refined suggestions and typo correction for `404.astro`
 
 ### 2027 (Q2-Q3)
 

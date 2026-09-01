@@ -1,0 +1,474 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import MenuButton from '../components/MenuButton.astro';
+import { SITE_DESCRIPTION } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={"OtterlyOmari | Changelog"} description={SITE_DESCRIPTION} />
+  </head>
+  <body id="home-screen">
+
+    <div id="bg-layer-base" aria-hidden="true"></div>
+
+    <main id="content">
+      <div id="home-section" class="t-outline">
+        <h1 style="text-align: center;">Changelog 🦦</h1>
+
+        <div class="timeline">
+
+            <!-- Entry v3.5.0 (This Page launched) -->
+            <article class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-meta">
+                    <span class="version t-outline-w">v3.5.0</span>
+                    <span class="date t-outline-w">August 31st, 2026 (Q3)</span>
+                    <span class="badge new t-outline-w">New Feature</span>
+                </div>
+                <h4 style="color: white;">Changelog Launch</h4>
+                
+                <h5>Added</h5>
+                <ul>
+                    <li>Introduced this dedicated Changelog page to track site progress</li>
+                    <li>Improved overall mobile navigation performance</li>
+                    <li>New artwork, with credits to the respective artists</li>
+                    <li>Introduced a "Now" page, inspired by Derek Sivers' website</li>
+                </ul>
+                
+                <h5>Changed</h5>
+                <ul>
+                    <li>Adjusted positioning of "arrow" icon in <mark>ScrollToggle.astro</mark></li>
+                    <li>Improved visual consistency on all main (non-library) pages</li>
+                </ul>
+            </article>
+
+            <!-- Entry: v3.4.0 (UI/UX Overhaul) -->
+            <article class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-meta">
+                    <span class="version t-outline-w">v3.4.0</span>
+                    <span class="date t-outline-w">June 9th, 2026 (Q3)</span>
+                    <span class="badge new t-outline-w">New Feature</span>
+                    <span class="badge green t-outline-w">QOL</span>
+                </div>
+                <h4 style="color: white;">UI/UX Overhaul</h4>
+                
+                <h5>Added</h5>
+                <ul>
+                    <li>Kindle-style reader system overhaul</li>
+                    <li>Introduced unified scroll + location tracking system (0–10000 Kindle-style index)</li>
+                    <li>Added persistent reading state using <mark>localStorage</mark></li>
+                    <li>Implemented automatic progress saving during scroll</li>
+                    <li>Reading session UX system
+                        <ul>
+                            <li>Added session bar (top overlay navigation for reader controls)</li>
+                            <li>Added chapter dropdown navigation inside session bar</li>
+                            <li>Added bookmark system with persistent storage and creation button</li>
+                        </ul>
+                    </li>
+                    <li>Resume & continuity system
+                        <ul>
+                            <li>Added Kindle-style resume toast for continuing reading sessions</li>
+                            <li>Implemented scroll restoration based on saved progress state</li>
+                            <li>Added chapter-aware resume context (continues from last active section)</li>
+                        </ul>
+                    </li>
+                    <li>Navigation improvements 
+                        <ul>
+                            <li>Improved chapter tracking using IntersectionObserver</li>
+                            <li>Enhanced chapter sidebar with active-state syncing</li>
+                            <li>Added smooth chapter navigation via sidebar + dropdown</li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <h5>Changed</h5>
+                <ul>
+                    <li>Refactored reader state model
+                        <ul>
+                            <li>Unified <mark>scrollY</mark>, <mark>progress</mark>, and <mark>locationIndex</mark> into a single location engine</li>
+                            <li>Improved accuracy of saved reading position restoration</li>    
+                        </ul>
+                    </li>
+                    <li>Improved session bar behavior
+                        <ul>
+                            <li>Added auto-hide on scroll down and auto-show on scroll up</li>
+                            <li>Reduced visual obstruction of reading layout</li>
+                        </ul>
+                    </li>
+                    <li>Updated chapter sidebar positioning to prevent overlap and reduce layout collision</li>
+                </ul>
+                
+                <h5>Fixed</h5>
+                <ul>
+                    <li>Fixed reading resume accuracy when restoring scroll position</li>
+                    <li>Fixed chapter tracking timing inconsistencies during page load</li>
+                    <li>Fixed sidebar active state desync on fast scrolling</li>
+                    <li>Fixed session bar overlap with sticky sidebar on desktop layouts</li>
+                </ul>
+            </article>
+
+            <!-- Entry: v3.4.0 (Gallery & Refactor) -->
+            <article class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-meta">
+                    <span class="version t-outline-w">v3.4.0</span>
+                    <span class="date t-outline-w">June 8th, 2026 (Q3)</span>
+                    <span class="badge green t-outline-w">QOL</span>
+                </div>
+                
+                <h5>Added</h5>
+                <ul>
+                    <li>Horizontal thumbnail strip in <mark>gallery.astro</mark></li>
+                    <li>Improved data filter stability</li>
+                    <li>Added a "DMCA" button for Artist Takedown/Removal requests</li>
+                    <li>Added contact information to <mark>about.astro</mark></li>
+                </ul>
+                
+                <h5>Changed</h5>
+                <ul>
+                    <li>Improved about page structure</li>
+                    <li>Restructured gallery for ease of maintenance long-term:
+                        <ul>
+                            <li>Split logic into <mark>gallery-core.js</mark>, <mark>gallery-render.js</mark>, and <mark>gallery-observers.js</mark></li>
+                            <li>Created <mark>gesture-engine.js</mark> to cleanly manage gesture events</li>
+                            <li>Changed images to load as asynchronous modules via <mark>src/data/gallery/index.js</mark> to reduce initial load lag</li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+<!-- Entry: v3.3.0 -->
+            <article class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-meta">
+                    <span class="version t-outline-w">v3.3.0</span>
+                    <span class="date t-outline-w">June 4th, 2026</span>
+                    <span class="badge green t-outline-w">QOL</span>
+                </div>
+                
+                <h5>Added</h5>
+                <ul>
+                    <li>Video audio unmute in lightbox with audio track detection</li>
+                    <li>Size constraints for video elements on desktop (max 560x420)</li>
+                </ul>
+
+                <h5>Changed</h5>
+                <ul>
+                    <li>Updated <mark>ROADMAP.md</mark> to reflect progress and current interests</li>
+                    <li>Updated inconsistent formatting and indenting across the codebase</li>
+                    <li>Updated import ordering for cleanliness</li>
+                </ul>
+
+                <h5>Fixed</h5>
+                <ul>
+                    <li>Fixed lightbox close to properly pause and cleanup video elements</li>
+                    <li>Fixed SVG sprite sheet cross-browser rendering (zero-sized container)</li>
+                </ul>
+
+                <h5>Removed</h5>
+                <ul>
+                    <li>Removed <mark>test.astro</mark> (unused page from early version)</li>
+                    <li>Removed unused import from <mark>Footer.astro</mark></li>
+                </ul>
+            </article>
+
+            <!-- Entry: v3.2.0 -->
+            <article class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-meta">
+                    <span class="version t-outline-w">v3.2.0</span>
+                    <span class="date t-outline-w">May 28th, 2026</span>
+                    <span class="badge new t-outline-w">New Feature</span>
+                </div>
+                
+                <h5>Added</h5>
+                <ul>
+                    <li>Dynamic build status badge endpoint powered by Cloudflare API</li>
+                    <li>Improved deployment configuration for Cloudflare Pages integration</li>
+                </ul>
+
+                <h5>Fixed</h5>
+                <ul>
+                    <li>Resolved multiple badge endpoint iteration issues</li>
+                    <li>Fixed Astro runtime environment variable access issues</li>
+                </ul>
+
+                <h5>Removed</h5>
+                <ul>
+                    <li>IDE configuration files removed from repository (<mark>.vscode</mark>, <mark>.idea</mark>)</li>
+                </ul>
+            </article>
+
+            <!-- Entry: v3.1.0 -->
+            <article class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-meta">
+                    <span class="version t-outline-w">v3.1.0</span>
+                    <span class="date t-outline-w">May 27th, 2026</span>
+                    <span class="badge green t-outline-w">QOL</span>
+                </div>
+                
+                <h5>Added</h5>
+                <ul>
+                    <li>Performance optimizations for gallery rendering system
+                        <ul>
+                            <li>Improved DOM handling and load efficiency</li>
+                            <li>Font preload caching improvements</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h5>Changed</h5>
+                <ul>
+                    <li>Refactored gallery core logic for stability</li>
+                    <li>Updated deployment workflow configuration (Node version adjustments)</li>
+                </ul>
+
+                <h5>Fixed</h5>
+                <ul>
+                    <li>Fixed import-related runtime issues</li>
+                    <li>Resolved mobile viewport scaling issues</li>
+                    <li>Fixed navigation/button labeling inconsistencies</li>
+                </ul>
+            </article>
+
+            <!-- Entry: v3.0.0 -->
+            <article class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-meta">
+                    <span class="version t-outline-w">v3.0.0</span>
+                    <span class="date t-outline-w">May 27th, 2026</span>
+                    <span class="badge new t-outline-w">Major Release</span>
+                </div>
+                
+                <h5>Added</h5>
+                <ul>
+                    <li>Major architecture update for site structure</li>
+                    <li>Improved responsive layout system</li>
+                    <li>Enhanced gallery system stability</li>
+                </ul>
+
+                <h5>Changed</h5>
+                <ul>
+                    <li>Significant refactor of core frontend systems</li>
+                    <li>Updated Astro configuration and build pipeline</li>
+                </ul>
+            </article>
+
+            <!-- Entry: v2.4.0 -->
+            <article class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-meta">
+                    <span class="version t-outline-w">v2.4.0</span>
+                    <span class="date t-outline-w">May 25th, 2026</span>
+                </div>
+                
+                <h5>Added</h5>
+                <ul>
+                    <li>Improved homepage layout and navigation structure</li>
+                </ul>
+
+                <h5>Fixed</h5>
+                <ul>
+                    <li>Fixed layout inconsistencies introduced in previous updates</li>
+                </ul>
+            </article>
+
+            <!-- Entry: v2.3.0 -->
+            <article class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-meta">
+                    <span class="version t-outline-w">v2.3.0</span>
+                    <span class="date t-outline-w">May 24th, 2026</span>
+                </div>
+                
+                <h5>Added</h5>
+                <ul>
+                    <li>Expanded gallery system functionality</li>
+                    <li>Improved gallery rendering pipeline</li>
+                    <li>Early archive/library system structure</li>
+                </ul>
+
+                <h5>Fixed</h5>
+                <ul>
+                    <li>Mobile scaling issues</li>
+                    <li>Blog slug cleanup and routing fixes</li>
+                </ul>
+            </article>
+
+            <!-- Entry: v2.1.0 -->
+            <article class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-meta">
+                    <span class="version t-outline-w">v2.1.0</span>
+                    <span class="date t-outline-w">May 23rd, 2026</span>
+                </div>
+                
+                <h5>Added</h5>
+                <ul>
+                    <li>Initial version of gallery system</li>
+                    <li>Archive/library system foundation</li>
+                    <li>Multi-page Astro site structure</li>
+                </ul>
+
+                <h5>Changed</h5>
+                <ul>
+                    <li>Iterative improvements to UI layout and navigation</li>
+                </ul>
+            </article>
+
+            <!-- Entry: v2.0.x -->
+            <article class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-meta">
+                    <span class="version t-outline-w">v2.0.x</span>
+                    <span class="date t-outline-w">Feb – Jul 2025</span>
+                </div>
+                
+                <h5>Added</h5>
+                <ul>
+                    <li>Core site foundation (Astro-based rebuild)</li>
+                    <li>Basic navigation and homepage layout</li>
+                    <li>Social link integration</li>
+                    <li>Initial asset and media support</li>
+                </ul>
+
+                <h5>Fixed</h5>
+                <ul>
+                    <li>Mobile scaling issues across early versions</li>
+                    <li>Metadata and SEO improvements</li>
+                    <li>Navigation and routing stability</li>
+                </ul>
+            </article>
+
+            <!-- Entry: v1.0.0 -->
+            <article class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-meta">
+                    <span class="version t-outline-w">v1.0.0</span>
+                    <span class="date t-outline-w">Feb – Mar 2024</span>
+                </div>
+                
+                <h5>Added</h5>
+                <ul>
+                    <li>Initial project setup</li>
+                    <li>Basic static HTML site structure</li>
+                    <li>Early navigation and layout experiments</li>
+                    <li>First iterations of content pages</li>
+                </ul>
+            </article>
+        </div>
+        <MenuButton href="/" label="Go Back"  data-astro-prefetch />
+      </div>
+    </main>
+
+    <Footer />
+
+    <style is:global>
+      main {
+          backdrop-filter: blur(0.4rem);
+          z-index: 9999;
+          background-color: transparent;
+      }
+
+      #bg-layer-base {
+          position: fixed;
+          inset: 0;
+          background-image: url("/bg.webp");
+          background-size: cover;
+          background-position: center;
+          z-index: -2;
+      }
+
+      #home-section {
+        padding: 2rem;
+        border-radius: 12px; 
+        background: rgba(16, 185, 129, 0.03);
+      }
+
+      #home-section .image {
+          display: block;
+          margin: 0 auto 1.5rem;
+      }
+
+      #home-section h5 {
+          margin-top: 1.5rem;
+          margin-bottom: 0.5rem;
+      }
+
+      #home-section h4 {
+          margin-top: 1rem;
+          margin-bottom: 0.75rem;
+      }
+
+      /* Timeline styles remain your custom rules below */
+      .changelog-container { max-width: 700px; margin: 0 auto; padding: 3rem 1.5rem; }
+      .changelog-header { margin-bottom: 3rem; }
+      .changelog-header h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+      .changelog-header p { color: var(--text-muted, #888); }
+      
+      .timeline {
+          position: relative;
+          padding-left: 1.5rem;
+          padding-top: 2.2rem;
+          border-left: 2px solid var(--border-color, #222);
+          margin-left: 0.5rem;
+      }
+      .timeline-item {
+          position: relative;
+          margin-bottom: 3rem;
+      }
+      .timeline-item:last-child { margin-bottom: 0; }
+      .timeline-marker {
+          position: absolute;
+          left: calc(-1.5rem - 6px);
+          top: 6px;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: var(--accent-color, #6366f1);
+          outline: 4px solid var(--bg-color, #0a0a0a);
+      }
+      .timeline-meta {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-bottom: 0.5rem;
+          font-size: 0.875rem;
+      }
+      .timeline-meta .version { font-weight: 600; color: var(--accent-color, #6366f1); }
+      .timeline-meta .date { color: var(--text-muted, #888); }
+      
+      .badge {
+          font-size: 0.75rem;
+          padding: 0.15rem 0.5rem;
+          border-radius: 999px;
+          font-weight: 500;
+      }
+      .badge.new { background-color: rgba(99, 102, 241, 0.1); color: #818cf8; }
+      .badge.green { background-color: rgba(16, 185, 129, 0.1); color: #34d399; }
+
+      .timeline-item ul {
+          list-style-type: disc;
+          padding-left: 1.25rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.4rem;
+          color: var(--text-main, #ccc);
+      }
+      .timeline-item ul ul {
+          list-style-type: circle;
+          margin-top: 0.35rem;
+      }
+      .timeline-item a {
+          color: var(--accent-color, #6366f1);
+          text-decoration: underline;
+      }
+      .timeline-item a:hover { opacity: 0.8; }
+    </style>
+  </body>
+</html>

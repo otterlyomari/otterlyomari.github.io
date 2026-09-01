@@ -1,0 +1,182 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import MenuButton from '../components/MenuButton.astro';
+import ScrollToggle from '../components/ScrollToggle.astro';
+import { SITE_DESCRIPTION } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={"OtterlyOmari | Now"} description={SITE_DESCRIPTION} />
+  </head>
+  <body id="home-screen">
+
+    <div id="bg-layer-base" aria-hidden="true"></div>
+
+    <main id="content">
+      <div id="home-section">
+        <div class="now-content-wrapper">
+          <h1 class="t-outline" style="text-align: center;">Now</h1>
+  
+          <p class="t-outline-w" style="text-align:center;">(Last Updated August 31st, 2026)</p>
+          <p class="t-outline now-subtitle" style="text-align: center;">What I'm currently focused on, playing, and building.</p> 
+          <div class="now-grid">
+            <section class="now-card">
+              <h3 class="t-outline">System Setup</h3>
+              <ul>
+                <li class="t-outline-w">Hardware
+                    <ul>
+                    <li>CPU: AMD Ryzen 9 5900X (AM4 Socket) Running @ 4.6ghz (OC)</li>
+                    <li>CPU Cooler: NZXT Kraken X53</li>
+                    <li>RAM: Corsair Vengeance Pro RGB 32GB DDR4 C16</li>
+                    <li>Graphics Card: PNY GeForce RTX 3060 w/12GB VRAM</li>  
+                    </ul>
+                </li>
+
+                <li class="t-outline-w">System Software
+                    <ul>
+                    <li>OS: CachyOS (Latest x86_64)</li>
+                    <li>Kernel: Linux 7.2.0-1-cachyos</li>
+                    <li>DE: KDE Plasma 6</li>
+                    <li>WM: KWin (Wayland)</li>
+                    <li>Shell: fish 4.8.1</li>  
+                    </ul>
+                </li>
+
+              </ul>
+            </section>
+
+            <section class="now-card">
+              <h3 class="t-outline">Current Obsessions/Hyperfixations</h3>
+              <ul>
+                <li class="t-outline-w">UNDERTALE, DELTARUNE and fanworks by the UT/DR fandom!</li>
+                <li class="t-outline-w">Homestuck - the webcomic that doesnt know what genre it is</li>
+                <li class="t-outline-w">Retro gaming via emulation with replica controllers</li>
+                <li class="t-outline-w">Kingdom Hearts series/franchise</li>
+                <li class="t-outline-w">Backrooms (mostly the movie)</li>                
+                <li class="t-outline-w">Scene music (6arelyhuman, Asteria, Rebzyyx)</li>
+              </ul>
+            </section>
+            <section class="now-card">
+              <h3 class="t-outline">Development & Code</h3>
+              <ul>
+                <li class="t-outline-w">Refining and hand-coding this Astro website.</li>
+                <li class="t-outline-w">Crafting modular components and making things lightweight.</li>
+                <li class="t-outline-w">Writing scripts and managing my workflow right from the `fish` shell.</li>
+                <li class="t-outline-w">Contemplating exploring game development once more.</li>
+              </ul>
+            </section>
+
+            <section class="now-card">
+              <h3 class="t-outline">Creative & 3D</h3>
+              <ul>
+                <li class="t-outline-w">Perpetually updating my VRChat avatar using Unity 2022.3f1.</li>
+                <li class="t-outline-w">Creating and producing music as "Symphony of Tidemere"</li>
+                <li class="t-outline-w">Working on "DELTATUNES: Bits and Pieces" (cover album)</li>
+                <li class="t-outline-w">Producing "UNDERTALE: Grillby's Jukebox" (cover album)</li>
+                <li class="t-outline-w">Creating first original album! (mental health themed)</li>
+                <li class="t-outline-w">Re-learning guitar with an acoustic guitar!</li>
+                <li class="t-outline-w">Exploring digital art and painting, learning as I go</li>
+              </ul>
+            </section>
+
+            <section class="now-card">
+              <h3 class="t-outline">Gaming</h3>
+              <ul>
+                <li class="t-outline-w">Playing through a Shield build run of <em>Kingdom Hearts</em> via PCSX2. Level 16, 2/13 worlds completed!</li>
+                <li class="t-outline-w">Trying to get good at Geometry Dash 😅</li>
+                <li class="t-outline-w">Replaying Minecraft: Story Mode (Seasons 1 & 2)</li>
+                <li class="t-outline-w">Trying out Atari 2600 and Atari 7800 games (for fun!)</li>
+              </ul>
+            </section>
+          </div>
+        </div>
+        <MenuButton href="/" label="Go Back"  data-astro-prefetch />
+      </div>
+    </main>
+
+    <Footer />
+    <ScrollToggle />
+
+    <style is:global>
+      main {
+        backdrop-filter: blur(0.4rem);
+        z-index: 9999;
+        background-color: transparent;
+      }
+
+      #bg-layer-base {
+        position: fixed;
+        inset: 0;
+        background-image: url("/bg.webp");
+        background-size: cover;
+        background-position: center;
+        z-index: -2;
+      }
+
+      #home-section .image {
+        display: block;
+        margin: 0 auto 1.5rem;
+        max-width: 100%;
+        height: auto;
+      }
+
+      #home-section > h5 {
+        margin-bottom: 2.5rem;
+      }
+
+      #home-section > h4 {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      /* Now Page Custom Styling */
+      .now-content-wrapper {
+        max-width: 700px;
+        margin: 2rem auto 0;
+        padding: 0 1rem;
+        text-align: left;
+      }
+
+      .now-content-wrapper h2 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .now-subtitle {
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 2rem;
+      }
+
+      .now-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .now-card {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 1.5rem;
+      }
+
+      .now-card h3 {
+        margin-top: 0;
+        margin-bottom: 0.75rem;
+        font-size: 1.25rem;
+      }
+
+      .now-card ul {
+        margin: 0;
+        padding-left: 1.25rem;
+      }
+
+      .now-card li {
+        margin-bottom: 0.5rem;
+      }
+    </style>
+  </body>
+</html>

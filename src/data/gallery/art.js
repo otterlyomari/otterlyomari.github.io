@@ -26,5 +26,10 @@ export default  [
   { src: "/gallery/fursona-art/Omari-maw (4).webp", thumb: "/gallery/thumbs/fursona_art/Omari-maw (4).webp", artist: "Grey" },
   { src: "/gallery/fursona-art/IMG_2010.webp", thumb: "/gallery/thumbs/fursona_art/IMG_2010.webp", artist: "Paraslider" },
   { src: "/gallery/fursona-art/photo_2025-10-15_16-18-21.webp", thumb: "/gallery/thumbs/fursona_art/photo_2025-10-15_16-18-21.webp", artist: "Grey" },
-  { src: "/gallery/fursona-art/omariBakaColoured.webp", thumb: "/gallery/thumbs/fursona_art/omariBakaColoured.webp", artist: "Whatify" }
+  { src: "/gallery/fursona-art/omariBakaColoured.webp", thumb: "/gallery/thumbs/fursona_art/omariBakaColoured.webp", artist: "Whatify" },
+  { src: "/gallery/fursona-art/Forest.webp", thumb: "/gallery/thumbs/fursona_art/Forest.webp", artist: "Fengrove" },
+  { src: "/gallery/fursona-art/omaNerdinqq.webp", thumb: "/gallery/thumbs/fursona_art/omaNerdinqq.webp", artist: "Nerdinqq" },
+  { src: "/gallery/fursona-art/Omari_V1.webp", thumb: "/gallery/thumbs/fursona_art/Omari_V1.webp", artist: "Fengrove" },
+  { src: "/gallery/fursona-art/Omari_V2.webp", thumb: "/gallery/thumbs/fursona_art/Omari_V2.webp", artist: "Fengrove" },
+  { src: "/gallery/fursona-art/dateNight.webp", thumb: "/gallery/thumbs/fursona_art/dateNight.webp", artist: "Poptailss" },
 ];
