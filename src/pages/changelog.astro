@@ -2,6 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import MenuButton from '../components/MenuButton.astro';
+import ScrollToggle from '../components/ScrollToggle.astro';
 import { SITE_DESCRIPTION } from '../consts';
 ---
 
@@ -367,6 +368,7 @@ import { SITE_DESCRIPTION } from '../consts';
     </main>
 
     <Footer />
+    <ScrollToggle />
 
     <style is:global>
       main {
@@ -469,6 +471,12 @@ import { SITE_DESCRIPTION } from '../consts';
           text-decoration: underline;
       }
       .timeline-item a:hover { opacity: 0.8; }
+
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 2rem;
+        }
+    }
     </style>
   </body>
 </html>
