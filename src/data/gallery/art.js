@@ -32,4 +32,5 @@ export default  [
   { src: "/gallery/fursona-art/Omari_V1.webp", thumb: "/gallery/thumbs/fursona_art/Omari_V1.webp", artist: "Fengrove" },
   { src: "/gallery/fursona-art/Omari_V2.webp", thumb: "/gallery/thumbs/fursona_art/Omari_V2.webp", artist: "Fengrove" },
   { src: "/gallery/fursona-art/dateNight.webp", thumb: "/gallery/thumbs/fursona_art/dateNight.webp", artist: "Poptailss" },
+  { src: "/gallery/fursona-art/OmariLILFAG.webp", thumb: "/gallery/thumbs/fursona_art/OMARILILFAG-thumb.webp", artist: "SleepyLycan" },
 ];
