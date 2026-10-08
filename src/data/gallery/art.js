@@ -16,7 +16,6 @@ export default  [
   { src: "/gallery/fursona-art/omariBlep.webp", thumb: "/gallery/thumbs/fursona_art/omariBlep.webp", artist: "CoalColorHusky" },
   { src: "/gallery/fursona-art/swerveCuddle.webp", thumb: "/gallery/thumbs/fursona_art/swerveCuddle.webp", artist: "TsukiTheBunny" },
   { src: "/gallery/fursona-art/omariAnime.webp", thumb: "/gallery/thumbs/fursona_art/omariAnime.webp", artist: "DoggieMedia" },
-  { src: "/gallery/fursona-art/otterfox.webp", thumb: "/gallery/thumbs/fursona_art/otterfox.webp", artist: "SataOwO" },
   { src: "/gallery/fursona-art/omariCute.webp", thumb: "/gallery/thumbs/fursona_art/omariCute.webp", artist: "Pocki Lori" },
   { src: "/gallery/fursona-art/149_-_Omari_Symm_Headshot_gift.webp", thumb: "/gallery/thumbs/fursona_art/149_-_Omari_Symm_Headshot_gift.webp", artist: "Siozend" },
   { src: "/gallery/fursona-art/IMG_3250.webp", thumb: "/gallery/thumbs/fursona_art/IMG_3250.webp", artist: "" },
