@@ -38,5 +38,7 @@ export default [
   { src: "/gallery/vrchat-pics/VRChat_2026_016.webp", thumb: "/gallery/thumbs/vrchat/VRChat_2026_016.webp" },
 
   { src: "/gallery/vrchat-pics/yass-av1.webm", thumb: "/gallery/thumbs/vrchat/yass.webp" },
-  { src: "/gallery/vrchat-pics/cutie_detected-av1.webm", thumb: "/gallery/thumbs/vrchat/cutie_detected.webp" }
+  { src: "/gallery/vrchat-pics/cutie_detected-av1.webm", thumb: "/gallery/thumbs/vrchat/cutie_detected.webp" },
+  { src: "/gallery/vrchat-pics/omari_fruit.webm", thumb: "/gallery/thumbs/vrchat/cutie_detected.webp" },
+  { src: "/gallery/vrchat-pics/omari_hello.webm", thumb: "/gallery/thumbs/vrchat/cutie_detected.webp" },
 ];
